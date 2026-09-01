@@ -41,10 +41,11 @@
       return total;
     }
     function renderInventory(){
+      $('#inventoryBody').closest('table').querySelector('thead tr').innerHTML = '<th>Item</th><th>SKU</th><th>Last stocked</th><th>Stock</th><th>Cost</th><th>Selling price</th><th></th>';
       $('#inventoryBody').innerHTML = db.inventory.length ? db.inventory.map(function(item){
         var low = item.quantity <= item.reorderAt;
-        return '<tr><td><strong>' + escapeHtml(item.name) + '</strong></td><td>' + escapeHtml(item.sku || '—') + '</td><td><span class="stock-pill ' + (low ? 'low' : '') + '">' + item.quantity + ' units' + (low ? ' · reorder' : '') + '</span></td><td>' + (item.cost ? money.format(item.cost) : '—') + '</td><td>' + money.format(item.price) + '</td><td><button class="row-action" type="button" data-restock="' + item.id + '">Restock</button></td></tr>';
-      }).join('') : '<tr><td colspan="6" class="admin-muted">No inventory yet. Add your first product above.</td></tr>';
+        return '<tr><td><strong>' + escapeHtml(item.name) + '</strong></td><td>' + escapeHtml(item.sku || '—') + '</td><td>' + (item.stockedDate ? formatDate(item.stockedDate) : '—') + '</td><td><span class="stock-pill ' + (low ? 'low' : '') + '">' + item.quantity + ' units' + (low ? ' · reorder' : '') + '</span></td><td>' + (item.cost ? money.format(item.cost) : '—') + '</td><td>' + money.format(item.price) + '</td><td><button class="row-action" type="button" data-restock="' + item.id + '">Restock</button></td></tr>';
+      }).join('') : '<tr><td colspan="7" class="admin-muted">No inventory yet. Add your first product above.</td></tr>';
     }
     function renderSales(){
       var recent = db.sales.slice().reverse().slice(0,6);
@@ -62,7 +63,7 @@
       $('#lowStockList').innerHTML = low.length ? low.map(function(item){ return '<p style="margin:0 0 10px"><strong>' + escapeHtml(item.name) + '</strong><br><span class="stock-pill low">' + item.quantity + ' left · reorder at ' + item.reorderAt + '</span></p>'; }).join('') : 'No items need reordering.';
     }
     function renderConnection(){
-      var connected = !!db.settings.endpoint; $('#sheetStatus').textContent = connected ? 'Connected to Google Sheets. Use “Sync sheet” to update the workbook.' : 'Not connected yet. You can still download CSV backups.';
+      var connected = !!db.settings.endpoint; $('#sheetStatus').textContent = connected ? 'Connected to Google Sheets. Inventory and sales update the workbook automatically.' : 'Not connected yet. You can still download CSV backups.';
       $('#sheetSettingsForm').elements.endpoint.value = db.settings.endpoint || '';
     }
     function refreshSaleLines(){ var previous = $$('.sale-line').map(function(line){ return { productId:$('.sale-product', line).value, quantity:number($('.sale-quantity', line).value) || 1 }; }); $('#saleLines').innerHTML = ''; (previous.length ? previous : [null]).forEach(function(line){ addSaleLine(line); }); }
@@ -113,6 +114,11 @@
     $('#saleLines').addEventListener('input', updateSaleTotals); $('#saleLines').addEventListener('change', updateSaleTotals);
     $('#saleLines').addEventListener('click', function(event){ if(event.target.classList.contains('remove-sale-line')){ var lines = $$('.sale-line'); if(lines.length > 1) event.target.closest('.sale-line').remove(); updateSaleTotals(); } });
     $('#saleForm').elements.date.value = today();
+    (function addInventoryDateField(){
+      var grid = $('#inventoryForm .admin-form-grid');
+      grid.insertAdjacentHTML('beforeend', '<label class="admin-field">Date bought / stocked<input name="stockedDate" type="date" required></label>');
+      $('#inventoryForm').elements.stockedDate.value = today();
+    })();
     $('#saleForm').addEventListener('submit', function(event){
       event.preventDefault(); var form = event.currentTarget; var selected = []; var invalid = '';
       $$('.sale-line').forEach(function(line){ var product = db.inventory.find(function(item){ return item.id === $('.sale-product', line).value; }); var qty = number($('.sale-quantity', line).value); if(!product) invalid = 'Select a product for every line item.'; else if(qty < 1 || qty > product.quantity) invalid = 'Check stock levels — ' + product.name + ' has only ' + product.quantity + ' units available.'; else selected.push({ productId:product.id, name:product.name, quantity:qty, price:number(product.price), total:qty * number(product.price) }); });
@@ -120,14 +126,14 @@
       selected.forEach(function(line){ db.inventory.find(function(item){ return item.id === line.productId; }).quantity -= line.quantity; });
       var data = new FormData(form); var sale = { id:makeId('sale'), invoice:invoiceNumber(), customer:data.get('customer'), phone:data.get('phone'), payment:data.get('payment'), date:data.get('date'), items:selected, total:selected.reduce(function(sum,line){ return sum + line.total; },0), createdAt:new Date().toISOString() }; db.sales.push(sale); saveStore(); form.reset(); form.elements.date.value = today(); $('#saleLines').innerHTML = ''; addSaleLine(); renderAll(); setMessage('#saleMessage','Sale saved and inventory updated. Invoice ' + sale.invoice + ' is ready.'); showInvoice(sale.id);
     });
-    $('#inventoryForm').addEventListener('submit', function(event){ event.preventDefault(); var data = new FormData(event.currentTarget); db.inventory.push({ id:makeId('item'), name:data.get('name').trim(), sku:data.get('sku').trim(), quantity:number(data.get('quantity')), reorderAt:number(data.get('reorderAt')), cost:number(data.get('cost')), price:number(data.get('price')) }); saveStore(); event.currentTarget.reset(); event.currentTarget.elements.reorderAt.value = 10; renderAll(); setMessage('#inventoryMessage','Inventory item saved.'); });
-    $('#inventoryBody').addEventListener('click', function(event){ if(!event.target.dataset.restock) return; var item = db.inventory.find(function(record){ return record.id === event.target.dataset.restock; }); var amount = Number(window.prompt('How many units of ' + item.name + ' are you adding?', '0')); if(Number.isFinite(amount) && amount > 0){ item.quantity += amount; saveStore(); renderAll(); } });
+    $('#inventoryForm').addEventListener('submit', function(event){ event.preventDefault(); var data = new FormData(event.currentTarget); db.inventory.push({ id:makeId('item'), name:data.get('name').trim(), sku:data.get('sku').trim(), quantity:number(data.get('quantity')), reorderAt:number(data.get('reorderAt')), cost:number(data.get('cost')), price:number(data.get('price')), stockedDate:data.get('stockedDate') || today() }); saveStore(); event.currentTarget.reset(); event.currentTarget.elements.reorderAt.value = 10; event.currentTarget.elements.stockedDate.value = today(); renderAll(); setMessage('#inventoryMessage','Inventory item saved.'); });
+    $('#inventoryBody').addEventListener('click', function(event){ if(!event.target.dataset.restock) return; var item = db.inventory.find(function(record){ return record.id === event.target.dataset.restock; }); var amount = Number(window.prompt('How many units of ' + item.name + ' are you adding?', '0')); if(Number.isFinite(amount) && amount > 0){ item.quantity += amount; item.stockedDate = today(); saveStore(); renderAll(); syncSheet({ messageTarget:'#inventoryMessage', pendingMessage:'Stock updated. Syncing to Google Sheets...', successMessage:'Stock updated and sheet sync request sent.' }); } });
     document.addEventListener('click', function(event){ if(!event.target.dataset.invoice) return; showInvoice(event.target.dataset.invoice); });
     $('#closeInvoice').addEventListener('click', function(){ $('#invoiceSheet').hidden = true; }); $('#printInvoice').addEventListener('click', function(){ window.print(); });
     $('#sheetSettingsForm').addEventListener('submit', function(event){ event.preventDefault(); db.settings.endpoint = new FormData(event.currentTarget).get('endpoint').trim(); saveStore(); renderConnection(); setMessage('#settingsMessage', db.settings.endpoint ? 'Sheet connection saved.' : 'Enter a valid deployed Apps Script URL.', !db.settings.endpoint); });
     $('#disconnectSheet').addEventListener('click', function(){ db.settings.endpoint = ''; saveStore(); renderConnection(); setMessage('#settingsMessage','Sheet connection removed.'); });
     $('#accessCodeForm').addEventListener('submit', function(event){ event.preventDefault(); var code = new FormData(event.currentTarget).get('accessCode'); localStorage.setItem(accessKey,code); event.currentTarget.reset(); setMessage('#accessMessage','Owner access code updated.'); });
-    $('#exportInventory').addEventListener('click', function(){ csvDownload('ruach-terra-inventory.csv', [['Name','SKU','Quantity','Reorder At','Cost','Selling Price']].concat(db.inventory.map(function(item){ return [item.name,item.sku,item.quantity,item.reorderAt,item.cost,item.price]; }))); });
+    $('#exportInventory').addEventListener('click', function(){ csvDownload('ruach-terra-inventory.csv', [['Name','SKU','Date Bought / Stocked','Quantity','Reorder At','Cost','Selling Price']].concat(db.inventory.map(function(item){ return [item.name,item.sku,item.stockedDate || '',item.quantity,item.reorderAt,item.cost,item.price]; }))); });
     $('#exportSales').addEventListener('click', function(){ csvDownload('ruach-terra-sales.csv', [['Invoice','Date','Customer','Phone','Payment','Items','Total']].concat(db.sales.map(function(sale){ return [sale.invoice,sale.date,sale.customer,sale.phone,sale.payment,sale.items.map(function(item){ return item.name + ' x' + item.quantity; }).join('; '),sale.total]; }))); });
 
     // These run after the original form handlers above have saved the data.

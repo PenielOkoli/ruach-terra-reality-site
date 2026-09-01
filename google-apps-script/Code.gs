@@ -13,9 +13,9 @@ function doPost(e) {
     var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
 
     replaceSheet_(spreadsheet, 'Inventory', [
-      ['Item ID', 'Product name', 'SKU', 'Quantity', 'Reorder at', 'Cost per unit', 'Selling price', 'Synced at']
+      ['Item ID', 'Product name', 'SKU', 'Date bought / stocked', 'Quantity', 'Reorder at', 'Cost per unit', 'Selling price', 'Synced at']
     ], (payload.inventory || []).map(function (item) {
-      return [item.id, item.name, item.sku, item.quantity, item.reorderAt, item.cost, item.price, payload.syncedAt];
+      return [item.id, item.name, item.sku, item.stockedDate || '', item.quantity, item.reorderAt, item.cost, item.price, payload.syncedAt];
     }));
 
     replaceSheet_(spreadsheet, 'Sales', [
