@@ -224,8 +224,8 @@
   :focus-visible{ outline:2.5px solid var(--teal); outline-offset:2px; }
 
   /* ---------- owner portal ---------- */
-  .admin-launch{ margin-left:auto; border:1px solid rgba(32,79,65,.28); background:var(--paper); color:var(--green); border-radius:999px; padding:10px 14px; font:700 10px 'Work Sans',sans-serif; letter-spacing:.1em; text-transform:uppercase; cursor:pointer; }
-  .admin-launch:hover{ background:#eef5f1; }
+  .admin-launch,.owner-portal-link{ margin-left:auto; border:1px solid rgba(32,79,65,.28); background:var(--paper); color:var(--green); border-radius:999px; padding:10px 14px; font:700 10px 'Work Sans',sans-serif; letter-spacing:.1em; text-transform:uppercase; cursor:pointer; text-decoration:none; }
+  .admin-launch:hover,.owner-portal-link:hover{ background:#eef5f1; }
   .owner-modal{ position:fixed; inset:0; z-index:100; display:grid; place-items:center; padding:20px; background:rgba(20,31,27,.62); backdrop-filter:blur(5px); }
   .owner-modal[hidden], .admin-portal[hidden], .admin-tab[hidden], .invoice-sheet[hidden]{ display:none; }
   .owner-card{ width:min(100%,430px); background:#fffdf8; border-radius:18px; padding:30px; box-shadow:0 24px 80px rgba(0,0,0,.28); }
@@ -298,5 +298,5 @@
   .invoice-total{ display:flex; justify-content:flex-end; margin-top:20px; }
   .invoice-total div{ min-width:245px; padding-top:13px; border-top:2px solid #204f41; display:flex; justify-content:space-between; color:#204f41; font-weight:700; }
   .invoice-note{ margin-top:55px; padding-top:15px; border-top:1px solid #ddd; color:#65716a; font-size:11px; line-height:1.5; }
-  @media (max-width:760px){ .admin-launch{ padding:9px 10px; font-size:9px; } .admin-topbar{ padding:13px 18px; } .admin-brand span{ display:none; } .admin-shell{ width:min(100% - 24px,1180px); margin-top:20px; } .admin-heading{ align-items:start; flex-direction:column; gap:8px; } .metric-grid{ grid-template-columns:1fr 1fr; } .admin-grid{ grid-template-columns:1fr; } .admin-form-grid,.admin-form-grid.three{ grid-template-columns:1fr; } .sale-line{ grid-template-columns:1fr 1fr; } .invoice-paper{ padding:28px 20px; } .invoice-header,.invoice-party{ gap:16px; } }
+  @media (max-width:760px){ .admin-launch,.owner-portal-link{ padding:9px 10px; font-size:9px; } .admin-topbar{ padding:13px 18px; } .admin-brand span{ display:none; } .admin-shell{ width:min(100% - 24px,1180px); margin-top:20px; } .admin-heading{ align-items:start; flex-direction:column; gap:8px; } .metric-grid{ grid-template-columns:1fr 1fr; } .admin-grid{ grid-template-columns:1fr; } .admin-form-grid,.admin-form-grid.three{ grid-template-columns:1fr; } .sale-line{ grid-template-columns:1fr 1fr; } .invoice-paper{ padding:28px 20px; } .invoice-header,.invoice-party{ gap:16px; } }
   @media print{ body > *:not(.invoice-sheet){ display:none !important; } .invoice-sheet{ position:static; display:block !important; overflow:visible; padding:0; background:#fff; } .invoice-actions{ display:none !important; } .invoice-paper{ width:100%; min-height:0; padding:0; box-shadow:none; } }

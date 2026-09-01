@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Owner workspace | Ruach &amp; Terra Reality Ltd.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="owner-modal" id="ownerGate" hidden aria-modal="true" role="dialog" aria-labelledby="ownerGateTitle">
+    <div class="owner-card">
+      <a class="owner-close" href="index.html" aria-label="Return to public site">&times;</a>
+      <div class="admin-kicker">Private business tools</div>
+      <h2 id="ownerGateTitle">Owner access</h2>
+      <p>Sign in to manage sales, inventory and customer invoices.</p>
+      <form id="ownerLoginForm">
+        <label class="admin-field">Owner email<input id="ownerEmail" type="email" autocomplete="email" required placeholder="owner@example.com"></label>
+        <label class="admin-field" style="margin-top:12px">Password<input id="ownerPassword" type="password" autocomplete="current-password" required placeholder="Enter password"></label>
+        <div class="admin-form-actions"><button class="admin-solid-btn" type="submit">Sign in securely</button></div>
+        <div class="status-message" id="ownerLoginMessage"></div>
+      </form>
+    </div>
+  </div>
+
+  <section class="admin-portal" id="adminPortal" hidden aria-label="Business owner portal">
+    <div class="admin-topbar"><div class="admin-brand">R&amp;T <span>Owner workspace</span></div><div class="admin-topbar-actions"><button class="admin-plain-btn" type="button" id="ownerLogout">Sign out</button><button class="admin-plain-btn" type="button" id="closeAdminPortal">Public site</button></div></div>
+    <div class="admin-shell">
+      <div class="admin-heading"><div><div class="admin-kicker">Ruach &amp; Terra Reality Ltd.</div><h1>Business desk</h1></div><div class="admin-muted" id="adminDate"></div></div>
+      <nav class="admin-tabs" aria-label="Owner portal sections"><button class="admin-tab-btn active" type="button" data-admin-tab="overview">Overview</button><button class="admin-tab-btn" type="button" data-admin-tab="sales">Record sale</button><button class="admin-tab-btn" type="button" data-admin-tab="inventory">Inventory</button><button class="admin-tab-btn" type="button" data-admin-tab="invoices">Invoices</button><button class="admin-tab-btn" type="button" data-admin-tab="settings">Security</button></nav>
+
+      <div class="admin-tab" data-admin-panel="overview">
+        <div class="metric-grid"><article class="metric"><div class="label">Today's sales</div><div class="value" id="metricToday">₦0</div><div class="hint" id="metricTodayHint">No sales recorded today</div></article><article class="metric"><div class="label">This month</div><div class="value" id="metricMonth">₦0</div><div class="hint" id="metricMonthHint">0 transactions</div></article><article class="metric"><div class="label">Inventory items</div><div class="value" id="metricItems">0</div><div class="hint" id="metricItemsHint">0 units in stock</div></article><article class="metric"><div class="label">Reorder alerts</div><div class="value" id="metricLow">0</div><div class="hint">Items at or below minimum</div></article></div>
+        <div class="admin-grid"><article class="admin-panel"><div class="admin-section-bar"><h2>Recent sales</h2><button class="row-action" data-go-tab="sales">Record a sale</button></div><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Invoice</th><th>Customer</th><th>Date</th><th>Total</th><th></th></tr></thead><tbody id="recentSalesBody"></tbody></table></div></article><article class="admin-panel"><div class="admin-section-bar"><h2>Stock alerts</h2><button class="row-action" data-go-tab="inventory">Manage stock</button></div><div id="lowStockList" class="admin-muted">No items need reordering.</div></article></div>
+      </div>
+
+      <div class="admin-tab" data-admin-panel="sales" hidden><div class="admin-grid"><article class="admin-panel"><h2>Record a sale</h2><p class="sub">Saving a sale automatically deducts the sold quantities from inventory and creates a printable invoice.</p><form id="saleForm"><div class="admin-form-grid"><label class="admin-field">Customer name<input name="customer" required placeholder="Customer or company"></label><label class="admin-field">Customer phone<input name="phone" placeholder="e.g. 0800 000 0000"></label><label class="admin-field">Payment method<select name="payment"><option>Bank transfer</option><option>Cash</option><option>POS</option><option>Credit</option></select></label><label class="admin-field">Sale date<input name="date" type="date" required></label></div><div class="line-items" id="saleLines"></div><div class="admin-form-actions"><button class="admin-plain-btn" style="color:#1e473b;background:#e7f1eb" type="button" id="addSaleLine">+ Add item</button><strong id="saleGrandTotal">Total: ₦0</strong><button class="admin-solid-btn" type="submit">Save sale &amp; invoice</button></div></form><div class="status-message" id="saleMessage"></div></article><aside class="admin-panel"><h2>Before you save</h2><p class="sub">Products and selling prices come from Inventory. Add each line item, confirm quantities, then save the transaction.</p><div class="admin-muted">Changes are automatically sent to the protected Google Sheets sync service.</div></aside></div></div>
+
+      <div class="admin-tab" data-admin-panel="inventory" hidden><div class="admin-grid"><article class="admin-panel"><h2>Add inventory item</h2><p class="sub">Use selling price for invoices; cost price is for your internal records.</p><form id="inventoryForm"><div class="admin-form-grid three"><label class="admin-field">Product name<input name="name" required placeholder="e.g. White cement"></label><label class="admin-field">SKU / item code<input name="sku" placeholder="Optional"></label><label class="admin-field">Units in stock<input name="quantity" type="number" min="0" step="1" required></label><label class="admin-field">Reorder at<input name="reorderAt" type="number" min="0" step="1" required value="10"></label><label class="admin-field">Cost per unit (₦)<input name="cost" type="number" min="0" step="0.01" placeholder="Optional"></label><label class="admin-field">Selling price (₦)<input name="price" type="number" min="0" step="0.01" required></label></div><div class="admin-form-actions"><button class="admin-solid-btn" type="submit">Save inventory item</button></div></form><div class="status-message" id="inventoryMessage"></div></article><aside class="admin-panel"><h2>Spreadsheet status</h2><p class="sub">Automatic protected sync is enabled. Inventory and sales changes are sent after every save.</p><div class="admin-form-actions"><button class="admin-plain-btn" style="color:#1e473b;background:#e7f1eb" type="button" id="exportInventory">Download inventory CSV</button></div></aside></div><article class="admin-panel" style="margin-top:18px"><div class="admin-section-bar"><h2>Current inventory</h2><button class="admin-plain-btn" style="color:#1e473b;background:#e7f1eb" type="button" id="exportSales">Download sales CSV</button></div><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Item</th><th>SKU</th><th>Stock</th><th>Cost</th><th>Selling price</th><th></th></tr></thead><tbody id="inventoryBody"></tbody></table></div></article></div>
+
+      <div class="admin-tab" data-admin-panel="invoices" hidden><article class="admin-panel"><div class="admin-section-bar"><div><h2>Invoices</h2><p class="sub">Every saved sale includes a ready-to-print invoice.</p></div></div><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Invoice no.</th><th>Customer</th><th>Transaction date</th><th>Payment</th><th>Total</th><th></th></tr></thead><tbody id="invoiceBody"></tbody></table></div></article></div>
+      <div class="admin-tab" data-admin-panel="settings" hidden><div class="admin-grid"><article class="admin-panel"><h2>Secure spreadsheet sync</h2><p class="sub">Inventory and sales sync automatically through a protected Vercel server endpoint. The Google Sheets URL and sync secret are not exposed in this browser.</p><div class="status-message" id="settingsMessage">Signed in as the authorized owner. Automatic sync is enabled.</div></article><article class="admin-panel"><h2>Owner security</h2><p class="sub">This workspace uses a server-verified owner email and password, with a signed, HTTP-only session cookie. Sign out on shared devices.</p><div class="admin-form-actions"><button class="admin-danger-btn" type="button" id="settingsLogout">Sign out of owner workspace</button></div></article></div></div>
+    </div>
+  </section>
+
+  <section class="invoice-sheet" id="invoiceSheet" hidden aria-label="Printable invoice"><div class="invoice-actions"><button class="admin-plain-btn" id="closeInvoice" type="button">Close</button><button class="admin-solid-btn" id="printInvoice" type="button">Print invoice</button></div><article class="invoice-paper" id="invoicePaper"></article></section>
+  <script src="app.js"></script>
+</body>
+</html>
