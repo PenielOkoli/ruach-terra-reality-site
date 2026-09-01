@@ -83,6 +83,25 @@
       fetch(db.settings.endpoint, { method:'POST', mode:'no-cors', body:JSON.stringify({ inventory:db.inventory, sales:db.sales, syncedAt:new Date().toISOString() }) }).then(function(){ setMessage('#settingsMessage','Sync request sent to Google Sheets.'); }).catch(function(){ setMessage('#settingsMessage','Could not reach the sheet connection. Check the deployed URL.',true); });
     }
 
+    // This declaration intentionally replaces the smaller initial helper above.
+    // It lets each save operation report its own sync progress to the owner.
+    function syncSheet(options){
+      options = options || {};
+      var messageTarget = options.messageTarget || '#settingsMessage';
+      if(!db.settings.endpoint){
+        if(!options.silent){ showTab('settings'); setMessage(messageTarget,'Add your Apps Script web app URL before syncing.',true); }
+        return Promise.resolve(false);
+      }
+      setMessage(messageTarget, options.pendingMessage || 'Sending current inventory and sales to the connected sheet...');
+      return fetch(db.settings.endpoint, { method:'POST', mode:'no-cors', body:JSON.stringify({ inventory:db.inventory, sales:db.sales, syncedAt:new Date().toISOString() }) }).then(function(){
+        setMessage(messageTarget, options.successMessage || 'Sync request sent to Google Sheets.');
+        return true;
+      }).catch(function(){
+        setMessage(messageTarget,'Could not reach the sheet connection. Check the deployed URL and Apps Script deployment settings.',true);
+        return false;
+      });
+    }
+
     $('#openOwnerPortal').addEventListener('click', function(){ $('#ownerGate').hidden = false; $('#ownerAccessCode').focus(); });
     $('#closeOwnerGate').addEventListener('click', function(){ $('#ownerGate').hidden = true; });
     $('#ownerLoginForm').addEventListener('submit', function(event){ event.preventDefault(); if($('#ownerAccessCode').value === currentAccessCode()){ $('#ownerAccessCode').value = ''; setMessage('#ownerLoginMessage',''); openPortal(); } else { setMessage('#ownerLoginMessage','That access code is not correct.',true); } });
@@ -110,6 +129,18 @@
     $('#accessCodeForm').addEventListener('submit', function(event){ event.preventDefault(); var code = new FormData(event.currentTarget).get('accessCode'); localStorage.setItem(accessKey,code); event.currentTarget.reset(); setMessage('#accessMessage','Owner access code updated.'); });
     $('#exportInventory').addEventListener('click', function(){ csvDownload('ruach-terra-inventory.csv', [['Name','SKU','Quantity','Reorder At','Cost','Selling Price']].concat(db.inventory.map(function(item){ return [item.name,item.sku,item.quantity,item.reorderAt,item.cost,item.price]; }))); });
     $('#exportSales').addEventListener('click', function(){ csvDownload('ruach-terra-sales.csv', [['Invoice','Date','Customer','Phone','Payment','Items','Total']].concat(db.sales.map(function(sale){ return [sale.invoice,sale.date,sale.customer,sale.phone,sale.payment,sale.items.map(function(item){ return item.name + ' x' + item.quantity; }).join('; '),sale.total]; }))); });
+
+    // These run after the original form handlers above have saved the data.
+    // They make a connected spreadsheet update automatically after each save.
+    $('#inventoryForm').addEventListener('submit', function(){
+      if(db.settings.endpoint) syncSheet({ messageTarget:'#inventoryMessage', pendingMessage:'Inventory item saved. Syncing to Google Sheets...', successMessage:'Inventory item saved and sheet sync request sent.' });
+    });
+    $('#saleForm').addEventListener('submit', function(){
+      if(db.settings.endpoint) syncSheet({ messageTarget:'#saleMessage', pendingMessage:'Sale saved. Syncing inventory and invoice to Google Sheets...', successMessage:'Sale saved and sheet sync request sent. Your invoice is ready.' });
+    });
+    $('#sheetSettingsForm').addEventListener('submit', function(){
+      if(db.settings.endpoint) syncSheet({ messageTarget:'#settingsMessage', pendingMessage:'Sheet connection saved. Creating the Inventory and Sales tabs...', successMessage:'Sheet connection saved and initial sync request sent.' });
+    });
   })();
 
   // Play each video only while it's actually visible on screen, like a
