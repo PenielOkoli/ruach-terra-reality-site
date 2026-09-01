@@ -26,7 +26,7 @@
     function openPortal(){ $('#ownerGate').hidden = true; $('#adminPortal').hidden = false; $('#adminDate').textContent = new Date().toLocaleDateString('en-NG', { weekday:'long', day:'numeric', month:'long', year:'numeric' }); renderAll(); }
     function lineMarkup(item){
       var options = '<option value="">Select item</option>' + db.inventory.map(function(product){ return '<option value="' + product.id + '"' + (item && item.productId === product.id ? ' selected' : '') + '>' + escapeHtml(product.name) + ' (' + product.quantity + ' in stock)</option>'; }).join('');
-      return '<div class="sale-line"><label>Product<select class="sale-product" required>' + options + '</select></label><label>Quantity<input class="sale-quantity" required type="number" min="1" step="1" value="' + (item ? item.quantity : 1) + '"></label><label>Line total<div class="sale-line-total">â‚¦0</div></label><button class="row-action remove-sale-line" type="button">Remove</button></div>';
+      return '<div class="sale-line"><label>Product<select class="sale-product" required>' + options + '</select></label><label>Quantity<input class="sale-quantity" required type="number" min="1" step="1" value="' + (item ? item.quantity : 1) + '"></label><label>Line total<div class="sale-line-total">₦0</div></label><button class="row-action remove-sale-line" type="button">Remove</button></div>';
     }
     function addSaleLine(item){ $('#saleLines').insertAdjacentHTML('beforeend', lineMarkup(item)); updateSaleTotals(); }
     function updateSaleTotals(){
@@ -43,7 +43,7 @@
     function renderInventory(){
       $('#inventoryBody').innerHTML = db.inventory.length ? db.inventory.map(function(item){
         var low = item.quantity <= item.reorderAt;
-        return '<tr><td><strong>' + escapeHtml(item.name) + '</strong></td><td>' + escapeHtml(item.sku || 'â€”') + '</td><td><span class="stock-pill ' + (low ? 'low' : '') + '">' + item.quantity + ' units' + (low ? ' Â· reorder' : '') + '</span></td><td>' + (item.cost ? money.format(item.cost) : 'â€”') + '</td><td>' + money.format(item.price) + '</td><td><button class="row-action" type="button" data-restock="' + item.id + '">Restock</button></td></tr>';
+        return '<tr><td><strong>' + escapeHtml(item.name) + '</strong></td><td>' + escapeHtml(item.sku || '—') + '</td><td><span class="stock-pill ' + (low ? 'low' : '') + '">' + item.quantity + ' units' + (low ? ' · reorder' : '') + '</span></td><td>' + (item.cost ? money.format(item.cost) : '—') + '</td><td>' + money.format(item.price) + '</td><td><button class="row-action" type="button" data-restock="' + item.id + '">Restock</button></td></tr>';
       }).join('') : '<tr><td colspan="6" class="admin-muted">No inventory yet. Add your first product above.</td></tr>';
     }
     function renderSales(){
@@ -59,10 +59,10 @@
       $('#metricToday').textContent = money.format(total(todaySales)); $('#metricTodayHint').textContent = todaySales.length + (todaySales.length === 1 ? ' transaction today' : ' transactions today');
       $('#metricMonth').textContent = money.format(total(monthSales)); $('#metricMonthHint').textContent = monthSales.length + (monthSales.length === 1 ? ' transaction this month' : ' transactions this month');
       $('#metricItems').textContent = db.inventory.length; $('#metricItemsHint').textContent = units + ' units in stock'; $('#metricLow').textContent = low.length;
-      $('#lowStockList').innerHTML = low.length ? low.map(function(item){ return '<p style="margin:0 0 10px"><strong>' + escapeHtml(item.name) + '</strong><br><span class="stock-pill low">' + item.quantity + ' left Â· reorder at ' + item.reorderAt + '</span></p>'; }).join('') : 'No items need reordering.';
+      $('#lowStockList').innerHTML = low.length ? low.map(function(item){ return '<p style="margin:0 0 10px"><strong>' + escapeHtml(item.name) + '</strong><br><span class="stock-pill low">' + item.quantity + ' left · reorder at ' + item.reorderAt + '</span></p>'; }).join('') : 'No items need reordering.';
     }
     function renderConnection(){
-      var connected = !!db.settings.endpoint; $('#sheetStatus').textContent = connected ? 'Connected to Google Sheets. Use â€œSync sheetâ€ to update the workbook.' : 'Not connected yet. You can still download CSV backups.';
+      var connected = !!db.settings.endpoint; $('#sheetStatus').textContent = connected ? 'Connected to Google Sheets. Use “Sync sheet” to update the workbook.' : 'Not connected yet. You can still download CSV backups.';
       $('#sheetSettingsForm').elements.endpoint.value = db.settings.endpoint || '';
     }
     function refreshSaleLines(){ var previous = $$('.sale-line').map(function(line){ return { productId:$('.sale-product', line).value, quantity:number($('.sale-quantity', line).value) || 1 }; }); $('#saleLines').innerHTML = ''; (previous.length ? previous : [null]).forEach(function(line){ addSaleLine(line); }); }
@@ -70,7 +70,7 @@
     function showInvoice(id){
       var sale = db.sales.find(function(record){ return record.id === id; }); if(!sale) return;
       var rows = sale.items.map(function(item){ return '<tr><td>' + escapeHtml(item.name) + '</td><td style="text-align:center">' + item.quantity + '</td><td style="text-align:right">' + money.format(item.price) + '</td><td style="text-align:right"><strong>' + money.format(item.total) + '</strong></td></tr>'; }).join('');
-      $('#invoicePaper').innerHTML = '<div class="invoice-header"><div class="invoice-logo">Ruach &amp; Terra<span>Reality Ltd.</span></div><div><div class="invoice-title">Invoice</div><div class="invoice-meta"><strong>' + escapeHtml(sale.invoice) + '</strong><br>Issued ' + formatDate(sale.date) + '</div></div></div><div class="invoice-party"><div><span class="label">Bill to</span><strong>' + escapeHtml(sale.customer) + '</strong><br>' + escapeHtml(sale.phone || 'â€”') + '</div><div><span class="label">Business</span>10A Covel Plaza, opp. Beechwood Estate<br>Malete, Lagos<br>0703 069 5474</div></div><table class="invoice-table"><thead><tr><th>Item</th><th style="text-align:center">Qty</th><th style="text-align:right">Unit price</th><th style="text-align:right">Amount</th></tr></thead><tbody>' + rows + '</tbody></table><div class="invoice-total"><div><span>Total</span><span>' + money.format(sale.total) + '</span></div></div><div class="invoice-note">Payment method: ' + escapeHtml(sale.payment) + '<br>Thank you for choosing Ruach &amp; Terra Reality Ltd.</div>';
+      $('#invoicePaper').innerHTML = '<div class="invoice-header"><div class="invoice-logo">Ruach &amp; Terra<span>Reality Ltd.</span></div><div><div class="invoice-title">Invoice</div><div class="invoice-meta"><strong>' + escapeHtml(sale.invoice) + '</strong><br>Issued ' + formatDate(sale.date) + '</div></div></div><div class="invoice-party"><div><span class="label">Bill to</span><strong>' + escapeHtml(sale.customer) + '</strong><br>' + escapeHtml(sale.phone || '—') + '</div><div><span class="label">Business</span>10A Covel Plaza, opp. Beechwood Estate<br>Malete, Lagos<br>0703 069 5474</div></div><table class="invoice-table"><thead><tr><th>Item</th><th style="text-align:center">Qty</th><th style="text-align:right">Unit price</th><th style="text-align:right">Amount</th></tr></thead><tbody>' + rows + '</tbody></table><div class="invoice-total"><div><span>Total</span><span>' + money.format(sale.total) + '</span></div></div><div class="invoice-note">Payment method: ' + escapeHtml(sale.payment) + '<br>Thank you for choosing Ruach &amp; Terra Reality Ltd.</div>';
       $('#invoiceSheet').hidden = false;
     }
     function csvDownload(filename, rows){
@@ -79,7 +79,7 @@
     }
     function syncSheet(){
       if(!db.settings.endpoint){ showTab('settings'); setMessage('#settingsMessage','Add your Apps Script web app URL before syncing.',true); return; }
-      setMessage('#settingsMessage','Sending current inventory and sales to the connected sheetâ€¦');
+      setMessage('#settingsMessage','Sending current inventory and sales to the connected sheet…');
       fetch(db.settings.endpoint, { method:'POST', mode:'no-cors', body:JSON.stringify({ inventory:db.inventory, sales:db.sales, syncedAt:new Date().toISOString() }) }).then(function(){ setMessage('#settingsMessage','Sync request sent to Google Sheets.'); }).catch(function(){ setMessage('#settingsMessage','Could not reach the sheet connection. Check the deployed URL.',true); });
     }
 
@@ -115,7 +115,7 @@
     $('#saleForm').elements.date.value = today();
     $('#saleForm').addEventListener('submit', function(event){
       event.preventDefault(); var form = event.currentTarget; var selected = []; var invalid = '';
-      $$('.sale-line').forEach(function(line){ var product = db.inventory.find(function(item){ return item.id === $('.sale-product', line).value; }); var qty = number($('.sale-quantity', line).value); if(!product) invalid = 'Select a product for every line item.'; else if(qty < 1 || qty > product.quantity) invalid = 'Check stock levels â€” ' + product.name + ' has only ' + product.quantity + ' units available.'; else selected.push({ productId:product.id, name:product.name, quantity:qty, price:number(product.price), total:qty * number(product.price) }); });
+      $$('.sale-line').forEach(function(line){ var product = db.inventory.find(function(item){ return item.id === $('.sale-product', line).value; }); var qty = number($('.sale-quantity', line).value); if(!product) invalid = 'Select a product for every line item.'; else if(qty < 1 || qty > product.quantity) invalid = 'Check stock levels — ' + product.name + ' has only ' + product.quantity + ' units available.'; else selected.push({ productId:product.id, name:product.name, quantity:qty, price:number(product.price), total:qty * number(product.price) }); });
       if(invalid || !selected.length){ setMessage('#saleMessage',invalid || 'Add at least one item to the sale.',true); return; }
       selected.forEach(function(line){ db.inventory.find(function(item){ return item.id === line.productId; }).quantity -= line.quantity; });
       var data = new FormData(form); var sale = { id:makeId('sale'), invoice:invoiceNumber(), customer:data.get('customer'), phone:data.get('phone'), payment:data.get('payment'), date:data.get('date'), items:selected, total:selected.reduce(function(sum,line){ return sum + line.total; },0), createdAt:new Date().toISOString() }; db.sales.push(sale); saveStore(); form.reset(); form.elements.date.value = today(); $('#saleLines').innerHTML = ''; addSaleLine(); renderAll(); setMessage('#saleMessage','Sale saved and inventory updated. Invoice ' + sale.invoice + ' is ready.'); showInvoice(sale.id);
@@ -144,7 +144,7 @@
   })();
 
   // Play each video only while it's actually visible on screen, like a
-  // background clip â€” no tap-to-play, no controls, just autoplay in view.
+  // background clip — no tap-to-play, no controls, just autoplay in view.
   (function(){
     var videos = document.querySelectorAll('.autoplay-video');
     var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
