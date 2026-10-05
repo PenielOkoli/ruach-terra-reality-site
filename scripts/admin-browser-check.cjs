@@ -12,6 +12,11 @@ let browser;
   const page = await context.newPage();
   const pageErrors = [];
   const syncs = [];
+  let shared = { inventory: [], sales: [] };
+  let pulls = 0;
+  let rejectPull = false;
+  let delayedPull;
+  let releasePull;
   let signedIn = false;
   page.on('pageerror', error => pageErrors.push(error.message));
   await context.route('**/*', async route => {
@@ -26,7 +31,16 @@ let browser;
       if (url.pathname === '/api/auth/logout') signedIn = false;
       if (url.pathname === '/api/admin/sync') {
         assert.equal(signedIn, true);
-        syncs.push(request.postDataJSON());
+        if (request.method() === 'GET') {
+          pulls++;
+          if (rejectPull) { status = 502; body = { error: 'Test refresh unavailable' }; }
+          else if (delayedPull) { body = structuredClone(shared); await delayedPull; delayedPull = null; }
+          else body = { ok: true, ...structuredClone(shared) };
+        } else {
+          const data = request.postDataJSON();
+          syncs.push(data);
+          shared = structuredClone(data);
+        }
       }
       return route.fulfill({ status, contentType: 'application/json', body: JSON.stringify(body) });
     }
@@ -43,6 +57,7 @@ let browser;
   await page.locator('#ownerPassword').fill('test-only-password');
   await page.locator('#ownerLoginForm button[type=submit]').click();
   await page.locator('#adminPortal').waitFor({ state: 'visible' });
+  await page.waitForFunction(() => JSON.parse(localStorage.getItem('rt-business-desk-v1')) !== null);
   assert.equal(await page.locator('#addSaleLine').evaluate(el => getComputedStyle(el).backgroundColor), 'rgb(231, 241, 235)');
 
   await page.locator('[data-admin-tab=inventory]').click();
@@ -65,14 +80,21 @@ let browser;
   await page.locator('#saleForm [name=customer]').fill('Test customer');
   await page.locator('.sale-product').selectOption(productId);
   await page.locator('.sale-quantity').fill('3');
+  await page.locator('.sale-discount').fill('10');
+  assert.match(await page.locator('#saleGrandTotal').innerText(), /2,700/);
   await page.locator('#saleForm button[type=submit]').click();
   await page.locator('#invoiceSheet').waitFor({ state: 'visible' });
   await page.waitForFunction(() => document.querySelector('#saleMessage').textContent.includes('saved and synced'));
   const sold = await readStore();
   assert.equal(sold.inventory[0].quantity, 17);
-  assert.equal(sold.sales[0].total, 3000);
+  assert.equal(sold.sales[0].subtotal, 3000);
+  assert.equal(sold.sales[0].discountTotal, 300);
+  assert.equal(sold.sales[0].total, 2700);
+  assert.equal(sold.sales[0].items[0].discountPercent, 10);
   assert.match(await page.locator('#invoicePaper').innerText(), /Test <pipe>/);
   assert.match(await page.locator('#invoicePaper').innerText(), /Test customer/);
+  assert.match(await page.locator('#invoicePaper').innerText(), /10%/);
+  assert.equal(await page.locator('#invoicePaper thead th').count(), 5);
   assert.equal(await page.locator('#invoicePaper script').count(), 0);
   assert.equal(await page.locator('#invoicePaper th.invoice-quantity').evaluate(el => getComputedStyle(el).textAlign), 'center');
   assert.equal(await page.locator('#invoicePaper th.invoice-amount').first().evaluate(el => getComputedStyle(el).textAlign), 'right');
@@ -94,6 +116,39 @@ let browser;
   const salesCsv = await salesDownload;
   assert.equal(salesCsv.suggestedFilename(), 'ruach-terra-sales.csv');
   assert.match(fs.readFileSync(await salesCsv.path(), 'utf8'), /"Test customer"/);
+  assert.match(fs.readFileSync(await salesCsv.path(), 'utf8'), /"Test <pipe> x3 \(10% off\)","300","2700"/);
+
+  // New main-branch feature: pull shared records, then retain them on failure.
+  await page.locator('[data-admin-tab=settings]').click();
+  shared.inventory[0].quantity = 27;
+  await page.locator('#refreshFromSheets').click();
+  await page.waitForFunction(() => document.querySelector('#settingsMessage').textContent.includes('Refreshed with'));
+  assert.equal((await readStore()).inventory[0].quantity, 27);
+  rejectPull = true;
+  await page.locator('#refreshFromSheets').click();
+  await page.waitForFunction(() => document.querySelector('#settingsMessage').textContent.includes('Could not refresh'));
+  assert.equal((await readStore()).inventory[0].quantity, 27);
+  rejectPull = false;
+
+  // A refresh in flight must not erase a newly saved local record.
+  delayedPull = new Promise(resolve => { releasePull = resolve; });
+  const startedPull = page.waitForRequest(request => request.url().endsWith('/api/admin/sync') && request.method() === 'GET');
+  await page.locator('#refreshFromSheets').click();
+  await startedPull;
+  await page.locator('[data-admin-tab=inventory]').click();
+  page.once('dialog', dialog => dialog.accept('1'));
+  await page.locator('[data-restock]').click();
+  await page.waitForFunction(() => document.querySelector('#inventoryMessage').textContent.includes('Stock updated and synced'));
+  releasePull();
+  await page.waitForFunction(() => document.querySelector('#settingsMessage').textContent.includes('Local records changed'));
+  assert.equal((await readStore()).inventory[0].quantity, 28);
+
+  // Portrait mobile layout includes the discount control without page overflow.
+  await page.locator('[data-admin-tab=sales]').click();
+  for (const width of [360, 768, 1280]) {
+    await page.setViewportSize({ width, height: 900 });
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
+  }
 
   await page.locator('[data-admin-tab=invoices]').click();
   await page.locator('#invoiceBody [data-invoice]').click();
@@ -102,8 +157,9 @@ let browser;
   await page.locator('#ownerLogout').click();
   await page.waitForURL('**/index.html');
   assert.equal(signedIn, false);
-  assert.equal(syncs.length, 3);
+  assert.equal(syncs.length, 4);
+  assert.ok(pulls >= 5);
   assert.equal(pageErrors.length, 0, pageErrors.join('\n'));
   await browser.close();
-  console.log('PASS: isolated owner login, inventory, reload, sale, invoice, restock, CSV exports, logout; no live API requests.');
+  console.log('PASS: owner login, inventory, reload, discounts, invoice, restock, CSV, shared refresh, failed refresh, in-flight data protection, mobile layout and logout; no live API requests.');
 })().catch(async error => { console.error(error); await browser?.close(); process.exitCode = 1; });

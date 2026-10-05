@@ -40,6 +40,33 @@ export function startAdmin() {
       year: "numeric",
     });
     renderAll();
+    pullFromSheet();
+  }
+
+  // Keep the shared-sheet refresh added on main, with all transport in api.mjs.
+  function pullFromSheet(messageTarget) {
+    const localSnapshot = JSON.stringify(db);
+    return api.pull().then(function (data) {
+      // A delayed refresh must not discard a sale/item saved while it was loading.
+      if (JSON.stringify(db) !== localSnapshot) {
+        setMessage(messageTarget || '#settingsMessage', 'Local records changed during refresh. Saved records were kept; refresh again when ready.', true);
+        return false;
+      }
+      if (!Array.isArray(data.inventory) || !Array.isArray(data.sales)) throw new Error('Invalid spreadsheet response');
+      if (!data.inventory.length && !data.sales.length && (db.inventory.length || db.sales.length)) {
+        return syncSheet(messageTarget, "Setting up shared sync with this device's existing data...", "This device's data is now the shared copy in Google Sheets.");
+      }
+      db.inventory = data.inventory;
+      db.sales = data.sales;
+      saveStore();
+      renderAll();
+      if (messageTarget) setMessage(messageTarget, 'Refreshed with the latest data from Google Sheets.');
+      return true;
+    }).catch(function (error) {
+      if (error.status === 503 && !messageTarget) return false;
+      setMessage(messageTarget || '#settingsMessage', 'Could not refresh from Google Sheets - showing the last saved copy on this device.', true);
+      return false;
+    });
   }
 
   function closePortal() {
@@ -127,6 +154,10 @@ export function startAdmin() {
   $("#closeAdminPortal").addEventListener("click", closePortal);
   $("#ownerLogout").addEventListener("click", signOut);
   $("#settingsLogout").addEventListener("click", signOut);
+  $("#refreshFromSheets").addEventListener("click", function () {
+    setMessage('#settingsMessage', 'Refreshing...');
+    pullFromSheet('#settingsMessage');
+  });
   $$(".admin-tab-btn").forEach(function (button) {
     button.addEventListener("click", function () {
       showTab(button.dataset.adminTab);
@@ -157,6 +188,7 @@ export function startAdmin() {
     const lines = $$(".sale-line").map((line) => ({
       productId: $(".sale-product", line).value,
       quantity: $(".sale-quantity", line).value,
+      discountPercent: $(".sale-discount", line).value,
     }));
     const { items, error } = selectSaleItems(db.inventory, lines);
     if (error) return setMessage("#saleMessage", error, true);

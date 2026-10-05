@@ -3,6 +3,13 @@ export function number(value) {
   return Number(value) || 0;
 }
 
+export function saleLineAmounts(quantity, price, discountInput = 0) {
+  const discountPercent = Math.min(100, Math.max(0, number(discountInput)));
+  const subtotal = number(quantity) * number(price);
+  const discountAmount = subtotal * (discountPercent / 100);
+  return { subtotal, discountPercent, discountAmount, total: subtotal - discountAmount };
+}
+
 export function today() {
   return new Date().toISOString().slice(0, 10);
 }
@@ -40,7 +47,7 @@ export function createInventoryItem(
 export function selectSaleItems(inventory, lines) {
   const selected = [];
   let error = "";
-  lines.forEach(({ productId, quantity: input }) => {
+  lines.forEach(({ productId, quantity: input, discountPercent: discountInput }) => {
     const product = inventory.find((item) => item.id === productId);
     const quantity = number(input);
     if (!product) error = "Select a product for every line item.";
@@ -52,12 +59,15 @@ export function selectSaleItems(inventory, lines) {
         product.quantity +
         " units available.";
     } else {
+      const { discountPercent, discountAmount, total } = saleLineAmounts(quantity, product.price, discountInput);
       selected.push({
         productId: product.id,
         name: product.name,
         quantity,
         price: number(product.price),
-        total: quantity * number(product.price),
+        discountPercent,
+        discountAmount,
+        total,
       });
     }
   });
@@ -80,6 +90,8 @@ export function recordSale(
     invoice: invoiceNumber(db.sales.length),
     ...details,
     items,
+    subtotal: items.reduce((sum, line) => sum + line.quantity * line.price, 0),
+    discountTotal: items.reduce((sum, line) => sum + number(line.discountAmount), 0),
     total: items.reduce((sum, line) => sum + line.total, 0),
     createdAt,
   };

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createStore, STORE_KEY } from '../admin/storage.mjs';
-import { createInventoryItem, selectSaleItems, recordSale, restockItem, getOverview, invoiceNumber } from '../admin/domain.mjs';
+import { createInventoryItem, selectSaleItems, recordSale, restockItem, getOverview, invoiceNumber, saleLineAmounts } from '../admin/domain.mjs';
 import { serializeCsv, inventoryRows, salesRows } from '../admin/exports.mjs';
 import { escapeHtml } from '../admin/format.mjs';
 import { createAdminApi } from '../admin/api.mjs';
@@ -83,14 +83,44 @@ test('admin API uses same-origin credentials and the original endpoints', async 
   await api.session();
   await api.login({ email: 'test@example.com', password: 'test-only' });
   await api.sync({ inventory: [], sales: [] });
+  await api.pull();
   await api.logout();
-  assert.deepEqual(requests.map(r => r.path), ['/api/auth/session', '/api/auth/login', '/api/admin/sync', '/api/auth/logout']);
+  assert.deepEqual(requests.map(r => r.path), ['/api/auth/session', '/api/auth/login', '/api/admin/sync', '/api/admin/sync', '/api/auth/logout']);
   assert.ok(requests.every(r => r.options.credentials === 'same-origin'));
   assert.equal(requests[0].options.body, undefined);
   assert.equal(JSON.parse(requests[1].options.body).email, 'test@example.com');
+  assert.equal(requests[3].options.method, 'GET');
+  assert.equal(requests[3].options.body, undefined);
 });
 
 test('admin API preserves HTTP error messages and status', async () => {
   const api = createAdminApi(async () => Response.json({ error: 'Session expired' }, { status: 401 }));
   await assert.rejects(api.session(), error => error.status === 401 && error.message === 'Session expired');
+});
+
+test('merged sale discounts retain the main-branch schema and net totals', () => {
+  const db = { inventory: [product()], sales: [] };
+  const { items, error } = selectSaleItems(db.inventory, [{ productId: 'item-1', quantity: 3, discountPercent: '10' }]);
+  assert.equal(error, '');
+  assert.equal(items[0].discountPercent, 10);
+  assert.equal(items[0].discountAmount, 300);
+  assert.equal(items[0].total, 2700);
+  const sale = recordSale(db, { customer: 'Client' }, items);
+  assert.equal(sale.subtotal, 3000);
+  assert.equal(sale.discountTotal, 300);
+  assert.equal(sale.total, 2700);
+  assert.equal(db.inventory[0].quantity, 17);
+  const rows = salesRows([sale]);
+  assert.equal(rows[0][6], 'Discount');
+  assert.equal(rows[1][5], 'Pipe x3 (10% off)');
+  assert.equal(rows[1][6], 300);
+  assert.equal(rows[1][7], 2700);
+});
+
+test('discounts default to zero and stay within the original 0–100 percent range', () => {
+  assert.equal(saleLineAmounts(3, 1000).total, 3000);
+  assert.equal(saleLineAmounts(3, 1000, -10).discountPercent, 0);
+  assert.equal(saleLineAmounts(3, 1000, 120).total, 0);
+  assert.equal(saleLineAmounts(3, 1000, 2.5).total, 2925);
+  assert.equal(salesRows([{ invoice: 'old', items: [{ name: 'Pipe', quantity: 1 }], total: 1000 }])[1][6], 0);
 });
