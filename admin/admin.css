@@ -5,3 +5,5 @@
 .admin-stock-alert { margin: 0 0 10px; }
 .invoice-table .invoice-quantity { text-align: center; }
 .invoice-table .invoice-amount { text-align: right; }
+.sale-line { grid-template-columns: 1.4fr .55fr .55fr .9fr auto; }
+@media (max-width: 760px) { .sale-line { grid-template-columns: 1fr 1fr; } }

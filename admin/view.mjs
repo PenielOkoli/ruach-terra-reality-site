@@ -1,5 +1,5 @@
 import { $, $$ } from "./dom.mjs";
-import { number, getOverview } from "./domain.mjs";
+import { number, getOverview, saleLineAmounts } from "./domain.mjs";
 import { money, escapeHtml, formatDate } from "./format.mjs";
 
 // Rendering reads state but never persists, syncs, or changes business records.
@@ -27,6 +27,8 @@ export function createAdminView(db) {
       options +
       '</select></label><label>Quantity<input class="sale-quantity" required type="number" min="1" step="1" value="' +
       (item ? item.quantity : 1) +
+      '"></label><label>Discount %<input class="sale-discount" type="number" min="0" max="100" step="0.01" placeholder="0" value="' +
+      (item ? escapeHtml(item.discountPercent || '') : '') +
       '"></label><label>Line total<div class="sale-line-total">0</div></label><button class="row-action remove-sale-line" type="button">Remove</button></div>'
     );
   }
@@ -37,18 +39,17 @@ export function createAdminView(db) {
   }
 
   function updateSaleTotals() {
-    var total = 0;
+    var total = 0, savedTotal = 0;
     $$(".sale-line").forEach(function (line) {
       var product = db.inventory.find(function (candidate) {
         return candidate.id === $(".sale-product", line).value;
       });
-      var amount = product
-        ? number($(".sale-quantity", line).value) * number(product.price)
-        : 0;
-      $(".sale-line-total", line).textContent = money.format(amount);
-      total += amount;
+      const amounts = saleLineAmounts($(".sale-quantity", line).value, product ? product.price : 0, $(".sale-discount", line).value);
+      $(".sale-line-total", line).textContent = money.format(amounts.total) + (amounts.discountAmount ? ' (saved ' + money.format(amounts.discountAmount) + ')' : '');
+      total += amounts.total;
+      savedTotal += amounts.discountAmount;
     });
-    $("#saleGrandTotal").textContent = "Total: " + money.format(total);
+    $("#saleGrandTotal").textContent = "Total: " + money.format(total) + (savedTotal ? ' · Discount given: ' + money.format(savedTotal) : '');
     return total;
   }
 
@@ -57,6 +58,7 @@ export function createAdminView(db) {
       return {
         productId: $(".sale-product", line).value,
         quantity: number($(".sale-quantity", line).value) || 1,
+        discountPercent: number($(".sale-discount", line).value),
       };
     });
     $("#saleLines").innerHTML = "";
@@ -161,12 +163,15 @@ export function createAdminView(db) {
           item.quantity +
           '</td><td class="invoice-amount">' +
           money.format(item.price) +
+          '</td><td class="invoice-amount">' +
+          (item.discountPercent ? escapeHtml(item.discountPercent) + '%' : '-') +
           '</td><td class="invoice-amount"><strong>' +
           money.format(item.total) +
           "</strong></td></tr>"
         );
       })
       .join("");
+    const totalsMarkup = (sale.discountTotal ? '<div><span>Subtotal</span><span>' + money.format(sale.subtotal) + '</span></div><div><span>Discount</span><span>-' + money.format(sale.discountTotal) + '</span></div>' : '') + '<div><span>Total</span><span>' + money.format(sale.total) + '</span></div>';
     $("#invoicePaper").innerHTML =
       '<div class="invoice-header"><div class="invoice-logo">Ruach &amp; Terra<span>Reality Ltd.</span></div><div><div class="invoice-title">Invoice</div><div class="invoice-meta"><strong>' +
       escapeHtml(sale.invoice) +
@@ -176,11 +181,9 @@ export function createAdminView(db) {
       escapeHtml(sale.customer) +
       "</strong><br>" +
       escapeHtml(sale.phone || "-") +
-      '</div><div><span class="label">Business</span>10A Covel Plaza, opp. Beechwood Estate<br>Malete, Lagos<br>0703 069 5474</div></div><table class="invoice-table"><thead><tr><th>Item</th><th class="invoice-quantity">Qty</th><th class="invoice-amount">Unit price</th><th class="invoice-amount">Amount</th></tr></thead><tbody>' +
+      '</div><div><span class="label">Business</span>10A Covel Plaza, opp. Beechwood Estate<br>Malete, Lagos<br>0703 069 5474</div></div><table class="invoice-table"><thead><tr><th>Item</th><th class="invoice-quantity">Qty</th><th class="invoice-amount">Unit price</th><th class="invoice-amount">Discount</th><th class="invoice-amount">Amount</th></tr></thead><tbody>' +
       rows +
-      '</tbody></table><div class="invoice-total"><div><span>Total</span><span>' +
-      money.format(sale.total) +
-      '</span></div></div><div class="invoice-note">Payment method: ' +
+      '</tbody></table><div class="invoice-total">' + totalsMarkup + '</div><div class="invoice-note">Payment method: ' +
       escapeHtml(sale.payment) +
       "<br>Thank you for choosing Ruach &amp; Terra Reality Ltd.</div>";
     $("#invoiceSheet").hidden = false;

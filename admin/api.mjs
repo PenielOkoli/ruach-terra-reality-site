@@ -30,5 +30,6 @@ export function createAdminApi(fetchRequest = globalThis.fetch) {
     logout: () => request("/api/auth/logout", { method: "POST", body: {} }),
     sync: (records) =>
       request("/api/admin/sync", { method: "POST", body: records }),
+    pull: () => request("/api/admin/sync"),
   };
 }

@@ -31,7 +31,7 @@ export function inventoryRows(inventory) {
 
 export function salesRows(sales) {
   return [
-    ["Invoice", "Date", "Customer", "Phone", "Payment", "Items", "Total"],
+    ["Invoice", "Date", "Customer", "Phone", "Payment", "Items", "Discount", "Total"],
   ].concat(
     sales.map((sale) => [
       sale.invoice,
@@ -39,7 +39,8 @@ export function salesRows(sales) {
       sale.customer,
       sale.phone,
       sale.payment,
-      sale.items.map((item) => item.name + " x" + item.quantity).join("; "),
+      sale.items.map((item) => item.name + " x" + item.quantity + (item.discountPercent ? ' (' + item.discountPercent + '% off)' : '')).join("; "),
+      sale.discountTotal || 0,
       sale.total,
     ]),
   );
