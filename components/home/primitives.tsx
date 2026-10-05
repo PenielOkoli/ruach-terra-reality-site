@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { ResponsivePhoto } from '../responsive-photo';
 import Link from "next/link";
 
 export function Fact({ label, value }: { label: string; value: string }) {
@@ -28,12 +28,10 @@ export function Photo({
 }) {
   return (
     <div className={`home-photo ${className}`}>
-      <Image
+      <ResponsivePhoto
         src={src}
         alt={alt}
-        fill
-        unoptimized={src.startsWith('/media/enhanced/') || src.startsWith('/media/profile/')}
-        sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 600px"
+        sizes={className.includes('project-photo') ? '(max-width: 767px) calc(100vw - 40px), (max-width: 1416px) 30vw, 422px' : '(max-width: 1023px) calc(100vw - 40px), (max-width: 1416px) 60vw, 780px'}
         className="object-cover"
       />
     </div>

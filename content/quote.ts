@@ -1,16 +1,17 @@
 export const quoteFields = [
   ["name", "Name", "text"],
-  ["company", "Company or organisation", "text"],
-  ["email", "Email address", "email"],
-  ["phone", "Phone number", "tel"],
+  ["phone", "Phone / WhatsApp", "tel"],
   ["location", "Project location", "text"],
-  ["volume", "Approximate volume", "number"],
-  ["pipelineDistance", "Pipeline distance", "number"],
+  ["email", "Email address (optional)", "email"],
+  ["company", "Company or organisation (optional)", "text"],
+] as const;
+export const quoteEngineeringFields = [
+  ["volume", "Approximate volume (m³)", "number"],
+  ["pipelineDistance", "Pipeline distance (m)", "number"],
   ["timeline", "Required timeline", "text"],
 ] as const;
 export const quoteRequiredFields = [
   "name",
-  "email",
   "phone",
   "location",
   "projectType",
@@ -23,5 +24,7 @@ export const quoteProjectTypes = [
   "Terrain and earthworks",
   "Pipeline and marine support",
   "Industrial pumping and emergency dewatering",
+  "Not sure yet",
 ] as const;
 export const MAX_QUOTE_ATTACHMENT_BYTES = 5_000_000;
+export const MAX_QUOTE_REQUEST_BYTES = MAX_QUOTE_ATTACHMENT_BYTES + 100_000;

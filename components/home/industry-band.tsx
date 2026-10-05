@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { ResponsivePhoto } from '../responsive-photo';
 import { profilePhotos } from '@/content/photography';
 
 export function IndustryBand() {
@@ -8,11 +8,9 @@ export function IndustryBand() {
         className="industry-band"
         aria-label="Company-profile pipeline installation photograph"
       >
-        <Image
+        <ResponsivePhoto
           src={profilePhotos.pipeline.src}
           alt={profilePhotos.pipeline.alt}
-          fill
-          unoptimized
           sizes="100vw"
           className="object-cover"
         />

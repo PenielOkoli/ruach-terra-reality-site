@@ -1,0 +1,448 @@
+{
+  "/media/enhanced/coastal-road-barge-v2.webp": {
+    "width": 939,
+    "height": 1675,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/enhanced-coastal-road-barge-v2-320.webp",
+        "bytes": 30410
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/enhanced-coastal-road-barge-v2-480.webp",
+        "bytes": 56642
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/enhanced-coastal-road-barge-v2-768.webp",
+        "bytes": 103634
+      },
+      {
+        "width": 939,
+        "src": "/media/responsive/enhanced-coastal-road-barge-v2-939.webp",
+        "bytes": 147870
+      }
+    ]
+  },
+  "/media/enhanced/dredger-crew-v2.webp": {
+    "width": 1088,
+    "height": 1445,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/enhanced-dredger-crew-v2-320.webp",
+        "bytes": 29760
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/enhanced-dredger-crew-v2-480.webp",
+        "bytes": 57720
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/enhanced-dredger-crew-v2-768.webp",
+        "bytes": 112134
+      },
+      {
+        "width": 1024,
+        "src": "/media/responsive/enhanced-dredger-crew-v2-1024.webp",
+        "bytes": 159306
+      },
+      {
+        "width": 1088,
+        "src": "/media/responsive/enhanced-dredger-crew-v2-1088.webp",
+        "bytes": 200162
+      }
+    ]
+  },
+  "/media/enhanced/dredging-action-v3.webp": {
+    "width": 1535,
+    "height": 1025,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/enhanced-dredging-action-v3-320.webp",
+        "bytes": 15150
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/enhanced-dredging-action-v3-480.webp",
+        "bytes": 29962
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/enhanced-dredging-action-v3-768.webp",
+        "bytes": 66740
+      },
+      {
+        "width": 1024,
+        "src": "/media/responsive/enhanced-dredging-action-v3-1024.webp",
+        "bytes": 103106
+      },
+      {
+        "width": 1535,
+        "src": "/media/responsive/enhanced-dredging-action-v3-1535.webp",
+        "bytes": 221662
+      }
+    ]
+  },
+  "/media/enhanced/epe-pipeline-joint-v2.webp": {
+    "width": 1367,
+    "height": 1150,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/enhanced-epe-pipeline-joint-v2-320.webp",
+        "bytes": 30752
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/enhanced-epe-pipeline-joint-v2-480.webp",
+        "bytes": 58828
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/enhanced-epe-pipeline-joint-v2-768.webp",
+        "bytes": 114002
+      },
+      {
+        "width": 1024,
+        "src": "/media/responsive/enhanced-epe-pipeline-joint-v2-1024.webp",
+        "bytes": 159370
+      },
+      {
+        "width": 1367,
+        "src": "/media/responsive/enhanced-epe-pipeline-joint-v2-1367.webp",
+        "bytes": 238930
+      }
+    ]
+  },
+  "/media/enhanced/field-pump-preparation-v2.webp": {
+    "width": 979,
+    "height": 1606,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/enhanced-field-pump-preparation-v2-320.webp",
+        "bytes": 54642
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/enhanced-field-pump-preparation-v2-480.webp",
+        "bytes": 108678
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/enhanced-field-pump-preparation-v2-768.webp",
+        "bytes": 215896
+      },
+      {
+        "width": 979,
+        "src": "/media/responsive/enhanced-field-pump-preparation-v2-979.webp",
+        "bytes": 338090
+      }
+    ]
+  },
+  "/media/enhanced/hydraulic-discharge-v2.webp": {
+    "width": 928,
+    "height": 1695,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/enhanced-hydraulic-discharge-v2-320.webp",
+        "bytes": 53316
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/enhanced-hydraulic-discharge-v2-480.webp",
+        "bytes": 111020
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/enhanced-hydraulic-discharge-v2-768.webp",
+        "bytes": 232358
+      },
+      {
+        "width": 928,
+        "src": "/media/responsive/enhanced-hydraulic-discharge-v2-928.webp",
+        "bytes": 359208
+      }
+    ]
+  },
+  "/media/enhanced/igbolomi-excavator-v2.webp": {
+    "width": 940,
+    "height": 1672,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/enhanced-igbolomi-excavator-v2-320.webp",
+        "bytes": 33034
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/enhanced-igbolomi-excavator-v2-480.webp",
+        "bytes": 68464
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/enhanced-igbolomi-excavator-v2-768.webp",
+        "bytes": 141776
+      },
+      {
+        "width": 940,
+        "src": "/media/responsive/enhanced-igbolomi-excavator-v2-940.webp",
+        "bytes": 228370
+      }
+    ]
+  },
+  "/media/enhanced/lagoon-dredger-v2.webp": {
+    "width": 1087,
+    "height": 1447,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/enhanced-lagoon-dredger-v2-320.webp",
+        "bytes": 21808
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/enhanced-lagoon-dredger-v2-480.webp",
+        "bytes": 44852
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/enhanced-lagoon-dredger-v2-768.webp",
+        "bytes": 95032
+      },
+      {
+        "width": 1024,
+        "src": "/media/responsive/enhanced-lagoon-dredger-v2-1024.webp",
+        "bytes": 138300
+      },
+      {
+        "width": 1087,
+        "src": "/media/responsive/enhanced-lagoon-dredger-v2-1087.webp",
+        "bytes": 174550
+      }
+    ]
+  },
+  "/media/enhanced/pipeline-installation-v2.webp": {
+    "width": 1777,
+    "height": 885,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/enhanced-pipeline-installation-v2-320.webp",
+        "bytes": 11758
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/enhanced-pipeline-installation-v2-480.webp",
+        "bytes": 24912
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/enhanced-pipeline-installation-v2-768.webp",
+        "bytes": 53888
+      },
+      {
+        "width": 1024,
+        "src": "/media/responsive/enhanced-pipeline-installation-v2-1024.webp",
+        "bytes": 80696
+      },
+      {
+        "width": 1536,
+        "src": "/media/responsive/enhanced-pipeline-installation-v2-1536.webp",
+        "bytes": 134674
+      },
+      {
+        "width": 1777,
+        "src": "/media/responsive/enhanced-pipeline-installation-v2-1777.webp",
+        "bytes": 182634
+      }
+    ]
+  },
+  "/media/enhanced/shore-discharge-v3.webp": {
+    "width": 1082,
+    "height": 1454,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/enhanced-shore-discharge-v3-320.webp",
+        "bytes": 28230
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/enhanced-shore-discharge-v3-480.webp",
+        "bytes": 60386
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/enhanced-shore-discharge-v3-768.webp",
+        "bytes": 132516
+      },
+      {
+        "width": 1024,
+        "src": "/media/responsive/enhanced-shore-discharge-v3-1024.webp",
+        "bytes": 196412
+      },
+      {
+        "width": 1082,
+        "src": "/media/responsive/enhanced-shore-discharge-v3-1082.webp",
+        "bytes": 269374
+      }
+    ]
+  },
+  "/media/enhanced/stockpile-discharge-v3.webp": {
+    "width": 939,
+    "height": 1676,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/enhanced-stockpile-discharge-v3-320.webp",
+        "bytes": 37748
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/enhanced-stockpile-discharge-v3-480.webp",
+        "bytes": 77208
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/enhanced-stockpile-discharge-v3-768.webp",
+        "bytes": 159414
+      },
+      {
+        "width": 939,
+        "src": "/media/responsive/enhanced-stockpile-discharge-v3-939.webp",
+        "bytes": 258476
+      }
+    ]
+  },
+  "/media/enhanced/submersible-pump-v2.webp": {
+    "width": 986,
+    "height": 1596,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/enhanced-submersible-pump-v2-320.webp",
+        "bytes": 24292
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/enhanced-submersible-pump-v2-480.webp",
+        "bytes": 44562
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/enhanced-submersible-pump-v2-768.webp",
+        "bytes": 86170
+      },
+      {
+        "width": 986,
+        "src": "/media/responsive/enhanced-submersible-pump-v2-986.webp",
+        "bytes": 144218
+      }
+    ]
+  },
+  "/media/profile/coastal-protection.png": {
+    "width": 809,
+    "height": 1080,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/profile-coastal-protection-320.webp",
+        "bytes": 17818
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/profile-coastal-protection-480.webp",
+        "bytes": 34094
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/profile-coastal-protection-768.webp",
+        "bytes": 68918
+      },
+      {
+        "width": 809,
+        "src": "/media/responsive/profile-coastal-protection-809.webp",
+        "bytes": 72130
+      }
+    ]
+  },
+  "/media/profile/hdpe-pipe-stock.jpg": {
+    "width": 780,
+    "height": 1040,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/profile-hdpe-pipe-stock-320.webp",
+        "bytes": 17612
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/profile-hdpe-pipe-stock-480.webp",
+        "bytes": 30602
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/profile-hdpe-pipe-stock-768.webp",
+        "bytes": 58620
+      },
+      {
+        "width": 780,
+        "src": "/media/responsive/profile-hdpe-pipe-stock-780.webp",
+        "bytes": 58388
+      }
+    ]
+  },
+  "/media/profile/project-route-map.jpeg": {
+    "width": 469,
+    "height": 264,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/profile-project-route-map-320.webp",
+        "bytes": 10628
+      },
+      {
+        "width": 469,
+        "src": "/media/responsive/profile-project-route-map-469.webp",
+        "bytes": 20796
+      }
+    ]
+  },
+  "/media/profile/workshop-pump.png": {
+    "width": 1152,
+    "height": 1536,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/profile-workshop-pump-320.webp",
+        "bytes": 23966
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/profile-workshop-pump-480.webp",
+        "bytes": 40698
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/profile-workshop-pump-768.webp",
+        "bytes": 73390
+      },
+      {
+        "width": 1024,
+        "src": "/media/responsive/profile-workshop-pump-1024.webp",
+        "bytes": 103482
+      },
+      {
+        "width": 1152,
+        "src": "/media/responsive/profile-workshop-pump-1152.webp",
+        "bytes": 122668
+      }
+    ]
+  }
+}

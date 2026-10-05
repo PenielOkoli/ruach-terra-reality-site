@@ -1,2 +1,4 @@
+import { pageMetadata } from '@/lib/metadata';
 import { PageHero } from '@/components/page-hero';
 export default function Privacy() { return <><PageHero eyebrow="Privacy" title="Privacy information." copy="This placeholder notice explains how project-enquiry information is handled." /><section className="section section-white"><div className="container max-w-3xl space-y-7 text-base leading-8 text-clay"><p>When you submit a project enquiry, we process the contact and project details you provide so we can respond to that request.</p><p>We do not ask you to include sensitive personal information in the form. Contact information may be retained for legitimate business follow-up.</p><p>For questions about your information, contact Ruach Dredging using the contact details on this site.</p></div></section></>; }
+export const metadata = pageMetadata("Privacy Notice", "Privacy information for enquiries submitted to Ruach Dredging.", '/privacy');
