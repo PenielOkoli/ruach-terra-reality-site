@@ -10,15 +10,7 @@ export type Project = {
   status: 'Completed' | 'Ongoing';
 };
 
-export const company = {
-  name: 'RUACH DREDGING NIG LTD',
-  rc: 'RC 9001841',
-  tagline: 'Water Moves Possibilities',
-  subline: 'Dredging | Hydraulic Fill | Reclamation',
-  address: '32 Vover Close, Adiva Plainfield Estate, KM 69 Lekki-Epe Expressway, Lagos, Nigeria.',
-  phones: ['08055212777', '08098129888'],
-  whatsapp: '09044441234',
-};
+export { company } from './company';
 
 export const stats = [
   { value: '10', label: 'hopper dredgers' },

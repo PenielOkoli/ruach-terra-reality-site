@@ -1,0 +1,11 @@
+// Shared identity has no imports, so profile data can use it without a circular dependency.
+export const company = {
+  name: 'RUACH DREDGING NIG LTD',
+  rc: 'RC 9001841',
+  tagline: 'Water Moves Possibilities',
+  subline: 'Dredging | Hydraulic Fill | Reclamation',
+  operatingBase: 'Lagos, Nigeria', // Confirmed by the company; supersedes the profile's narrower base wording.
+  address: '32 Vover Close, Adiva Plainfield Estate, KM 69 Lekki-Epe Expressway, Lagos, Nigeria.',
+  phones: ['08055212777', '08098129888'],
+  whatsapp: '09044441234',
+};

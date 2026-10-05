@@ -52,6 +52,56 @@ test('certificate identity is used consistently after the user confirmed slide 9
   assert.equal(load('app/manifest.ts').default().name, company.name);
 });
 
+test('company and profile data load as native ES modules without circular imports', async () => {
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const ts = require('typescript');
+  const cache = new Map();
+  function moduleUrl(file, ancestors = []) {
+    const absolute = path.resolve(__dirname, '..', file);
+    assert.ok(!ancestors.includes(absolute), 'Circular content import: ' + [...ancestors, absolute].join(' -> '));
+    if (cache.has(absolute)) return cache.get(absolute);
+    const code = ts.transpileModule(fs.readFileSync(absolute, 'utf8'), {
+      compilerOptions: { target: ts.ScriptTarget.ES2020, module: ts.ModuleKind.ESNext },
+    }).outputText.replace(/(from\s+)(['"])(\.[^'"]+)\2/g, (_, prefix, quote, dependency) => {
+      const resolved = path.resolve(path.dirname(absolute), dependency + '.ts');
+      return prefix + quote + moduleUrl(resolved, [...ancestors, absolute]) + quote;
+    });
+    const url = 'data:text/javascript;base64,' + Buffer.from(code).toString('base64');
+    cache.set(absolute, url);
+    return url;
+  }
+  const site = await import(moduleUrl('content/site.ts'));
+  const profile = await import(moduleUrl('content/profile-details.ts'));
+  assert.equal(site.company.operatingBase, 'Lagos, Nigeria');
+  assert.equal(profile.industrialPumping.base, 'Mobilisation from Lagos, Nigeria.');
+  assert.equal(site.systems, profile.coreSystems);
+});
+
+test('Vercel builds Next.js routes instead of publishing only public assets', () => {
+  const config = require('../vercel.json');
+  assert.equal(config.framework, 'nextjs');
+  assert.equal(config.buildCommand, 'npm run build');
+  assert.equal(config.outputDirectory, '.next');
+  assert.equal(config.headers[0].headers.find(header => header.key === 'X-Content-Type-Options').value, 'nosniff');
+});
+
+test('confirmed operating base is consistent without changing the office or project locations', () => {
+  const { company, projects } = load('content/site.ts');
+  assert.equal(company.operatingBase, 'Lagos, Nigeria');
+  assert.equal(company.address, '32 Vover Close, Adiva Plainfield Estate, KM 69 Lekki-Epe Expressway, Lagos, Nigeria.');
+  assert.equal(load('content/profile-details.ts').industrialPumping.base, 'Mobilisation from Lagos, Nigeria.');
+  assert.equal(projects[0].location, 'Igbolomi, Lekki–Epe Axis');
+  assert.equal(projects[2].location, 'Epe Lagoon Waterfront');
+  const Link = ({ children, ...props }) => React.createElement('a', props, children);
+  const renderLoad = createLoader({ 'next/image': { default: () => null }, 'next/link': { default: Link } });
+  const hero = renderToStaticMarkup(React.createElement(renderLoad('components/home/hero.tsx').Hero));
+  assert.match(hero, /Operating base<\/p><strong>Lagos, Nigeria<\/strong>/);
+  const about = renderToStaticMarkup(React.createElement(renderLoad('app/about/page.tsx').default));
+  assert.match(about, /Based in Lagos, Nigeria\./);
+  assert.doesNotMatch(about, /Our operating focus is Ibeju-Lekki and Epe/);
+});
+
 test('missing project information is source-specific rather than a substituted client or location', () => {
   const { projects } = load('content/site.ts');
   assert.equal(projects.length, 7);
@@ -237,9 +287,10 @@ test('homepage composition preserves the approved markup and copy', () => {
   const Link = ({ children, ...props }) => React.createElement('a', props, children);
   const renderLoad = createLoader({ 'next/image': { default: () => null }, 'next/link': { default: Link } });
   const html = renderToStaticMarkup(React.createElement(renderLoad('app/page.tsx').default));
+  assert.match(html, /Pipeline<\/p><strong>12–16″ HDPE line<\/strong>/);
   // Update deliberately if homepage copy or markup is intentionally changed later.
   // Responsive derivatives deliberately change image markup, but not homepage copy.
-  assert.equal(crypto.createHash('sha256').update(html).digest('hex'), '2fb95966c31f0a1ecbfd7945599ccc595ab447d748656fe6e21072d61c6855c0');
+  assert.equal(crypto.createHash('sha256').update(html).digest('hex'), 'b3052849576fc881a99b959ef00f13d08b7d2d64099e2fe22d4f53e5ca1317ff');
 });
 
 test('marketing pages and footer contain no photo credits or FIG captions', () => {
