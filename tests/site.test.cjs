@@ -7,12 +7,12 @@ const { createLoader } = require('../scripts/ts-test-loader.cjs');
 const load = createLoader();
 const { estimateHydraulicFill } = load('lib/fleet/estimate.ts');
 const { validateQuote } = load('lib/quote/validation.ts');
-const { deliverQuote } = load('lib/quote/delivery.ts');
+const { deliverQuote, QuoteDeliveryError } = load('lib/quote/delivery.ts');
 const { sendQuote } = load('lib/quote/client.ts');
 
 function quoteForm() {
   const form = new FormData();
-  Object.entries({ name: ' Test Client ', email: 'test@example.com', phone: '08000000000', location: 'Epe', projectType: 'Hydraulic dredging and reclamation' }).forEach(([key, value]) => form.set(key, value));
+  Object.entries({ name: ' Test Client ', email: 'test@example.com', phone: '08000000000', location: 'Epe', projectType: 'Hydraulic dredging and reclamation', consent: 'on' }).forEach(([key, value]) => form.set(key, value));
   return form;
 }
 
@@ -77,13 +77,18 @@ test('industrial-pumping recommendations and limitations remain explicit', () =>
   assert.ok(load('content/quote.ts').quoteProjectTypes.includes('Industrial pumping and emergency dewatering'));
 });
 
-test('quote validation retains required fields and email checks', () => {
+test('quote requires four core fields and consent, with optional valid email', () => {
   assert.equal(validateQuote(new FormData()).ok, false);
   const form = quoteForm();
   form.set('email', 'invalid');
   assert.equal(validateQuote(form).error, 'Please enter a valid email address.');
   form.set('email', 'test@example.com');
   assert.equal(validateQuote(form).ok, true);
+  form.delete('email');
+  form.set('projectType', 'Not sure yet');
+  assert.equal(validateQuote(form).ok, true);
+  form.delete('consent');
+  assert.equal(validateQuote(form).ok, false);
 });
 
 test('quote validation trims copy and limits field length', () => {
@@ -94,38 +99,131 @@ test('quote validation trims copy and limits field length', () => {
   assert.equal(result.submission.data.message.length, 2000);
 });
 
-test('quote attachment handling keeps metadata and the 5 MB limit', () => {
+test('quote attachment handling preserves actual file bytes and the 5 MB limit', async () => {
   const form = quoteForm();
-  form.set('attachment', new File(['brief'], 'brief.txt', { type: 'text/plain' }));
+  form.set('attachment', new File(['%PDF-brief'], 'brief.pdf', { type: 'application/pdf' }));
   const result = validateQuote(form);
-  assert.deepEqual(JSON.parse(JSON.stringify(result.submission.attachment)), { name: 'brief.txt', size: 5, type: 'text/plain' });
+  assert.equal(result.submission.attachment.name, 'brief.pdf');
+  assert.equal(await result.submission.attachment.text(), '%PDF-brief');
   assert.equal(result.submission.data.attachment, undefined);
   form.set('attachment', new File([new Uint8Array(5_000_001)], 'large.pdf'));
   assert.equal(validateQuote(form).error, 'Attachments must be 5 MB or smaller.');
+  form.set('attachment', new File(['unsafe'], 'script.exe', { type: 'application/octet-stream' }));
+  assert.equal(validateQuote(form).ok, false);
+  form.set('attachment', new File(['unsafe'], 'script.pdf', { type: 'text/html' }));
+  assert.equal(validateQuote(form).ok, false);
 });
 
-test('webhook delivery keeps preview mode and request format', async () => {
-  const submission = validateQuote(quoteForm()).submission;
+test('webhook delivery fails closed and sends multipart payload plus actual file', async () => {
+  const form = quoteForm();
+  form.set('attachment', new File(['%PDF-file-bytes'], 'brief.pdf', { type: 'application/pdf' }));
+  const submission = validateQuote(form).submission;
   const calls = [];
   const fetchRequest = async (...args) => { calls.push(args); return Response.json({ ok: true }); };
-  await deliverQuote(submission, {}, fetchRequest);
-  await deliverQuote(submission, { url: 'http://example.com' }, fetchRequest);
+  await assert.rejects(deliverQuote(submission, {}, fetchRequest), error => error.status === 503);
+  await assert.rejects(deliverQuote(submission, { url: 'http://example.com' }, fetchRequest), error => error.status === 503);
   assert.equal(calls.length, 0);
   await deliverQuote(submission, { url: 'https://example.com', secret: 'test-secret' }, fetchRequest);
   assert.equal(calls[0][1].headers.Authorization, 'Bearer test-secret');
-  assert.equal(JSON.parse(calls[0][1].body).type, 'ruach_quote_request');
-  assert.equal(JSON.parse(calls[0][1].body).data.location, 'Epe');
+  const payload = JSON.parse(calls[0][1].body.get('payload'));
+  assert.equal(payload.type, 'ruach_quote_request');
+  assert.equal(payload.data.location, 'Epe');
+  assert.deepEqual(payload.units, { volume: 'm³', pipelineDistance: 'm' });
+  assert.equal(await calls[0][1].body.get('attachment').text(), '%PDF-file-bytes');
+  assert.equal(calls[0][1].headers['Content-Type'], undefined);
+  assert.equal(calls[0][1].redirect, 'error');
+  assert.ok(calls[0][1].signal);
+  await assert.rejects(deliverQuote(submission, { url: 'https://example.com' }, async () => new Response('rejected', { status: 500 })), error => error.status === 502);
+  await assert.rejects(deliverQuote(submission, { url: 'https://example.com' }, async () => { throw new Error('offline'); }), error => error.status === 502);
 });
 
 test('browser quote transport reports server errors', async () => {
   await sendQuote(quoteForm(), async () => Response.json({ ok: true }));
   await assert.rejects(sendQuote(quoteForm(), async () => Response.json({ error: 'Invalid details' }, { status: 400 })), /Invalid details/);
+  await assert.rejects(sendQuote(quoteForm(), async () => Response.json({})), /could not be confirmed/);
+  await assert.rejects(sendQuote(quoteForm(), async () => new Response('bad gateway', { status: 502 })), /could not be sent/);
+});
+
+test('quote validation rejects invalid parameters, unknown types and honeypot submissions', () => {
+  for (const value of ['-1', '0', 'Infinity', 'bad']) {
+    const form = quoteForm(); form.set('volume', value);
+    assert.equal(validateQuote(form).ok, false);
+  }
+  const form = quoteForm();
+  form.set('volume', 'Not sure yet'); form.set('pipelineDistance', '250.5');
+  assert.equal(validateQuote(form).ok, true);
+  form.set('secretUnexpectedField', 'ignored');
+  assert.equal(validateQuote(form).submission.data.secretUnexpectedField, undefined);
+  form.set('projectType', 'unknown'); assert.equal(validateQuote(form).ok, false);
+  form.set('projectType', 'Not sure yet'); form.set('website', 'spam'); assert.equal(validateQuote(form).ok, false);
+});
+
+test('bounded request reader rejects oversized bodies without relying on Content-Length', async () => {
+  const { readQuoteForm } = load('lib/quote/request.ts');
+  const { MAX_QUOTE_REQUEST_BYTES } = load('content/quote.ts');
+  const request = new Request('http://localhost/api/quote', { method: 'POST', headers: { 'Content-Type': 'multipart/form-data; boundary=test' }, body: new Uint8Array(MAX_QUOTE_REQUEST_BYTES + 1) });
+  await assert.rejects(readQuoteForm(request), /size/);
+  await assert.rejects(readQuoteForm(new Request('http://localhost', { method: 'POST', body: 'not multipart' })), /format/);
+});
+
+test('quote route exposes safe configuration/delivery errors and blocks cross-origin browser requests', async () => {
+  let status = 503;
+  const routeLoad = createLoader({ '@/lib/quote/delivery': { QuoteDeliveryError, deliverQuote: async () => { throw new QuoteDeliveryError(status); } } });
+  const { POST } = routeLoad('app/api/quote/route.ts');
+  for (status of [503, 502, 504]) {
+    const response = await POST(new Request('http://localhost/api/quote', { method: 'POST', body: quoteForm() }));
+    assert.equal(response.status, status);
+    assert.match((await response.json()).error, /call or WhatsApp/);
+  }
+  assert.equal((await POST(new Request('http://localhost/api/quote', { method: 'POST', headers: { Origin: 'https://other.example' }, body: quoteForm() }))).status, 403);
+  assert.equal((await POST(new Request('http://localhost/api/quote', { method: 'POST', headers: { 'Content-Type': 'multipart/form-data; boundary=test', 'Content-Length': '9999999' }, body: 'tiny' }))).status, 413);
+});
+
+test('delivery times out rather than reporting acceptance', async () => {
+  const submission = validateQuote(quoteForm()).submission;
+  await assert.rejects(deliverQuote(submission, { url: 'https://example.com' }, async (_url, options) => new Promise((_resolve, reject) => options.signal.addEventListener('abort', () => reject(new Error('aborted')), { once: true }))), error => error.status === 504);
+});
+
+test('all internal pages have distinct metadata and self-referencing canonicals', () => {
+  for (const route of ['about', 'services', 'fleet', 'projects', 'quality-hse', 'contact', 'privacy', 'terms']) {
+    const { metadata } = load(`app/${route}/page.tsx`);
+    assert.equal(metadata.alternates.canonical, '/' + route);
+    assert.equal(metadata.openGraph.url, '/' + route);
+    assert.ok(metadata.title && metadata.description);
+    assert.equal(metadata.twitter.description, metadata.description);
+  }
+});
+
+test('case-study evidence preserves unknown quantities and withholds unapproved client names', () => {
+  const { publicProjects } = load('content/project-evidence.ts');
+  assert.equal(publicProjects.length, 7);
+  assert.match(publicProjects[0].evidence.quantity, /Total not stated/);
+  assert.match(publicProjects[1].evidence.quantity, /not stated/);
+  assert.match(publicProjects[2].evidence.quantity, /25,000 m³/);
+  for (const project of publicProjects) assert.equal(project.client, 'Client name not published');
+  assert.doesNotMatch(JSON.stringify(publicProjects), /Hitech|Craneburg/);
+});
+
+test('responsive photo derivatives never upscale and supply smaller mobile candidates', async () => {
+  const fs = require('node:fs'); const path = require('node:path'); const sharp = require('sharp');
+  const manifest = require('../content/responsive-images.json');
+  for (const [src, image] of Object.entries(manifest)) {
+    assert.ok(image.variants.length >= 2, src);
+    for (const variant of image.variants) {
+      const file = path.join(__dirname, '../public', variant.src);
+      assert.ok(variant.width <= image.width, variant.src);
+      assert.equal((await sharp(file).metadata()).width, variant.width);
+      assert.equal(fs.statSync(file).size, variant.bytes);
+    }
+  }
+  const pipeline = manifest['/media/enhanced/pipeline-installation-v2.webp'];
+  assert.ok(pipeline.variants.find(v => v.width === 480).bytes < fs.statSync(path.join(__dirname, '../public/media/enhanced/pipeline-installation-v2.webp')).size / 2);
 });
 
 test('quote HTTP boundary returns 400, 200 and 500 without live delivery', async () => {
   let fail = false;
   let deliveries = 0;
-  const routeLoad = createLoader({ '@/lib/quote/delivery': { deliverQuote: async () => { deliveries++; if (fail) throw new Error('offline'); } } });
+  const routeLoad = createLoader({ '@/lib/quote/delivery': { QuoteDeliveryError, deliverQuote: async () => { deliveries++; if (fail) throw new Error('offline'); } } });
   const { POST } = routeLoad('app/api/quote/route.ts');
   const request = form => new Request('http://localhost/api/quote', { method: 'POST', body: form });
   assert.equal((await POST(request(new FormData()))).status, 400);
@@ -140,8 +238,8 @@ test('homepage composition preserves the approved markup and copy', () => {
   const renderLoad = createLoader({ 'next/image': { default: () => null }, 'next/link': { default: Link } });
   const html = renderToStaticMarkup(React.createElement(renderLoad('app/page.tsx').default));
   // Update deliberately if homepage copy or markup is intentionally changed later.
-  // Only the certificate RC changed in this data-audit pass; homepage sections/copy are unchanged.
-  assert.equal(crypto.createHash('sha256').update(html).digest('hex'), '72198f951c18e790771838805b603a63c462e6f850ea9042accfea34817b1f15');
+  // Responsive derivatives deliberately change image markup, but not homepage copy.
+  assert.equal(crypto.createHash('sha256').update(html).digest('hex'), '2fb95966c31f0a1ecbfd7945599ccc595ab447d748656fe6e21072d61c6855c0');
 });
 
 test('marketing pages and footer contain no photo credits or FIG captions', () => {

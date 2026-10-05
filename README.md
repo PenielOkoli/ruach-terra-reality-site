@@ -19,16 +19,16 @@ npm run build
 
 ## Deploy
 
-The application is ready for Vercel. Connect the repository, use the standard Next.js build settings, and set the optional environment variables below. Marketing pages are static by design; the contact endpoint is the only server route. If deploying as a fully static export, point the form action to an external form or webhook service and omit `app/api/quote`.
+Use the standard Next.js build settings on Vercel. Configure and test quote delivery before launch; marketing pages are static by design and Contact needs the server endpoint. Fully static export is not supported by the current quote form.
 
 ## Environment variables
 
 Copy `.env.example` to `.env.local` when configuring notifications.
 
-- `QUOTE_WEBHOOK_URL` - optional HTTPS endpoint for an email-provider workflow or CRM automation.
+- `QUOTE_WEBHOOK_URL` - required HTTPS endpoint for an email-provider workflow or CRM automation, accepting multipart uploads.
 - `QUOTE_WEBHOOK_SECRET` - optional bearer token sent to that endpoint.
 
-When no endpoint is configured, the API still validates the request and returns a success response, making the handoff safe to preview without transmitting data.
+Without a valid endpoint, the API returns HTTP 503 and the form offers phone/WhatsApp contact. It never simulates delivery. See [quote delivery setup](docs/quote-delivery.md) for the payload contract, limitations and launch checks.
 
 ## Content editing
 
@@ -36,7 +36,7 @@ Primary copy, people, fleet and project data live in `content/site.ts`. Pages an
 
 ## Photography and remaining photo needs
 
-The image catalogue is `content/photography.ts`. Native profile assets are in `public/media/profile/`; nine AI-assisted higher-resolution restorations are in `public/media/enhanced/`. They are served through `next/image` with responsive sizing and WebP optimization. Restored detail is not unedited photographic evidence. Source associations, actual dimensions, limitations and the built-in editing prompts are recorded in `docs/profile-photography.md`.
+The image catalogue is `content/photography.ts`. Native profile assets are in `public/media/profile/`; AI-assisted restorations are in `public/media/enhanced/`. Profile photos use pre-generated WebP derivatives with width-described `srcset` and layout-specific `sizes`; other images use Next's optimizer. Regenerate derivatives with `node scripts/build-responsive-images.cjs` after changing a source. Masters remain unchanged. Restored detail is not unedited photographic evidence. Source associations and limitations are recorded in `docs/profile-photography.md`.
 
 The following still need approved original photography or documents:
 

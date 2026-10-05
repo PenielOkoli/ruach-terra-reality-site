@@ -10,6 +10,7 @@ function createLoader(mocks = {}) {
   function load(file) {
     const absolute = path.resolve(root, file);
     if (cache.has(absolute)) return cache.get(absolute).exports;
+    if (absolute.endsWith('.json')) return { default: JSON.parse(fs.readFileSync(absolute, 'utf8')) };
     const loadedModule = { exports: {} };
     cache.set(absolute, loadedModule);
     const code = ts.transpileModule(fs.readFileSync(absolute, 'utf8'), {
@@ -27,7 +28,7 @@ function createLoader(mocks = {}) {
     };
     vm.runInNewContext(code, {
       exports: loadedModule.exports, module: loadedModule, require: localRequire,
-      FormData, File, fetch, Request, Response, URL, process, console,
+      FormData, File, fetch, Request, Response, URL, process, console, Error, AbortController, setTimeout, clearTimeout,
     }, { filename: absolute });
     return loadedModule.exports;
   }
