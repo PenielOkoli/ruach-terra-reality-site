@@ -253,9 +253,10 @@ test('homepage composition preserves the approved markup and copy', () => {
   const Link = ({ children, ...props }) => React.createElement('a', props, children);
   const renderLoad = createLoader({ 'next/image': { default: () => null }, 'next/link': { default: Link } });
   const html = renderToStaticMarkup(React.createElement(renderLoad('app/page.tsx').default));
+  assert.match(html, /Pipeline<\/p><strong>12–16″ HDPE line<\/strong>/);
   // Update deliberately if homepage copy or markup is intentionally changed later.
   // Responsive derivatives deliberately change image markup, but not homepage copy.
-  assert.equal(crypto.createHash('sha256').update(html).digest('hex'), '933a729008aa14830434900eb67ec644c2a5d1e020b18274815fb59e8e10582e');
+  assert.equal(crypto.createHash('sha256').update(html).digest('hex'), 'b3052849576fc881a99b959ef00f13d08b7d2d64099e2fe22d4f53e5ca1317ff');
 });
 
 test('marketing pages and footer contain no photo credits or FIG captions', () => {
