@@ -1,4 +1,6 @@
-// Source: supplied company profile, slides as annotated below.
+import { company } from './site';
+
+// Source: supplied company profile, slides as annotated below; operating base updated by company confirmation.
 // Profile recommendations are not independently verified OEM specifications.
 export const coreSystems = [
   { name: 'TOYO DP-200-12A', discharge: '12 in', power: '160 kW', role: 'Primary heavy-duty sand / hydraulic fill production' },
@@ -56,7 +58,7 @@ export const industrialPumping = {
     'Utilities: cooling-water, hydrotest and settling-pond transfer.',
   ],
   package: 'Pump, power unit, hoses, operator, HSE documentation and performance report; planned hire, standby or emergency call-out.',
-  base: 'Mobilisation from Ibeju-Lekki / Lekki Free Zone.',
+  base: `Mobilisation from ${company.operatingBase}.`,
 } as const; // slides 18–21: capability, not completed refinery work
 
 export const serviceDetails = [

@@ -52,6 +52,22 @@ test('certificate identity is used consistently after the user confirmed slide 9
   assert.equal(load('app/manifest.ts').default().name, company.name);
 });
 
+test('confirmed operating base is consistent without changing the office or project locations', () => {
+  const { company, projects } = load('content/site.ts');
+  assert.equal(company.operatingBase, 'Lagos, Nigeria');
+  assert.equal(company.address, '32 Vover Close, Adiva Plainfield Estate, KM 69 Lekki-Epe Expressway, Lagos, Nigeria.');
+  assert.equal(load('content/profile-details.ts').industrialPumping.base, 'Mobilisation from Lagos, Nigeria.');
+  assert.equal(projects[0].location, 'Igbolomi, Lekki–Epe Axis');
+  assert.equal(projects[2].location, 'Epe Lagoon Waterfront');
+  const Link = ({ children, ...props }) => React.createElement('a', props, children);
+  const renderLoad = createLoader({ 'next/image': { default: () => null }, 'next/link': { default: Link } });
+  const hero = renderToStaticMarkup(React.createElement(renderLoad('components/home/hero.tsx').Hero));
+  assert.match(hero, /Operating base<\/p><strong>Lagos, Nigeria<\/strong>/);
+  const about = renderToStaticMarkup(React.createElement(renderLoad('app/about/page.tsx').default));
+  assert.match(about, /Based in Lagos, Nigeria\./);
+  assert.doesNotMatch(about, /Our operating focus is Ibeju-Lekki and Epe/);
+});
+
 test('missing project information is source-specific rather than a substituted client or location', () => {
   const { projects } = load('content/site.ts');
   assert.equal(projects.length, 7);
@@ -239,7 +255,7 @@ test('homepage composition preserves the approved markup and copy', () => {
   const html = renderToStaticMarkup(React.createElement(renderLoad('app/page.tsx').default));
   // Update deliberately if homepage copy or markup is intentionally changed later.
   // Responsive derivatives deliberately change image markup, but not homepage copy.
-  assert.equal(crypto.createHash('sha256').update(html).digest('hex'), '2fb95966c31f0a1ecbfd7945599ccc595ab447d748656fe6e21072d61c6855c0');
+  assert.equal(crypto.createHash('sha256').update(html).digest('hex'), '933a729008aa14830434900eb67ec644c2a5d1e020b18274815fb59e8e10582e');
 });
 
 test('marketing pages and footer contain no photo credits or FIG captions', () => {

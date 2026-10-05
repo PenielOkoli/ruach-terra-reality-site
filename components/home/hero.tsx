@@ -44,7 +44,7 @@ export function Hero() {
         <div className="container facts-grid">
           <Fact label="Fleet" value="2 submersible dredgers" />
           <Fact label="Pipeline" value="12″ HDPE line" />
-          <Fact label="Operating base" value="Ibeju-Lekki / Epe" />
+          <Fact label="Operating base" value={company.operatingBase} />
           <Fact label="Registration" value={company.rc} />
         </div>
       </section>
