@@ -1,0 +1,2 @@
+import Link from 'next/link';
+export default function NotFound() { return <section className="section section-paper"><div className="container max-w-3xl"><p className="section-label">404</p><h1 className="section-title">This page is not available.</h1><p className="section-intro">Return to the Ruach Dredging website.</p><Link href="/" className="btn btn-navy mt-8">Return home</Link></div></section>; }

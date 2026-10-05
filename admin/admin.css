@@ -1,0 +1,7 @@
+/* Legacy admin presentation overrides, formerly inline in markup/templates. */
+.admin-field-spaced { margin-top: 12px; }
+.admin-panel-spaced { margin-top: 18px; }
+.admin-button-muted { color: #1e473b; background: #e7f1eb; }
+.admin-stock-alert { margin: 0 0 10px; }
+.invoice-table .invoice-quantity { text-align: center; }
+.invoice-table .invoice-amount { text-align: right; }
