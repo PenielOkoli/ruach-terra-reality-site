@@ -21,6 +21,8 @@ npm run build
 
 Use the standard Next.js build settings on Vercel. Configure and test quote delivery before launch; marketing pages are static by design and Contact needs the server endpoint. Fully static export is not supported by the current quote form.
 
+`vercel.json` pins the Next.js preset, `npm run build` and `.next` output, overriding legacy static-site settings. The project root must be the repository root. Do not serve `public` as the output directory: that exposes images but none of the App Router pages. A production deployment must return HTTP 200 for `/`, `/fleet`, `/projects` and `/contact`.
+
 ## Environment variables
 
 Copy `.env.example` to `.env.local` when configuring notifications.

@@ -1,4 +1,4 @@
-import { company } from './site';
+import { company } from './company';
 
 // Source: supplied company profile, slides as annotated below; operating base updated by company confirmation.
 // Profile recommendations are not independently verified OEM specifications.

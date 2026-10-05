@@ -52,6 +52,40 @@ test('certificate identity is used consistently after the user confirmed slide 9
   assert.equal(load('app/manifest.ts').default().name, company.name);
 });
 
+test('company and profile data load as native ES modules without circular imports', async () => {
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const ts = require('typescript');
+  const cache = new Map();
+  function moduleUrl(file, ancestors = []) {
+    const absolute = path.resolve(__dirname, '..', file);
+    assert.ok(!ancestors.includes(absolute), 'Circular content import: ' + [...ancestors, absolute].join(' -> '));
+    if (cache.has(absolute)) return cache.get(absolute);
+    const code = ts.transpileModule(fs.readFileSync(absolute, 'utf8'), {
+      compilerOptions: { target: ts.ScriptTarget.ES2020, module: ts.ModuleKind.ESNext },
+    }).outputText.replace(/(from\s+)(['"])(\.[^'"]+)\2/g, (_, prefix, quote, dependency) => {
+      const resolved = path.resolve(path.dirname(absolute), dependency + '.ts');
+      return prefix + quote + moduleUrl(resolved, [...ancestors, absolute]) + quote;
+    });
+    const url = 'data:text/javascript;base64,' + Buffer.from(code).toString('base64');
+    cache.set(absolute, url);
+    return url;
+  }
+  const site = await import(moduleUrl('content/site.ts'));
+  const profile = await import(moduleUrl('content/profile-details.ts'));
+  assert.equal(site.company.operatingBase, 'Lagos, Nigeria');
+  assert.equal(profile.industrialPumping.base, 'Mobilisation from Lagos, Nigeria.');
+  assert.equal(site.systems, profile.coreSystems);
+});
+
+test('Vercel builds Next.js routes instead of publishing only public assets', () => {
+  const config = require('../vercel.json');
+  assert.equal(config.framework, 'nextjs');
+  assert.equal(config.buildCommand, 'npm run build');
+  assert.equal(config.outputDirectory, '.next');
+  assert.equal(config.headers[0].headers.find(header => header.key === 'X-Content-Type-Options').value, 'nosniff');
+});
+
 test('confirmed operating base is consistent without changing the office or project locations', () => {
   const { company, projects } = load('content/site.ts');
   assert.equal(company.operatingBase, 'Lagos, Nigeria');
