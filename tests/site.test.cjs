@@ -290,7 +290,7 @@ test('homepage composition preserves the approved markup and copy', () => {
   assert.match(html, /Pipeline<\/p><strong>12–16″ HDPE line<\/strong>/);
   // Update deliberately if homepage copy or markup is intentionally changed later.
   // Responsive derivatives deliberately change image markup, but not homepage copy.
-  assert.equal(crypto.createHash('sha256').update(html).digest('hex'), 'b3052849576fc881a99b959ef00f13d08b7d2d64099e2fe22d4f53e5ca1317ff');
+  assert.equal(crypto.createHash('sha256').update(html).digest('hex'), '77fbdbaa34f75a8f38faee02195cf358b5813b9d1e707b39fbfa1be7f88747b1');
 });
 
 test('marketing pages and footer contain no photo credits or FIG captions', () => {
@@ -378,6 +378,7 @@ test('additional dredging assets retain their slide sources and illustration dis
   for (const photo of Object.values(projectPhotos)) assert.notEqual(photo.original, 'image31.png');
   const fs = require('node:fs');
   const hero = fs.readFileSync(require('node:path').join(__dirname, '../components/home/hero.tsx'), 'utf8');
-  assert.match(hero, /src="\/media\/industry\/river-dredging\.jpg"/);
+  assert.match(hero, /src=\{companyPhotos\.deck\.src\}/);
+  assert.doesNotMatch(hero, /river-dredging\.jpg|dredgingAction/);
   assert.doesNotMatch(hero, /profilePhotos\.crew\.src/);
 });

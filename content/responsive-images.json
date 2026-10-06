@@ -444,5 +444,269 @@
         "bytes": 122668
       }
     ]
+  },
+  "/media/company/discharge-poster-v1.webp": {
+    "width": 941,
+    "height": 1672,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/company-discharge-poster-v1-320.webp",
+        "bytes": 27952
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/company-discharge-poster-v1-480.webp",
+        "bytes": 56276
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/company-discharge-poster-v1-768.webp",
+        "bytes": 113074
+      },
+      {
+        "width": 941,
+        "src": "/media/responsive/company-discharge-poster-v1-941.webp",
+        "bytes": 171818
+      }
+    ]
+  },
+  "/media/company/field-pontoon-v1.webp": {
+    "width": 1086,
+    "height": 1448,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/company-field-pontoon-v1-320.webp",
+        "bytes": 24910
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/company-field-pontoon-v1-480.webp",
+        "bytes": 46194
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/company-field-pontoon-v1-768.webp",
+        "bytes": 92892
+      },
+      {
+        "width": 1024,
+        "src": "/media/responsive/company-field-pontoon-v1-1024.webp",
+        "bytes": 135588
+      },
+      {
+        "width": 1086,
+        "src": "/media/responsive/company-field-pontoon-v1-1086.webp",
+        "bytes": 170702
+      }
+    ]
+  },
+  "/media/company/handling-poster-v1.webp": {
+    "width": 931,
+    "height": 1690,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/company-handling-poster-v1-320.webp",
+        "bytes": 30274
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/company-handling-poster-v1-480.webp",
+        "bytes": 58078
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/company-handling-poster-v1-768.webp",
+        "bytes": 113922
+      },
+      {
+        "width": 931,
+        "src": "/media/responsive/company-handling-poster-v1-931.webp",
+        "bytes": 175930
+      }
+    ]
+  },
+  "/media/company/mobilisation-v1.webp": {
+    "width": 831,
+    "height": 1893,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/company-mobilisation-v1-320.webp",
+        "bytes": 46908
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/company-mobilisation-v1-480.webp",
+        "bytes": 83704
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/company-mobilisation-v1-768.webp",
+        "bytes": 148530
+      },
+      {
+        "width": 831,
+        "src": "/media/responsive/company-mobilisation-v1-831.webp",
+        "bytes": 182404
+      }
+    ]
+  },
+  "/media/company/pump-intake-v1.webp": {
+    "width": 1086,
+    "height": 1448,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/company-pump-intake-v1-320.webp",
+        "bytes": 42042
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/company-pump-intake-v1-480.webp",
+        "bytes": 81930
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/company-pump-intake-v1-768.webp",
+        "bytes": 161310
+      },
+      {
+        "width": 1024,
+        "src": "/media/responsive/company-pump-intake-v1-1024.webp",
+        "bytes": 228930
+      },
+      {
+        "width": 1086,
+        "src": "/media/responsive/company-pump-intake-v1-1086.webp",
+        "bytes": 292830
+      }
+    ]
+  },
+  "/media/company/pump-pontoon-v1.webp": {
+    "width": 1170,
+    "height": 1345,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/company-pump-pontoon-v1-320.webp",
+        "bytes": 22774
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/company-pump-pontoon-v1-480.webp",
+        "bytes": 43380
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/company-pump-pontoon-v1-768.webp",
+        "bytes": 85562
+      },
+      {
+        "width": 1024,
+        "src": "/media/responsive/company-pump-pontoon-v1-1024.webp",
+        "bytes": 122602
+      },
+      {
+        "width": 1170,
+        "src": "/media/responsive/company-pump-pontoon-v1-1170.webp",
+        "bytes": 164436
+      }
+    ]
+  },
+  "/media/company/stockyard-aerial-v1.webp": {
+    "width": 1683,
+    "height": 934,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/company-stockyard-aerial-v1-320.webp",
+        "bytes": 20936
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/company-stockyard-aerial-v1-480.webp",
+        "bytes": 44236
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/company-stockyard-aerial-v1-768.webp",
+        "bytes": 102972
+      },
+      {
+        "width": 1024,
+        "src": "/media/responsive/company-stockyard-aerial-v1-1024.webp",
+        "bytes": 166866
+      },
+      {
+        "width": 1536,
+        "src": "/media/responsive/company-stockyard-aerial-v1-1536.webp",
+        "bytes": 298550
+      },
+      {
+        "width": 1683,
+        "src": "/media/responsive/company-stockyard-aerial-v1-1683.webp",
+        "bytes": 421098
+      }
+    ]
+  },
+  "/media/company/submersible-pump-v1.webp": {
+    "width": 984,
+    "height": 1599,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/company-submersible-pump-v1-320.webp",
+        "bytes": 24056
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/company-submersible-pump-v1-480.webp",
+        "bytes": 43182
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/company-submersible-pump-v1-768.webp",
+        "bytes": 77100
+      },
+      {
+        "width": 984,
+        "src": "/media/responsive/company-submersible-pump-v1-984.webp",
+        "bytes": 119116
+      }
+    ]
+  },
+  "/media/company/suction-deck-v1.webp": {
+    "width": 1448,
+    "height": 1086,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/company-suction-deck-v1-320.webp",
+        "bytes": 21280
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/company-suction-deck-v1-480.webp",
+        "bytes": 41542
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/company-suction-deck-v1-768.webp",
+        "bytes": 86688
+      },
+      {
+        "width": 1024,
+        "src": "/media/responsive/company-suction-deck-v1-1024.webp",
+        "bytes": 129790
+      },
+      {
+        "width": 1448,
+        "src": "/media/responsive/company-suction-deck-v1-1448.webp",
+        "bytes": 223150
+      }
+    ]
   }
 }

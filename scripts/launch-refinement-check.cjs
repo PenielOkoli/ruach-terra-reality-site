@@ -23,7 +23,7 @@ async function loadImages(page) {
     await page.goto(base, { waitUntil: 'domcontentloaded' });
     await loadImages(page);
     const photos = await page.locator('main img[srcset*="/media/responsive/"]').evaluateAll(images => images.map(image => ({ src: new URL(image.currentSrc).pathname, slot: Math.round(image.getBoundingClientRect().width), fit: getComputedStyle(image).objectFit })));
-    assert.equal(photos.length, 6);
+    assert.equal(photos.length, 7);
     const downloads = photos.map(photo => {
       const entry = Object.entries(manifest).find(([, image]) => image.variants.some(v => v.src === photo.src));
       assert.ok(entry, photo.src);
@@ -49,7 +49,7 @@ async function loadImages(page) {
   await retinaPage.goto(base);
   await loadImages(retinaPage);
   const retinaSources = await retinaPage.locator('main img[srcset*="/media/responsive/"]').evaluateAll(images => images.map(image => new URL(image.currentSrc).pathname));
-  assert.equal(retinaSources.length, 6);
+  assert.equal(retinaSources.length, 7);
   assert.ok(retinaSources.every(src => Object.values(manifest).some(image => image.variants.some(v => v.src === src && v.width <= 768))));
   await retinaContext.close();
   const context = await browser.newContext();

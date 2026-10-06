@@ -7,7 +7,7 @@ async function build() {
   const manifest = {};
   const output = path.join(root, 'public/media/responsive');
   await fs.mkdir(output, { recursive: true });
-  for (const folder of ['enhanced', 'profile']) {
+  for (const folder of ['enhanced', 'profile', 'company']) {
     for (const file of (await fs.readdir(path.join(root, 'public/media', folder))).sort()) {
       if (!/\.(webp|jpe?g|png)$/i.test(file) || (folder === 'enhanced' && !file.endsWith('.webp'))) continue;
       const input = path.join(root, 'public/media', folder, file);

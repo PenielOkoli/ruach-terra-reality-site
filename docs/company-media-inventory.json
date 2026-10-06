@@ -1,0 +1,182 @@
+[
+  {
+    "file": "WhatsApp Image 2026-10-05 at 10.00.30 AM.jpeg",
+    "sha256": "2ff5ca35005d624fb021871f8ab5fc2620f19c8929e802a31b6476de4c8b2648",
+    "bytes": 216412,
+    "width": 899,
+    "height": 1080
+  },
+  {
+    "file": "WhatsApp Image 2026-10-05 at 10.00.31 AM (1).jpeg",
+    "sha256": "18c700c2bef8dfb58a1f47b35d400abe4382a63e2717f701da7fd0616f3dc4b6",
+    "bytes": 120687,
+    "width": 800,
+    "height": 773
+  },
+  {
+    "file": "WhatsApp Image 2026-10-05 at 10.00.31 AM (2).jpeg",
+    "sha256": "ea58ea0d724b5fa56fe5efc1d253652b5c40dc793e0458ca2c44ef462c1818b4",
+    "bytes": 90765,
+    "width": 700,
+    "height": 500
+  },
+  {
+    "file": "WhatsApp Image 2026-10-05 at 10.00.31 AM (3).jpeg",
+    "sha256": "ed3b272beea8fc79fb89157b4ff39578f165864ccc3c6bf95b5d46cb257d048d",
+    "bytes": 107418,
+    "width": 700,
+    "height": 500
+  },
+  {
+    "file": "WhatsApp Image 2026-10-05 at 10.00.31 AM (4).jpeg",
+    "sha256": "1a3827f9e5d554d0f765c395794bb76897708f2bd6eebd3a8dbd53c7f2c0356f",
+    "bytes": 69236,
+    "width": 540,
+    "height": 1080
+  },
+  {
+    "file": "WhatsApp Image 2026-10-05 at 10.00.31 AM.jpeg",
+    "sha256": "1a3827f9e5d554d0f765c395794bb76897708f2bd6eebd3a8dbd53c7f2c0356f",
+    "bytes": 69236,
+    "duplicateOf": "WhatsApp Image 2026-10-05 at 10.00.31 AM (4).jpeg",
+    "width": 540,
+    "height": 1080
+  },
+  {
+    "file": "WhatsApp Image 2026-10-05 at 10.00.32 AM (1).jpeg",
+    "sha256": "5fc242417e9bf5efac1173a3257f9861b0b3febf705c42751bee34aa1b54a857",
+    "bytes": 80491,
+    "width": 768,
+    "height": 1024
+  },
+  {
+    "file": "WhatsApp Image 2026-10-05 at 10.00.32 AM.jpeg",
+    "sha256": "5fc242417e9bf5efac1173a3257f9861b0b3febf705c42751bee34aa1b54a857",
+    "bytes": 80491,
+    "duplicateOf": "WhatsApp Image 2026-10-05 at 10.00.32 AM (1).jpeg",
+    "width": 768,
+    "height": 1024
+  },
+  {
+    "file": "WhatsApp Image 2026-10-05 at 9.23.48 AM.jpeg",
+    "sha256": "68e7aea7d861cabd0a6c7de2fe1641b2e1086f433e94b74b14eaee534f4a681e",
+    "bytes": 37597,
+    "width": 960,
+    "height": 960
+  },
+  {
+    "file": "WhatsApp Image 2026-10-05 at 9.36.25 AM.jpeg",
+    "sha256": "5f059fcd5c327c541e46b059ca6125c7c4649ee147a43cc31104bbed3b2cfe6b",
+    "bytes": 145597,
+    "width": 1280,
+    "height": 960
+  },
+  {
+    "file": "WhatsApp Image 2026-10-05 at 9.36.32 AM.jpeg",
+    "sha256": "077327098ea348489fcd9cecc69b2bfa25a0bae9a9ce29662df8e793ecbc4cc8",
+    "bytes": 434373,
+    "width": 1080,
+    "height": 599
+  },
+  {
+    "file": "WhatsApp Image 2026-10-05 at 9.37.47 AM.jpeg",
+    "sha256": "2c6df71021a07410c45f1c7e1324503d98a619bc239d147586ee6515512917b1",
+    "bytes": 56982,
+    "width": 474,
+    "height": 1080
+  },
+  {
+    "file": "WhatsApp Image 2026-10-05 at 9.37.50 AM.jpeg",
+    "sha256": "db6388b3edf98639c9b91032e06ac1be5c4f3846f3438322e6ace0c0cc8fc4be",
+    "bytes": 58639,
+    "width": 940,
+    "height": 1080
+  },
+  {
+    "file": "WhatsApp Image 2026-10-05 at 9.37.52 AM.jpeg",
+    "sha256": "bf6be837e49f758b171a20397a40d6dcf1a927502437eb475db4e1e2981c696b",
+    "bytes": 70998,
+    "width": 787,
+    "height": 1280
+  },
+  {
+    "file": "WhatsApp Image 2026-10-05 at 9.37.53 AM.jpeg",
+    "sha256": "8fa06c9ba71dae8f0c53a57c793d35a377a6a332d72d697644455fe709a3ddf3",
+    "bytes": 78970,
+    "width": 1080,
+    "height": 882
+  },
+  {
+    "file": "WhatsApp Image 2026-10-05 at 9.51.40 AM.jpeg",
+    "sha256": "0403b53fc3b3e80b1c39bf7afa169400c28d1de59e6fb7d63a405295e608c415",
+    "bytes": 97963,
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "WhatsApp Video 2026-10-05 at 9.23.51 AM.mp4",
+    "sha256": "ec8af597283fe6db694c13677f36dd65602f9eb0f24ff9d15c61f5a42539936c",
+    "bytes": 4704441,
+    "duration": 67.98
+  },
+  {
+    "file": "WhatsApp Video 2026-10-05 at 9.36.31 AM.mp4",
+    "sha256": "3b643d3e86a19825bcc7d5199a12abc1608e451d9ba66b03a3a4f8841b738798",
+    "bytes": 8677915,
+    "duration": 132.3
+  },
+  {
+    "file": "WhatsApp Video 2026-10-05 at 9.37.46 AM.mp4",
+    "sha256": "a84bc32a970a78e601bc1ef50f0f52ebae23653f1abc62504f441a08b74af58e",
+    "bytes": 14359029,
+    "duration": 66.09
+  },
+  {
+    "file": "WhatsApp Video 2026-10-05 at 9.37.47 AM.mp4",
+    "sha256": "44f54cda383eddbfffa4a12380d92589419372524b5417496e3160d00d06bb13",
+    "bytes": 1550186,
+    "duration": 11.48
+  },
+  {
+    "file": "WhatsApp Video 2026-10-05 at 9.37.48 AM.mp4",
+    "sha256": "bb82c1a9e2477c80bf44450598862a971258cc190681d4673b29c6693c563433",
+    "bytes": 2268921,
+    "duration": 10.61
+  },
+  {
+    "file": "WhatsApp Video 2026-10-05 at 9.37.49 AM.mp4",
+    "sha256": "cfa6e191af3e63827a24ecc26aa70a8e63cebecb41e0948b3a70200551b50946",
+    "bytes": 10248601,
+    "duration": 44.72
+  },
+  {
+    "file": "WhatsApp Video 2026-10-05 at 9.51.40 AM (1).mp4",
+    "sha256": "82c4765674f2372ccf64a2bb41d03288a0903abdd5ee6c7a1fd245cf179d97bc",
+    "bytes": 1384747,
+    "duration": 10.66
+  },
+  {
+    "file": "WhatsApp Video 2026-10-05 at 9.51.40 AM.mp4",
+    "sha256": "82c4765674f2372ccf64a2bb41d03288a0903abdd5ee6c7a1fd245cf179d97bc",
+    "bytes": 1384747,
+    "duplicateOf": "WhatsApp Video 2026-10-05 at 9.51.40 AM (1).mp4"
+  },
+  {
+    "file": "WhatsApp Video 2026-10-05 at 9.51.49 AM.mp4",
+    "sha256": "e83a3eade1dd5c7f2e78583350715efe8f7b427dd35b90695a752b5dcc9f9d12",
+    "bytes": 5743847,
+    "duration": 52.59
+  },
+  {
+    "file": "WhatsApp Video 2026-10-05 at 9.52.10 AM (1).mp4",
+    "sha256": "51ff3901b4158a6dd462d169f641df9ce4be0a9b2b668abbf0b87a449f802c4b",
+    "bytes": 7654149,
+    "duration": 62.74
+  },
+  {
+    "file": "WhatsApp Video 2026-10-05 at 9.52.10 AM.mp4",
+    "sha256": "51ff3901b4158a6dd462d169f641df9ce4be0a9b2b668abbf0b87a449f802c4b",
+    "bytes": 7654149,
+    "duplicateOf": "WhatsApp Video 2026-10-05 at 9.52.10 AM (1).mp4"
+  }
+]

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { services } from "@/content/home";
-import { profilePhotos } from '@/content/photography';
+import { companyPhotos } from '@/content/company-media';
 import { Photo, Arrow, TextLink } from "./primitives";
 
 export function ServicesSection() {
@@ -16,9 +16,9 @@ export function ServicesSection() {
               the waterfront.
             </h2>
             <Photo
-              src={profilePhotos.preparation.src}
-              alt={profilePhotos.preparation.alt}
-              className="service-photo"
+              src={companyPhotos.field.src}
+              alt={companyPhotos.field.alt}
+              className="service-photo photo-contain"
             />
           </div>
           <div className="service-list">

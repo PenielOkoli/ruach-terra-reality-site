@@ -1,5 +1,5 @@
 import { Metric, Photo, TextLink } from "./primitives";
-import { profilePhotos } from '@/content/photography';
+import { companyPhotos } from '@/content/company-media';
 
 export function FleetSection() {
   return (
@@ -22,8 +22,8 @@ export function FleetSection() {
           </div>
           <figure className="fleet-visual">
             <Photo
-              src={profilePhotos.dredgingAction.src}
-              alt={profilePhotos.dredgingAction.alt}
+              src={companyPhotos.pontoon.src}
+              alt={companyPhotos.pontoon.alt}
               className="fleet-photo photo-contain"
             />
           </figure>

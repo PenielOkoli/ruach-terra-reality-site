@@ -1,4 +1,5 @@
-import Image from "next/image";
+import { ResponsivePhoto } from '@/components/responsive-photo';
+import { companyPhotos } from '@/content/company-media';
 import Link from "next/link";
 import { company } from "@/content/site";
 import { Fact, Arrow } from "./primitives";
@@ -8,11 +9,10 @@ export function Hero() {
     <>
       <section className="home-hero" aria-labelledby="hero-title">
         <div className="hero-landscape">
-          <Image
-            src="/media/industry/river-dredging.jpg"
-            alt="USACE dredge Potter on the Mississippi River, USA; illustrative industry photograph, not Ruach equipment"
-            fill
-            preload
+          <ResponsivePhoto
+            src={companyPhotos.deck.src}
+            alt={companyPhotos.deck.alt}
+            priority
             sizes="100vw"
             className="object-cover"
           />
