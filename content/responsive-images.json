@@ -559,6 +559,130 @@
       }
     ]
   },
+  "/media/company/manufacturer-centrifugal-front-v2.webp": {
+    "width": 1484,
+    "height": 1060,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/company-manufacturer-centrifugal-front-v2-320.webp",
+        "bytes": 22838
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/company-manufacturer-centrifugal-front-v2-480.webp",
+        "bytes": 44698
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/company-manufacturer-centrifugal-front-v2-768.webp",
+        "bytes": 93882
+      },
+      {
+        "width": 1024,
+        "src": "/media/responsive/company-manufacturer-centrifugal-front-v2-1024.webp",
+        "bytes": 140134
+      },
+      {
+        "width": 1484,
+        "src": "/media/responsive/company-manufacturer-centrifugal-front-v2-1484.webp",
+        "bytes": 244620
+      }
+    ]
+  },
+  "/media/company/manufacturer-diesel-side-v2.webp": {
+    "width": 1484,
+    "height": 1060,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/company-manufacturer-diesel-side-v2-320.webp",
+        "bytes": 24294
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/company-manufacturer-diesel-side-v2-480.webp",
+        "bytes": 47146
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/company-manufacturer-diesel-side-v2-768.webp",
+        "bytes": 95634
+      },
+      {
+        "width": 1024,
+        "src": "/media/responsive/company-manufacturer-diesel-side-v2-1024.webp",
+        "bytes": 141564
+      },
+      {
+        "width": 1484,
+        "src": "/media/responsive/company-manufacturer-diesel-side-v2-1484.webp",
+        "bytes": 253316
+      }
+    ]
+  },
+  "/media/company/manufacturer-submersible-angle-v2.webp": {
+    "width": 1277,
+    "height": 1232,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/company-manufacturer-submersible-angle-v2-320.webp",
+        "bytes": 28230
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/company-manufacturer-submersible-angle-v2-480.webp",
+        "bytes": 49882
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/company-manufacturer-submersible-angle-v2-768.webp",
+        "bytes": 94430
+      },
+      {
+        "width": 1024,
+        "src": "/media/responsive/company-manufacturer-submersible-angle-v2-1024.webp",
+        "bytes": 132414
+      },
+      {
+        "width": 1277,
+        "src": "/media/responsive/company-manufacturer-submersible-angle-v2-1277.webp",
+        "bytes": 190950
+      }
+    ]
+  },
+  "/media/company/manufacturer-submersible-front-v2.webp": {
+    "width": 1144,
+    "height": 1375,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/company-manufacturer-submersible-front-v2-320.webp",
+        "bytes": 33242
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/company-manufacturer-submersible-front-v2-480.webp",
+        "bytes": 58684
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/company-manufacturer-submersible-front-v2-768.webp",
+        "bytes": 109702
+      },
+      {
+        "width": 1024,
+        "src": "/media/responsive/company-manufacturer-submersible-front-v2-1024.webp",
+        "bytes": 153256
+      },
+      {
+        "width": 1144,
+        "src": "/media/responsive/company-manufacturer-submersible-front-v2-1144.webp",
+        "bytes": 200968
+      }
+    ]
+  },
   "/media/company/mobilisation-v1.webp": {
     "width": 831,
     "height": 1893,

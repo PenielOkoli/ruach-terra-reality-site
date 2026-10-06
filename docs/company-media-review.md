@@ -10,10 +10,10 @@ Originals remain untouched in the user-supplied `Downloads/Dredger Photos` folde
 | 10.00.32 AM (1) | Byte-identical intake duplicate | Not repeated |
 | 10.00.31 AM | Deck walkway, electrical cables, finger obscuring corner | Omitted: weak composition; no need for another deck image |
 | 10.00.31 AM (4) | Byte-identical walkway duplicate | Not repeated |
-| 10.00.30 AM | Zidong-watermarked multi-cutter submersible pump, factory scene | Omitted: not evidence of a Ruach-owned TOYO model; use/ownership unconfirmed |
-| 10.00.31 AM (1) | Second factory view of multi-cutter submersible pump | Omitted for the same reason |
-| 10.00.31 AM (2) | Zidong-watermarked horizontal centrifugal dredge pumps | Omitted: manufacturer reference, not an identified Ruach unit |
-| 10.00.31 AM (3) | Zidong diesel-driven centrifugal pump package on skid | Omitted: manufacturer reference, not an identified Ruach booster |
+| 10.00.30 AM | Manufacturer submersible pump assembly, factory scene | Added on explicit later user request: Fleet manufacturer references, not a Ruach-owned TOYO model |
+| 10.00.31 AM (1) | Second factory view of submersible pump assembly | Fleet manufacturer references; separate from the company equipment gallery |
+| 10.00.31 AM (2) | Manufacturer horizontal centrifugal dredge pumps | Fleet / diesel-driven pump references, not an identified Ruach unit |
+| 10.00.31 AM (3) | Manufacturer diesel-driven centrifugal pump package on skid | Fleet / diesel-driven pump references, not an identified Ruach booster |
 | 9.51.40 AM | Field pontoon, twin lifting gantries and hoses | Homepage Services; Fleet overview |
 | 9.37.53 AM | Dredger with twin wheel assemblies, yellow rails, workshop/yard | Omitted pending origin and exact dredger-type confirmation |
 | 9.37.52 AM | Vertical submersible slurry pump, motor guards and flanged discharge | Fleet / pump family; **not** attached to a named TOYO register row |
@@ -40,6 +40,8 @@ Originals remain untouched in the user-supplied `Downloads/Dredger Photos` folde
 | 9.52.10 AM (1) | Byte-identical duplicate | Not repeated |
 
 ## Identification sources
+
+Later inclusion and user-requested logo removal for the four factory images are documented in [Manufacturer media review](manufacturer-media-review.md). Original manufacturer identity is retained in provenance; no ownership, model or supplier relationship is implied by these images.
 
 Primary manufacturer documentation was used to check visible equipment families; similarities do not verify the model or manufacturer of a photographed machine.
 
@@ -68,7 +70,7 @@ Asset-specific prompt suffixes:
 - `discharge-poster`: Preserve the exact dark slurry stream from the black pipe, water, sand banks and landscape; do not expand the stream or invent additional equipment.
 - `handling-poster` (final retry): Preserve the precise suspended curved suction hose, crane cable, blue vessel and ground pipe sections. Most important: preserve the original blurred boat-name marks pixel-faithfully as unclear text. DO NOT invent or re-letter a readable vessel name; leave the lettering indistinct exactly as in the source. Restore gently, without reconstructing fine structural detail or adding equipment. No new people or lifting gear. The first draft was rejected because it re-lettered the vessel name.
 
-Videos use mild temporal denoising, small exposure/contrast adjustment and mild sharpening; no synthetic frames or enlargement. Rotation is honoured, audio is omitted in the silent excerpts, and H.264 MP4s use fast-start metadata. Review at native size remains important: the hose clip is lower resolution and deliberately limited to a 352px player. Neither video is an HSE demonstration or a claim of compliance. A written visual description accompanies each silent film. Video elements and sources are mounted only after a user opens a film; no autoplay, external embed, tracking, or initial video download. Playback pauses off-screen or when the tab is hidden.
+Videos use mild temporal denoising, small exposure/contrast adjustment and mild sharpening; no synthetic frames or enlargement. Rotation is honoured, audio is omitted in the silent excerpts, and H.264 MP4s use fast-start metadata. Review at native size remains important: the hose clip is lower resolution and deliberately limited to a 352px player. Neither video is an HSE demonstration or a claim of compliance. A written visual description accompanies each silent film. Following the user's later scroll-play request, video elements mount on meaningful viewport entry and play muted inline, pausing off-screen or when the tab is hidden. There is no external embed, tracking or initial off-screen video download. Reduced-motion and data-saving preferences use manual playback instead. See [Scroll-video behaviour](scroll-video-behaviour.md).
 
 Reproduction: `scripts/review-company-media.cjs` writes ignored review artifacts and SHA-256 inventory; `scripts/prepare-company-photos.cjs` converts selected generated PNGs; `scripts/build-company-videos.cjs` produces the two excerpts; `scripts/build-responsive-images.cjs` creates mobile image variants. Pass the external source folder and an installed FFmpeg binary explicitly to the review/video scripts.
 

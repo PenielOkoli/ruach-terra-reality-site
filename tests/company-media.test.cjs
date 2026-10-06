@@ -37,11 +37,11 @@ test('seven equipment-family photos and two enhanced posters have responsive del
   }
 });
 
-test('server-rendered field films have no video source, autoplay or embed', () => {
+test('server-rendered field films defer video sources until viewport entry or manual play', () => {
   const { CompanyFieldFilms } = load('components/company-field-films.tsx');
   const html = renderToStaticMarkup(React.createElement(CompanyFieldFilms));
   assert.doesNotMatch(html, /<video\b|<source\b|<iframe\b|autoplay/);
-  assert.equal((html.match(/aria-label="Open film:/g) || []).length, 2);
+  assert.equal((html.match(/aria-label="Play film:/g) || []).length, 2);
   assert.match(html, /Read visual description/);
   assert.match(html, /<noscript>/);
 });
@@ -52,4 +52,32 @@ test('repaired pontoon and hero photos use new versions while retaining original
     assert.match(companyPhotos[key].src, /-v2\.webp$/);
     assert.ok(fs.existsSync(path.join(__dirname, '../public', companyPhotos[key].src.replace('-v2.webp', '-v1.webp'))));
   }
+});
+
+test('all four manufacturer photos are enhanced, responsive and labelled separately from the fleet', async () => {
+  const sharp = require('sharp');
+  const { manufacturerEquipment } = load('content/manufacturer-media.ts');
+  const inventory = require('../docs/company-media-inventory.json');
+  const manifest = require('../content/responsive-images.json');
+  const photos = manufacturerEquipment.flatMap(group => group.photos);
+  assert.equal(manufacturerEquipment.length, 2);
+  assert.equal(new Set(photos.map(photo => photo.src)).size, 4);
+  for (const photo of photos) {
+    const original = inventory.find(file => file.file === photo.sourceFile);
+    assert.ok(original);
+    const metadata = await sharp(path.join(__dirname, '../public', photo.src)).metadata();
+    assert.ok(metadata.width > original.width && metadata.height > original.height);
+    assert.ok(Math.abs(metadata.width / metadata.height - original.width / original.height) < .01);
+    assert.ok(manifest[photo.src].variants.some(variant => variant.width === 480));
+    assert.match(photo.alt, /AI-enhanced manufacturer reference/);
+    assert.doesNotMatch(photo.alt, /TOYO|DP-\d|\b\d+\s*(?:in|kW|m³)\b/);
+  }
+  const { ManufacturerEquipment } = load('components/manufacturer-equipment.tsx');
+  const html = renderToStaticMarkup(React.createElement(ManufacturerEquipment));
+  assert.match(html, /not identified Ruach-owned units or models/);
+  assert.equal((html.match(/<img /g) || []).length, 4);
+  assert.equal((html.match(/object-fit:contain/g) || []).length, 4);
+  assert.doesNotMatch(html, /<figcaption|Photo credit|FIG\./);
+  assert.ok(fs.readFileSync(path.join(__dirname, '../app/fleet/page.tsx'), 'utf8').includes('<ManufacturerEquipment />'));
+  assert.ok(!fs.readFileSync(path.join(__dirname, '../app/page.tsx'), 'utf8').includes('ManufacturerEquipment'));
 });

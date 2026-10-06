@@ -17,13 +17,13 @@ let browser;
     page.on('request', request => { if (/\.mp4(?:\?|$)/.test(request.url())) videos.push(request.url()); });
     for (const route of ['/', '/fleet', '/services', '/about']) {
       await page.goto(base + route, { waitUntil: 'networkidle' });
+      if (route === '/services') assert.equal(await page.locator('video').count(), 0, 'Off-screen films must not mount before viewport entry');
       for (let y = 0; y < await page.evaluate(() => document.body.scrollHeight); y += 650) {
         await page.evaluate(y => window.scrollTo({ top: y, behavior: 'instant' }), y);
         await page.waitForTimeout(30);
       }
       await page.waitForFunction(() => [...document.querySelectorAll('main img')].every(image => image.complete && image.naturalWidth));
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, `${route} ${width}`);
-      assert.equal(videos.length, 0, 'Videos must not download before being opened');
       if (route === '/services') {
         // At the document end sticky navigation leaves with its main-content parent.
         // Check the active sticky state, not that intentionally off-screen state.
@@ -44,14 +44,12 @@ let browser;
       if (route === '/fleet') await page.locator('.equipment-gallery').screenshot({ path: `artifacts/company-media-check/equipment-${width}.png`, style: 'header { visibility: hidden !important; }' });
       if (route === '/services') await page.locator('.field-films-grid').screenshot({ path: `artifacts/company-media-check/films-${width}.png`, style: 'header { visibility: hidden !important; }' });
     }
+    videos.length = 0;
     await page.goto(base + '/services', { waitUntil: 'networkidle' });
     assert.equal(await page.locator('video').count(), 0);
     assert.equal(videos.length, 0);
     for (const [index, title] of ['Slurry discharge', 'Suction-hose handling'].entries()) {
-      const button = page.getByRole('button', { name: `Open film: ${title}` });
-      await button.scrollIntoViewIfNeeded();
-      await button.focus();
-      await page.keyboard.press('Enter');
+      await page.locator('.field-clip-player').nth(index).scrollIntoViewIfNeeded();
       // HTML video has no implicit ARIA role; select by accessible label instead.
       const player = page.locator(`video[aria-label="${title}"]`);
       await player.waitFor();
@@ -62,14 +60,14 @@ let browser;
       }));
       const attributes = await player.evaluate(node => ({ paused: node.paused, controls: node.controls, inline: node.playsInline, autoplay: node.autoplay, width: node.videoWidth, height: node.videoHeight, duration: node.duration }));
       assert.equal(attributes.autoplay, false);
-      assert.equal(attributes.paused, true);
       assert.equal(attributes.controls, true);
       assert.equal(attributes.inline, true);
       assert.ok(Math.abs(attributes.duration - (index ? 14 : 18)) < 0.2);
       assert.equal(attributes.width, index ? 352 : 540);
-      await player.evaluate(node => node.play());
-      await page.waitForTimeout(300);
-      assert.equal(await player.evaluate(node => node.paused), false);
+      await page.waitForFunction(title => {
+        const node = document.querySelector(`video[aria-label="${title}"]`);
+        return node && !node.paused && node.currentTime > 0;
+      }, title);
       await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
       await page.waitForTimeout(250);
       assert.equal(await player.evaluate(node => node.paused), true, 'Off-screen video must pause');
@@ -81,6 +79,6 @@ let browser;
     await context.close();
   }
   fs.writeFileSync('artifacts/company-media-check/results.json', JSON.stringify(results, null, 2));
-  console.log(JSON.stringify({ layouts: results, noInitialVideoDownloads: true, decodeAndPlayback: true, pausesOffscreen: true, aaViolations: 0 }, null, 2));
+  console.log(JSON.stringify({ layouts: results, noInitialVideoDownloads: true, playsInView: true, decodeAndPlayback: true, pausesOffscreen: true, aaViolations: 0 }, null, 2));
   await browser.close();
 })().catch(async error => { console.error(error); if (browser) await browser.close(); process.exitCode = 1; });
