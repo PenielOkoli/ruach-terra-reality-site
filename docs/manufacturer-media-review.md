@@ -40,3 +40,5 @@ Verification: all 46 unit tests, TypeScript and ESLint pass. The Fleet page was 
 
 The company marked the submersible front view and centrifugal pump front view for removal from the page. Only `manufacturer-submersible-angle-v2.webp` and `manufacturer-diesel-side-v2.webp` remain in the published gallery, one per equipment group. Each now fills its group's full width with its original proportions and complete equipment framing; responsive `sizes` reflects the wider layout. Removed selections and their responsive files remain in the repository for recoverability but are no longer rendered. No new image generation or equipment changes were made.
 
+After reviewing the full-width result, the company requested smaller images. The equipment groups are now centered and capped at 720px wide, with reduced vertical spacing. Both photos retain their native proportions and shrink to the mobile container; responsive delivery sizes now match the smaller display area.
+

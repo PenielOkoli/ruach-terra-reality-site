@@ -103,7 +103,7 @@ button, input, select, textarea { font: inherit; }
 .equipment-gallery h3, .field-clip-copy h3 { margin: 24px 0 10px; font-family: var(--font-display), Georgia, serif; font-size: 1.5rem; color: var(--navy); }
 .equipment-gallery p, .field-clip-copy > p:not(.section-label), .field-clip-copy details { font-size: .88rem; line-height: 1.6; color: var(--clay); max-width: 55ch; }
 .equipment-deck-photo .photo-frame { aspect-ratio: 4 / 3; }
-.manufacturer-groups { display: grid; gap: 80px; margin-top: 64px; }
+.manufacturer-groups { display: grid; gap: 64px; max-width: 720px; margin: 48px auto 0; }
 .manufacturer-groups h3 { font-family: var(--font-display), Georgia, serif; font-size: 1.5rem; color: var(--navy); }
 .manufacturer-groups article > p { font-size: .88rem; line-height: 1.6; color: var(--clay); max-width: 55ch; margin-top: 10px; }
 .manufacturer-photo-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; margin-top: 32px; }

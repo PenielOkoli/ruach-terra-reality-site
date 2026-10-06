@@ -100,7 +100,8 @@ test('the two selected manufacturer photos are enhanced, responsive and labelled
   assert.equal((html.match(/<img /g) || []).length, 2);
   assert.equal((html.match(/object-fit:contain/g) || []).length, 2);
   assert.doesNotMatch(html, /manufacturer-submersible-front|manufacturer-centrifugal-front/);
-  assert.match(html, /1320px/);
+  assert.match(html, /720px/);
+  assert.match(fs.readFileSync(path.join(__dirname, '../app/globals.css'), 'utf8'), /\.manufacturer-groups\s*\{[^}]*max-width: 720px/);
   assert.doesNotMatch(html, /<figcaption|Photo credit|FIG\./);
   assert.ok(fs.readFileSync(path.join(__dirname, '../app/fleet/page.tsx'), 'utf8').includes('<ManufacturerEquipment />'));
   assert.ok(!fs.readFileSync(path.join(__dirname, '../app/page.tsx'), 'utf8').includes('ManufacturerEquipment'));

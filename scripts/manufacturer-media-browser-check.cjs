@@ -42,13 +42,14 @@ let browser;
         return { gridWidth: grid.width, width: photo.width, height: photo.height, ratio: Number(image.getAttribute('width')) / Number(image.getAttribute('height')) };
       });
       assert.ok(Math.abs(state.gridWidth - state.width) < 1, 'Remaining photo does not fill the available width');
+      assert.ok(state.width <= 720.1 && state.height <= 720.1, 'Reference photo is too large');
       assert.ok(Math.abs(state.width / state.height - state.ratio) < .001, 'Equipment is cropped or stretched');
     }
     const axe = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
     assert.deepEqual(axe.violations.map(item => item.id), []);
     assert.deepEqual(errors, []);
     await section.screenshot({ path: `artifacts/manufacturer-media-check/fleet-${width}.png`, style: 'header { visibility: hidden !important; }' });
-    results.push({ width, images: 2, fillsAvailableWidth: true, fullEquipmentFraming: true, runtimeErrors: 0, aaViolations: 0 });
+    results.push({ width, images: 2, maximumPhotoWidth: 720, fullEquipmentFraming: true, runtimeErrors: 0, aaViolations: 0 });
     await context.close();
   }
   fs.writeFileSync('artifacts/manufacturer-media-check/results.json', JSON.stringify(results, null, 2));
