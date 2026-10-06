@@ -333,6 +333,15 @@ test('project photographs follow the profile slide associations', () => {
   assert.equal(projectPhotos['Orchid Road Waterfront Plot Filling'], undefined);
 });
 
+test('Projects heading uses the company-requested wording without changing project locations', () => {
+  const Link = ({ children, ...props }) => React.createElement('a', props, children);
+  const renderLoad = createLoader({ 'next/image': { default: () => null }, 'next/link': { default: Link } });
+  const html = renderToStaticMarkup(React.createElement(renderLoad('app/projects/page.tsx').default));
+  assert.match(html, /<h1[^>]*>Project records from across our sites\.<\/h1>/);
+  assert.doesNotMatch(html, /Project records from Lagos sites\./);
+  assert.equal(load('content/site.ts').projects[2].location, 'Epe Lagoon Waterfront');
+});
+
 test('all restored and native profile photographs exist with usable dimensions', async () => {
   const fs = require('node:fs');
   const sharp = require('sharp');
