@@ -1,3 +1,5 @@
+import { company } from './company';
+
 export type Project = {
   title: string;
   category: 'Reclamation' | 'Supply' | 'Survey' | 'Marine';
@@ -10,7 +12,7 @@ export type Project = {
   status: 'Completed' | 'Ongoing';
 };
 
-export { company } from './company';
+export { company };
 
 export const stats = [
   { value: '10', label: 'hopper dredgers' },
@@ -55,7 +57,7 @@ export const fleet = [
   { group: 'Dredgers', name: '8″ 75HP submersible dredger', note: '1 unit' },
   { group: 'Hopper fleet', name: 'Hopper dredgers', note: '10 units · 100 m³ each' },
   { group: 'Pumping & pipeline', name: 'Booster pump station', note: '1 unit · 350–450 kW' },
-  { group: 'Pumping & pipeline', name: 'HDPE pipeline', note: '2 km · 12″' },
+  { group: 'Pumping & pipeline', name: 'HDPE pipeline', note: `2 km · ${company.pipelineDiameter}` },
   { group: 'Support fleet', name: 'Marine & earthworks support', note: 'Tugboats, workboats, welding and anchor barges, 20–25 t excavators, D6–D8 bulldozers and vibro-compactors' },
 ] as const;
 

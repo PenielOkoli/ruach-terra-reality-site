@@ -114,6 +114,19 @@ test('missing project information is source-specific rather than a substituted c
   for (const project of projects) assert.ok(project.scopeDetails.length && [7, 8].includes(project.sourceSlide));
 });
 
+test('company-confirmed pipeline range is consistent without changing pump discharges', () => {
+  const { company, fleet, systems } = load('content/site.ts');
+  assert.equal(company.pipelineDiameter, '12–16″');
+  assert.equal(fleet.find(item => item.name === 'HDPE pipeline').note, '2 km · 12–16″');
+  const Link = ({ children, ...props }) => React.createElement('a', props, children);
+  const renderLoad = createLoader({ 'next/image': { default: () => null }, 'next/link': { default: Link } });
+  const hero = renderToStaticMarkup(React.createElement(renderLoad('components/home/hero.tsx').Hero));
+  assert.match(hero, /Pipeline<\/p><strong>12–16″ HDPE line<\/strong>/);
+  assert.equal(systems[0].discharge, '12 in');
+  assert.equal(systems[1].discharge, '10 in');
+  assert.equal(systems[2].discharge, '8 in');
+});
+
 test('industrial-pumping recommendations and limitations remain explicit', () => {
   const profile = load('content/profile-details.ts');
   assert.match(profile.industrialPumping.restriction, /Non-flammable.*OEM confirmation.*refinery HSE approval/);

@@ -5,6 +5,7 @@ export const company = {
   tagline: 'Water Moves Possibilities',
   subline: 'Dredging | Hydraulic Fill | Reclamation',
   operatingBase: 'Lagos, Nigeria', // Confirmed by the company; supersedes the profile's narrower base wording.
+  pipelineDiameter: '12–16″', // Company-confirmed range; individual pump sizes remain separate.
   address: '32 Vover Close, Adiva Plainfield Estate, KM 69 Lekki-Epe Expressway, Lagos, Nigeria.',
   phones: ['08055212777', '08098129888'],
   whatsapp: '09044441234',
