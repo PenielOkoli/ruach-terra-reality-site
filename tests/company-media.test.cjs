@@ -54,6 +54,25 @@ test('repaired pontoon and hero photos use new versions while retaining original
   }
 });
 
+test('full-view photos expand into native-proportion frames without changing fixed video posters', () => {
+  const { SitePhoto } = load('components/site-photo.tsx');
+  const { companyPhotos } = load('content/company-media.ts');
+  const manifest = require('../content/responsive-images.json');
+  const photo = companyPhotos.mobilisation;
+  const record = manifest[photo.src];
+  const html = renderToStaticMarkup(React.createElement(SitePhoto, { ...photo, fit: 'contain' }));
+  assert.match(html, /class="photo-frame photo-full-frame"/);
+  assert.ok(html.includes(`aspect-ratio:${record.width} / ${record.height}`));
+  assert.match(html, /height:auto;width:100%;max-width:/);
+  assert.ok(html.includes(`max-width:${820 * record.width / record.height}px`));
+  assert.match(html, /object-fit:contain/);
+  for (const props of [{ fit: 'cover' }, { fit: 'contain', frame: 'fixed' }]) {
+    const fixed = renderToStaticMarkup(React.createElement(SitePhoto, { ...photo, ...props }));
+    assert.doesNotMatch(fixed, /photo-full-frame|aspect-ratio:/);
+    assert.match(fixed, /<div class="photo-frame"><img/);
+  }
+});
+
 test('all four manufacturer photos are enhanced, responsive and labelled separately from the fleet', async () => {
   const sharp = require('sharp');
   const { manufacturerEquipment } = load('content/manufacturer-media.ts');
