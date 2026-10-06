@@ -303,7 +303,7 @@ test('homepage composition preserves the approved markup and copy', () => {
   assert.match(html, /Pipeline<\/p><strong>12–16″ HDPE line<\/strong>/);
   // Update deliberately if homepage copy or markup is intentionally changed later.
   // Responsive derivatives deliberately change image markup, but not homepage copy.
-  assert.equal(crypto.createHash('sha256').update(html).digest('hex'), '77fbdbaa34f75a8f38faee02195cf358b5813b9d1e707b39fbfa1be7f88747b1');
+  assert.equal(crypto.createHash('sha256').update(html).digest('hex'), '9a51e890c0c12e63974e6a8ae31c8e05466a6ed5069e8aa441c478d64b5aedee');
 });
 
 test('marketing pages and footer contain no photo credits or FIG captions', () => {

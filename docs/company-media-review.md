@@ -74,6 +74,21 @@ Reproduction: `scripts/review-company-media.cjs` writes ignored review artifacts
 
 ## Verification
 
+### Requested image repairs — 6 October 2026
+
+The user requested removal of the phone-camera writing and repair of the covered hero corner. The built-in image tool edited the existing enhanced photos separately, saving new `field-pontoon-v2.webp` and `suction-deck-v2.webp` versions in `public/media/company/`. The v1 photos and original supplied files are retained. All website consumers use the shared v2 references, with regenerated responsive derivatives. These are presentation repairs, not recovered camera evidence.
+
+Final prompts (each source is the edit target):
+
+- **Field pontoon:** Use case: precise-object-edit. Remove ONLY the white phone-camera stamp “Infinix NOTE 8i” in the lower-left water, reconstructing natural matching brown water ripples underneath. Preserve the original full portrait framing and aspect ratio. Keep the green pontoon, red twin gantries, hoses, cables, cabin, tarp, equipment, rust, wear, sky, vegetation and all other pixels and colours as unchanged as possible. Do not remove markings on equipment. No new equipment or people, no crop, no broad colour changes, no added text.
+- **Suction deck:** Use case: precise-object-edit. Remove ONLY the dark blurry obstruction covering the upper-left corner and restore it as a natural continuous pale blue sky, matching the surrounding daylight sky gradient. Preserve the gantry, its top hardware and cables. Keep the complete landscape 4:3 framing, camera angle and aspect ratio. Keep all other parts unchanged: red gantry, white frame, cabin, green deck, long suction pipe, ropes, hooks, horizon, background vessels, water, equipment markings and people. Do not crop, redesign equipment, invent extra structures or workers, change colour grading, or add text.
+
+Conversion command: `node scripts/prepare-company-photos.cjs --version=2 field-pontoon GENERATED_FIELD_PNG suction-deck GENERATED_DECK_PNG`, followed by `node scripts/build-responsive-images.cjs`.
+
+Repair verification: 45 unit tests, TypeScript and ESLint pass. Local Homepage, Fleet, Services and About were checked at 360, 768, 1280 and 1920px: no horizontal overflow, browser runtime errors or automated WCAG AA violations. The repaired hero was visually reviewed in its website layout; homepage copy remains 238 words.
+
+### Initial media release verification
+
 - Production build, TypeScript, ESLint and 43 unit tests pass.
 - Headless Edge: 360, 768, 1280 and 1920px. Homepage, Fleet, Services and About have no horizontal overflow or browser runtime errors; automated WCAG AA checks report zero violations. Screenshots were visually reviewed for framing and equipment visibility.
 - Both MP4s decode and play with native controls and inline playback. No MP4 request occurs before opening a film; no autoplay occurs after opening. Playback pauses when the player leaves the viewport.

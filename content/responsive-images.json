@@ -502,6 +502,37 @@
       }
     ]
   },
+  "/media/company/field-pontoon-v2.webp": {
+    "width": 1086,
+    "height": 1448,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/company-field-pontoon-v2-320.webp",
+        "bytes": 24552
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/company-field-pontoon-v2-480.webp",
+        "bytes": 45318
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/company-field-pontoon-v2-768.webp",
+        "bytes": 88296
+      },
+      {
+        "width": 1024,
+        "src": "/media/responsive/company-field-pontoon-v2-1024.webp",
+        "bytes": 128172
+      },
+      {
+        "width": 1086,
+        "src": "/media/responsive/company-field-pontoon-v2-1086.webp",
+        "bytes": 159220
+      }
+    ]
+  },
   "/media/company/handling-poster-v1.webp": {
     "width": 931,
     "height": 1690,
@@ -706,6 +737,37 @@
         "width": 1448,
         "src": "/media/responsive/company-suction-deck-v1-1448.webp",
         "bytes": 223150
+      }
+    ]
+  },
+  "/media/company/suction-deck-v2.webp": {
+    "width": 1448,
+    "height": 1086,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/company-suction-deck-v2-320.webp",
+        "bytes": 20788
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/company-suction-deck-v2-480.webp",
+        "bytes": 40770
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/company-suction-deck-v2-768.webp",
+        "bytes": 83828
+      },
+      {
+        "width": 1024,
+        "src": "/media/responsive/company-suction-deck-v2-1024.webp",
+        "bytes": 124946
+      },
+      {
+        "width": 1448,
+        "src": "/media/responsive/company-suction-deck-v2-1448.webp",
+        "bytes": 217792
       }
     ]
   }

@@ -45,3 +45,11 @@ test('server-rendered field films have no video source, autoplay or embed', () =
   assert.match(html, /Read visual description/);
   assert.match(html, /<noscript>/);
 });
+
+test('repaired pontoon and hero photos use new versions while retaining originals', () => {
+  const { companyPhotos } = load('content/company-media.ts');
+  for (const key of ['field', 'deck']) {
+    assert.match(companyPhotos[key].src, /-v2\.webp$/);
+    assert.ok(fs.existsSync(path.join(__dirname, '../public', companyPhotos[key].src.replace('-v2.webp', '-v1.webp'))));
+  }
+});

@@ -1,12 +1,12 @@
 // Equipment-family labels only: these photos do not establish model, capacity or project identity.
-const photo = (name: string, alt: string) => ({ src: `/media/company/${name}-v1.webp`, alt: `AI-enhanced company-supplied photo: ${alt}` });
+const photo = (name: string, alt: string, version = 1) => ({ src: `/media/company/${name}-v${version}.webp`, alt: `AI-enhanced company-supplied photo: ${alt}` });
 export const companyPhotos = {
   aerial: photo('stockyard-aerial', 'Company-supplied aerial view of sand stockpiles, a loader and surrounding access tracks'),
-  deck: photo('suction-deck', 'Suction-pipe assembly and red lifting gantry along a dredger deck'),
+  deck: photo('suction-deck', 'Suction-pipe assembly and red lifting gantry along a dredger deck', 2),
   pontoon: photo('pump-pontoon', 'Submersible pump suspended from a blue A-frame on a floating pontoon, with its discharge hose'),
   intake: photo('pump-intake', 'Perforated pump intake screen, central agitator and protective metal hoops'),
   pump: photo('submersible-pump', 'Vertical submersible slurry pump with motor guards, intake and flanged discharge'),
-  field: photo('field-pontoon', 'Floating green dredging pontoon with twin lifting gantries and discharge hoses'),
+  field: photo('field-pontoon', 'Floating green dredging pontoon with twin lifting gantries and discharge hoses', 2),
   mobilisation: photo('mobilisation', 'Crew beside a small dredging pontoon with a cabin, upright frames and yellow rails'),
 } as const;
 
