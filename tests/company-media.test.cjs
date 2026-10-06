@@ -73,14 +73,17 @@ test('full-view photos expand into native-proportion frames without changing fix
   }
 });
 
-test('all four manufacturer photos are enhanced, responsive and labelled separately from the fleet', async () => {
+test('the two selected manufacturer photos are enhanced, responsive and labelled separately from the fleet', async () => {
   const sharp = require('sharp');
   const { manufacturerEquipment } = load('content/manufacturer-media.ts');
   const inventory = require('../docs/company-media-inventory.json');
   const manifest = require('../content/responsive-images.json');
   const photos = manufacturerEquipment.flatMap(group => group.photos);
   assert.equal(manufacturerEquipment.length, 2);
-  assert.equal(new Set(photos.map(photo => photo.src)).size, 4);
+  assert.equal(new Set(photos.map(photo => photo.src)).size, 2);
+  for (const group of manufacturerEquipment) assert.equal(group.photos.length, 1);
+  assert.ok(photos.some(photo => photo.src.includes('manufacturer-submersible-angle')));
+  assert.ok(photos.some(photo => photo.src.includes('manufacturer-diesel-side')));
   for (const photo of photos) {
     const original = inventory.find(file => file.file === photo.sourceFile);
     assert.ok(original);
@@ -94,8 +97,10 @@ test('all four manufacturer photos are enhanced, responsive and labelled separat
   const { ManufacturerEquipment } = load('components/manufacturer-equipment.tsx');
   const html = renderToStaticMarkup(React.createElement(ManufacturerEquipment));
   assert.match(html, /not identified Ruach-owned units or models/);
-  assert.equal((html.match(/<img /g) || []).length, 4);
-  assert.equal((html.match(/object-fit:contain/g) || []).length, 4);
+  assert.equal((html.match(/<img /g) || []).length, 2);
+  assert.equal((html.match(/object-fit:contain/g) || []).length, 2);
+  assert.doesNotMatch(html, /manufacturer-submersible-front|manufacturer-centrifugal-front/);
+  assert.match(html, /1320px/);
   assert.doesNotMatch(html, /<figcaption|Photo credit|FIG\./);
   assert.ok(fs.readFileSync(path.join(__dirname, '../app/fleet/page.tsx'), 'utf8').includes('<ManufacturerEquipment />'));
   assert.ok(!fs.readFileSync(path.join(__dirname, '../app/page.tsx'), 'utf8').includes('ManufacturerEquipment'));

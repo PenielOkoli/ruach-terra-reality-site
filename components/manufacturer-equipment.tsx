@@ -16,8 +16,8 @@ export function ManufacturerEquipment() {
               <div className="manufacturer-photo-grid">
                 {group.photos.map(photo => (
                   <SitePhoto key={photo.src} src={photo.src} alt={photo.alt} fit="contain"
-                    sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1416px) calc((100vw - 128px) / 2), 644px"
-                    className={`manufacturer-photo ${group.id === 'submersible-assemblies' ? 'manufacturer-photo-portrait' : 'manufacturer-photo-landscape'}`} />
+                    sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1416px) calc(100vw - 96px), 1320px"
+                    className="manufacturer-photo" />
                 ))}
               </div>
             </article>

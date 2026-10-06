@@ -36,3 +36,7 @@ Delivery: `prepare-company-photos.cjs --version=2` converts generated PNGs to We
 
 Verification: all 46 unit tests, TypeScript and ESLint pass. The Fleet page was tested in headless Edge at 360, 768, 1280 and 1920px: all four cleaned responsive photos loaded with contain framing, no overlapping photo panels, no horizontal overflow, no browser runtime errors and no automated WCAG AA violations. The desktop section screenshot was visually reviewed. The originals and branded intermediate masters remain available off the published site.
 
+## Subsequent company selection — 6 October 2026
+
+The company marked the submersible front view and centrifugal pump front view for removal from the page. Only `manufacturer-submersible-angle-v2.webp` and `manufacturer-diesel-side-v2.webp` remain in the published gallery, one per equipment group. Each now fills its group's full width with its original proportions and complete equipment framing; responsive `sizes` reflects the wider layout. Removed selections and their responsive files remain in the repository for recoverability but are no longer rendered. No new image generation or equipment changes were made.
+
