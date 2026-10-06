@@ -116,12 +116,15 @@ test('missing project information is source-specific rather than a substituted c
 
 test('company-confirmed pipeline range is consistent without changing pump discharges', () => {
   const { company, fleet, systems } = load('content/site.ts');
-  assert.equal(company.pipelineDiameter, '12–16″');
-  assert.equal(fleet.find(item => item.name === 'HDPE pipeline').note, '2 km · 12–16″');
+  assert.equal(company.submersibleDredgerCount, 4);
+  assert.equal(fleet.filter(item => item.group === 'Dredgers').length, company.submersibleDredgerCount);
+  assert.equal(company.pipelineDiameter, '8–16″');
+  assert.equal(fleet.find(item => item.name === 'HDPE pipeline').note, '2 km · 8–16″');
   const Link = ({ children, ...props }) => React.createElement('a', props, children);
   const renderLoad = createLoader({ 'next/image': { default: () => null }, 'next/link': { default: Link } });
   const hero = renderToStaticMarkup(React.createElement(renderLoad('components/home/hero.tsx').Hero));
-  assert.match(hero, /Pipeline<\/p><strong>12–16″ HDPE line<\/strong>/);
+  assert.match(hero, /Fleet<\/p><strong>4 submersible dredgers<\/strong>/);
+  assert.match(hero, /Pipeline<\/p><strong>8–16″ HDPE line<\/strong>/);
   assert.equal(systems[0].discharge, '12 in');
   assert.equal(systems[1].discharge, '10 in');
   assert.equal(systems[2].discharge, '8 in');
@@ -300,10 +303,11 @@ test('homepage composition preserves the approved markup and copy', () => {
   const Link = ({ children, ...props }) => React.createElement('a', props, children);
   const renderLoad = createLoader({ 'next/image': { default: () => null }, 'next/link': { default: Link } });
   const html = renderToStaticMarkup(React.createElement(renderLoad('app/page.tsx').default));
-  assert.match(html, /Pipeline<\/p><strong>12–16″ HDPE line<\/strong>/);
+  assert.match(html, /Fleet<\/p><strong>4 submersible dredgers<\/strong>/);
+  assert.match(html, /Pipeline<\/p><strong>8–16″ HDPE line<\/strong>/);
   // Update deliberately if homepage copy or markup is intentionally changed later.
   // Responsive derivatives deliberately change image markup, but not homepage copy.
-  assert.equal(crypto.createHash('sha256').update(html).digest('hex'), '9a51e890c0c12e63974e6a8ae31c8e05466a6ed5069e8aa441c478d64b5aedee');
+  assert.equal(crypto.createHash('sha256').update(html).digest('hex'), 'd38a7ea6f0626e2fab32a04229596b5167f266803073b9e4825f7601a1111722');
 });
 
 test('marketing pages and footer contain no photo credits or FIG captions', () => {

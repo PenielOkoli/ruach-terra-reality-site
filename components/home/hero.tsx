@@ -42,7 +42,7 @@ export function Hero() {
       </section>
       <section className="home-facts" aria-label="Company at a glance">
         <div className="container facts-grid">
-          <Fact label="Fleet" value="2 submersible dredgers" />
+          <Fact label="Fleet" value={`${company.submersibleDredgerCount} submersible dredgers`} />
           <Fact label="Pipeline" value={`${company.pipelineDiameter} HDPE line`} />
           <Fact label="Operating base" value={company.operatingBase} />
           <Fact label="Registration" value={company.rc} />
