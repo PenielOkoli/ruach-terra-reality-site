@@ -21,17 +21,19 @@ export function Photo({
   src,
   alt,
   className,
+  sizes,
 }: {
   src: string;
   alt: string;
   className: string;
+  sizes?: string;
 }) {
   return (
     <div className={`home-photo ${className}`}>
       <ResponsivePhoto
         src={src}
         alt={alt}
-        sizes={className.includes('project-photo') ? '(max-width: 767px) calc(100vw - 40px), (max-width: 1416px) 30vw, 422px' : '(max-width: 1023px) calc(100vw - 40px), (max-width: 1416px) 60vw, 780px'}
+        sizes={sizes ?? (className.includes('project-photo') ? '(max-width: 767px) calc(100vw - 40px), (max-width: 1416px) 30vw, 422px' : '(max-width: 1023px) calc(100vw - 40px), (max-width: 1416px) 60vw, 780px')}
         className="object-cover"
       />
     </div>

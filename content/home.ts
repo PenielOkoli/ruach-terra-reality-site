@@ -1,4 +1,4 @@
-import { profilePhotos } from './photography';
+import { profilePhotos, projectPhotos } from './photography';
 
 export const services = [
   ["Hydraulic dredging", "Dredge and place suitable fill."],
@@ -30,8 +30,9 @@ export const projects = [
     location: "Epe Lagoon",
     figure: "25,000 m³+",
     unit: "project volume",
-    image: profilePhotos.epeJoint.src,
-    alt: profilePhotos.epeJoint.alt,
+    image: projectPhotos['Epe Lagoon Shoreline Stabilization & Stockpiling'].src,
+    alt: projectPhotos['Epe Lagoon Shoreline Stabilization & Stockpiling'].alt,
+    landscape: true,
   },
 ] as const;
 export const workSteps = [

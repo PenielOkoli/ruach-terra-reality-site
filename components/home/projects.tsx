@@ -24,7 +24,8 @@ export function ProjectsSection() {
                 <Photo
                   src={project.image}
                   alt={project.alt}
-                  className="project-photo"
+                  className={`project-photo${'landscape' in project && project.landscape ? ' project-photo-vessel' : ''}`}
+                  sizes={'landscape' in project && project.landscape ? '(max-width: 767px) calc((100vw - 40px) * 1.334), (max-width: 1416px) 40vw, 563px' : undefined}
                 />
                 <div className="project-copy">
                   <p className="project-location">{project.location}</p>

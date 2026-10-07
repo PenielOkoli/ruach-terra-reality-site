@@ -7,11 +7,29 @@ const { renderToStaticMarkup } = require('react-dom/server');
 const { createLoader } = require('../scripts/ts-test-loader.cjs');
 const load = createLoader();
 
-test('all supplied company files have duplicate-aware provenance', () => {
+test('the original batch of supplied company files has duplicate-aware provenance', () => {
   const inventory = require('../docs/company-media-inventory.json');
   assert.equal(inventory.length, 27);
   assert.equal(inventory.filter(file => file.duplicateOf).length, 4);
   for (const file of inventory) assert.match(file.sha256, /^[a-f0-9]{64}$/);
+});
+
+test('the company-selected vessel replacement has responsive assets and replaces the joint without changing project facts', async () => {
+  const { companyVessel } = load('content/company-media.ts');
+  const manifest = require('../content/responsive-images.json');
+  const metadata = await require('sharp')(path.join(__dirname, '../public', companyVessel.src)).metadata();
+  assert.ok(metadata.width >= 1600 && metadata.height >= 900);
+  assert.ok(Math.abs(metadata.width / metadata.height - 16 / 9) < .002);
+  assert.match(companyVessel.alt, /AI-edited company-supplied.*deck person removed/);
+  for (const width of [320, 480, 768, 1024]) assert.ok(manifest[companyVessel.src].variants.some(image => image.width === width));
+  const Link = ({ children, ...props }) => React.createElement('a', props, children);
+  const renderLoad = createLoader({ 'next/image': { default: () => null }, 'next/link': { default: Link } });
+  for (const route of ['', 'projects/']) {
+    const html = renderToStaticMarkup(React.createElement(renderLoad('app/' + route + 'page.tsx').default));
+    assert.match(html, /company-lagoon-vessel-v2-/);
+    assert.doesNotMatch(html, /epe-pipeline-joint-v2/);
+    assert.match(html, /25,000 m³\+/);
+  }
 });
 
 test('seven equipment-family photos and two enhanced posters have responsive delivery assets', async () => {

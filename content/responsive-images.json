@@ -559,6 +559,42 @@
       }
     ]
   },
+  "/media/company/lagoon-vessel-v2.webp": {
+    "width": 1672,
+    "height": 941,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/media/responsive/company-lagoon-vessel-v2-320.webp",
+        "bytes": 10342
+      },
+      {
+        "width": 480,
+        "src": "/media/responsive/company-lagoon-vessel-v2-480.webp",
+        "bytes": 19734
+      },
+      {
+        "width": 768,
+        "src": "/media/responsive/company-lagoon-vessel-v2-768.webp",
+        "bytes": 41278
+      },
+      {
+        "width": 1024,
+        "src": "/media/responsive/company-lagoon-vessel-v2-1024.webp",
+        "bytes": 61942
+      },
+      {
+        "width": 1536,
+        "src": "/media/responsive/company-lagoon-vessel-v2-1536.webp",
+        "bytes": 105544
+      },
+      {
+        "width": 1672,
+        "src": "/media/responsive/company-lagoon-vessel-v2-1672.webp",
+        "bytes": 129800
+      }
+    ]
+  },
   "/media/company/manufacturer-centrifugal-front-v2.webp": {
     "width": 1484,
     "height": 1060,

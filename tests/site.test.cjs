@@ -307,7 +307,7 @@ test('homepage composition preserves the approved markup and copy', () => {
   assert.match(html, /Pipeline<\/p><strong>8–16″ HDPE line<\/strong>/);
   // Update deliberately if homepage copy or markup is intentionally changed later.
   // Responsive derivatives deliberately change image markup, but not homepage copy.
-  assert.equal(crypto.createHash('sha256').update(html).digest('hex'), 'd38a7ea6f0626e2fab32a04229596b5167f266803073b9e4825f7601a1111722');
+  assert.equal(crypto.createHash('sha256').update(html).digest('hex'), '658551cf04cf326fbc9ba439381df096bb644e55518fc878055826d60f9384bf');
 });
 
 test('marketing pages and footer contain no photo credits or FIG captions', () => {
@@ -321,14 +321,17 @@ test('marketing pages and footer contain no photo credits or FIG captions', () =
   assert.doesNotMatch(footer, /Image credits|href="\/photography"/);
 });
 
-test('project photographs follow the profile slide associations', () => {
+test('project photographs preserve their source associations and company-selected vessel replacement', () => {
   const { profilePhotos, projectPhotos } = load('content/photography.ts');
+  const { companyVessel } = load('content/company-media.ts');
   const { projects } = load('content/home.ts');
   assert.equal(projectPhotos['Igbolomi–Lekki Coastal Sand Reclamation'].original, 'image16.png');
   assert.equal(projectPhotos['Coastal Road Subbase Sand Supply'].original, 'image19.png');
-  assert.equal(projectPhotos['Epe Lagoon Shoreline Stabilization & Stockpiling'].original, 'image17.png');
+  assert.equal(projectPhotos['Epe Lagoon Shoreline Stabilization & Stockpiling'].original, 'WhatsApp Image 2026-10-07 at 6.40.05 AM.jpeg');
+  assert.equal(profilePhotos.epeJoint.original, 'image17.png'); // Archived profile photo is not relabelled.
   assert.equal(profilePhotos.pump.original, 'image30.png');
-  assert.deepEqual(Array.from(projects, p => p.image), [profilePhotos.excavator.src, profilePhotos.coastalRoad.src, profilePhotos.epeJoint.src]);
+  assert.deepEqual(Array.from(projects, p => p.image), [profilePhotos.excavator.src, profilePhotos.coastalRoad.src, companyVessel.src]);
+  assert.equal(projects[2].landscape, true);
   assert.equal(projectPhotos['Lagoon Bathymetry Verification'], undefined);
   assert.equal(projectPhotos['Orchid Road Waterfront Plot Filling'], undefined);
 });
@@ -337,7 +340,7 @@ test('Projects heading uses the company-requested wording without changing proje
   const Link = ({ children, ...props }) => React.createElement('a', props, children);
   const renderLoad = createLoader({ 'next/image': { default: () => null }, 'next/link': { default: Link } });
   const html = renderToStaticMarkup(React.createElement(renderLoad('app/projects/page.tsx').default));
-  assert.match(html, /<h1[^>]*>Project records from across our sites\.<\/h1>/);
+  assert.match(html, /<h1[^>]*>Project records across our sites\.<\/h1>/);
   assert.doesNotMatch(html, /Project records from Lagos sites\./);
   assert.equal(load('content/site.ts').projects[2].location, 'Epe Lagoon Waterfront');
 });

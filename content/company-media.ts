@@ -10,6 +10,13 @@ export const companyPhotos = {
   mobilisation: photo('mobilisation', 'Crew beside a small dredging pontoon with a cabin, upright frames and yellow rails'),
 } as const;
 
+// Company-selected replacement photo; its location/model are not independently verified.
+export const companyVessel = {
+  src: '/media/company/lagoon-vessel-v2.webp',
+  alt: 'AI-edited company-supplied photo of a blue dredging vessel with a green cabin, lifting boom and reflection on calm water; deck person removed',
+  original: 'WhatsApp Image 2026-10-07 at 6.40.05 AM.jpeg',
+} as const;
+
 export const equipmentGallery = [
   { ...companyPhotos.pump, title: 'Submersible slurry pump', description: 'Motor, intake and flanged discharge.' },
   { ...companyPhotos.intake, title: 'Intake and agitator', description: 'Screen and agitator at the pump intake.' },

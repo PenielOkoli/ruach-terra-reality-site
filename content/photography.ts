@@ -1,5 +1,6 @@
 // Association is based on slide layout, not independently verified geolocation.
 // AI-restored photographs are presentation assets, not technical inspection records.
+import { companyVessel } from './company-media';
 export const profilePhotos = {
   dredgingAction: { src: '/media/enhanced/dredging-action-v3.webp', alt: 'AI-enhanced dredging illustration from the supplied profile; not a verified Ruach equipment or project photograph', slide: 12, original: 'image31.png', kind: 'illustration' },
   stockpileDischarge: { src: '/media/enhanced/stockpile-discharge-v3.webp', alt: 'AI-enhanced photograph of hydraulic sand discharge into a stockpile channel, from the profile equipment material', slide: 12, original: 'image28.png', kind: 'photo' },
@@ -21,5 +22,5 @@ export const profilePhotos = {
 export const projectPhotos = {
   'Igbolomi–Lekki Coastal Sand Reclamation': profilePhotos.excavator,
   'Coastal Road Subbase Sand Supply': profilePhotos.coastalRoad,
-  'Epe Lagoon Shoreline Stabilization & Stockpiling': profilePhotos.epeJoint,
+  'Epe Lagoon Shoreline Stabilization & Stockpiling': companyVessel,
 } as const;
