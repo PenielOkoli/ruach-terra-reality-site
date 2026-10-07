@@ -299,6 +299,28 @@ test('quote HTTP boundary returns 400, 200 and 500 without live delivery', async
   assert.equal((await POST(request(quoteForm()))).status, 500);
 });
 
+test('leadership names omit titles while roles and separate qualifications are retained', () => {
+  const { team } = load('content/site.ts');
+  const { leadershipQualifications } = load('content/profile-details.ts');
+  assert.deepEqual(Array.from(team, entry => Array.from(entry)), [
+    ['Blessing O. Uzo', 'MD/CEO'],
+    ['Ikechukwu C. Uzo', 'COO'],
+    ['Tosan Omatseye', 'HOD Legal'],
+    ['Adaora Uzo', 'HOD Admin/HR'],
+    ['Rotimi Mafoluku', 'HOD HSE'],
+    ['Joyce Bamidele', 'CFO/HOD Finance'],
+    ['Mark Revett', 'Technical Consultant, Circle pumps'],
+  ]);
+  assert.deepEqual(Array.from(leadershipQualifications, entry => Array.from(entry)), [
+    ['Blessing O. Uzo', 'BSc Political Science; Diploma Public Administration'],
+    ['Ikechukwu C. Uzo', 'M.Arch'],
+    ['Tosan Omatseye', 'BL, LLB, MBA'],
+    ['Adaora Uzo', 'MBBS'],
+    ['Rotimi Mafoluku', 'MSc Public Health, MBA'],
+    ['Joyce Bamidele', 'BSc Accounting, ACCA, ICAN'],
+  ]);
+});
+
 test('homepage composition preserves the approved markup and copy', () => {
   const Link = ({ children, ...props }) => React.createElement('a', props, children);
   const renderLoad = createLoader({ 'next/image': { default: () => null }, 'next/link': { default: Link } });

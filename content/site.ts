@@ -65,10 +65,10 @@ export { coreSystems as systems } from './profile-details';
 
 export const team = [
   ['Blessing O. Uzo', 'MD/CEO'],
-  ['Ikechukwu C. Uzo M.Arch', 'COO'],
-  ['Barr. Tosan Omatseye', 'HOD Legal'],
-  ['Dr. Adaora Uzo', 'HOD Admin/HR'],
-  ['Dr. Rotimi Mafoluku', 'HOD HSE'],
+  ['Ikechukwu C. Uzo', 'COO'],
+  ['Tosan Omatseye', 'HOD Legal'],
+  ['Adaora Uzo', 'HOD Admin/HR'],
+  ['Rotimi Mafoluku', 'HOD HSE'],
   ['Joyce Bamidele', 'CFO/HOD Finance'],
   ['Mark Revett', 'Technical Consultant, Circle pumps'],
 ] as const;
