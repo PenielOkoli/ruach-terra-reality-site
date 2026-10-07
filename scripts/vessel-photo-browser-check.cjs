@@ -31,15 +31,23 @@ let browser;
         return { width: box.width, height: box.height, ratio: Number(node.getAttribute('width')) / Number(node.getAttribute('height')), fit: style.objectFit, src: node.currentSrc };
       });
       if (route === '/') {
-        assert.ok(Math.abs(framing.width / framing.height - 4 / 3) < .002);
-        const visibleFraction = (framing.width / framing.height) / framing.ratio;
-        const left = (1 - visibleFraction) / 2;
-        // Both ends of the photographed vessel and the lifting gear are inside this safe crop.
-        assert.ok(left < .17 && 1 - left > .82, 'Card crop cuts off the vessel');
+        assert.equal(framing.fit, 'cover');
+        assert.equal(framing.height, width < 768 ? 260 : width <= 1100 ? 280 : 340);
+        const cards = await page.locator('.project-card').evaluateAll(nodes => nodes.map(node => ({
+          photoHeight: node.querySelector('.project-photo').getBoundingClientRect().height,
+          photoBottom: node.querySelector('.project-photo').getBoundingClientRect().bottom,
+          captionTop: node.querySelector('.project-copy').getBoundingClientRect().top,
+        })));
+        assert.equal(cards.length, 3);
+        assert.ok(cards.every(card => Math.abs(card.photoHeight - framing.height) < 1), 'Project image heights differ');
+        if (width >= 768) {
+          assert.ok(cards.every(card => Math.abs(card.photoBottom - cards[0].photoBottom) < 1), 'Image bottoms do not line up');
+          assert.ok(cards.every(card => Math.abs(card.captionTop - cards[0].captionTop) < 1), 'Project captions do not line up');
+        }
         const deliveredWidth = Number(framing.src.match(/-(\d+)\.webp$/)[1]);
-        assert.ok(deliveredWidth >= framing.height * framing.ratio, 'Crop is using an undersized delivery asset');
-        assert.ok(framing.height <= 320 || width === 768, 'Card became excessively tall');
+        assert.ok(deliveredWidth >= Math.max(framing.width, framing.height * framing.ratio), 'Crop is using an undersized delivery asset');
         await page.locator('.project-card').last().screenshot({ path: `artifacts/vessel-photo-review/home-card-${width}.png`, style: 'header { visibility: hidden !important; }' });
+        await page.locator('.home-projects').screenshot({ path: `artifacts/vessel-photo-review/home-projects-${width}.png`, style: 'header { visibility: hidden !important; }' });
       } else {
         assert.equal(framing.fit, 'contain');
         assert.ok(Math.abs(framing.width / framing.height - framing.ratio) < .002);
@@ -48,7 +56,7 @@ let browser;
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
       const axe = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
       assert.deepEqual(axe.violations.map(item => item.id), []);
-      results.push({ width, route, replacementLoaded: true, fullVesselVisible: true, aaViolations: 0, source: framing.src });
+      results.push({ width, route, replacementLoaded: true, ...(route === '/' ? { imageHeight: framing.height, projectImagesAligned: true } : { fullVesselVisible: true }), aaViolations: 0, source: framing.src });
     }
     assert.deepEqual(errors, []);
     await context.close();

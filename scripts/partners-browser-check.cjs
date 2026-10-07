@@ -7,6 +7,10 @@ let browser;
   browser = await chromium.launch({ executablePath: 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe', headless: true });
   const context = await browser.newContext();
   const page = await context.newPage();
+  page.setDefaultTimeout(60000);
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
   fs.mkdirSync('artifacts/partner-review', { recursive: true });
   const results = [];
   for (const width of [360, 768, 1280, 1920]) {
@@ -21,7 +25,12 @@ let browser;
       names: [...el.querySelectorAll('li p')].map(p => p.textContent),
       overflow: document.documentElement.scrollWidth > innerWidth,
       clippedText: [...el.querySelectorAll('p, h2')].filter(p => { const r = p.getBoundingClientRect(); return r.left < 0 || r.right > innerWidth; }).map(p => p.textContent),
-      loadedLogos: [...el.querySelectorAll('img')].filter(img => img.complete && img.naturalWidth === 1338).length,
+      loadedLogos: [...el.querySelectorAll('img')].filter(img => img.complete && img.naturalWidth > 0).length,
+      opaqueLogoFrames: [...el.querySelectorAll('[data-partner-logo], [data-partner-logo] div')].filter(frame => getComputedStyle(frame).backgroundColor !== 'rgba(0, 0, 0, 0)').length,
+      stretchedLogos: [...el.querySelectorAll('img')].filter(img => {
+        const r = img.getBoundingClientRect();
+        return getComputedStyle(img).objectFit !== 'contain' || Math.abs(r.width / r.height - img.naturalWidth / img.naturalHeight) > 0.02;
+      }).length,
     }));
     const axe = await new AxeBuilder({ page }).include('#technical-partners').withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
     results.push({ width, ...layout, violations: axe.violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => n.target) })) });
@@ -33,8 +42,8 @@ let browser;
     const r = document.querySelector('#technical-partners')?.getBoundingClientRect();
     return r && r.top >= 70 && r.top < 200;
   });
-  results.push({ footerDestination: page.url(), anchorVisibleBelowHeader: true });
+  results.push({ footerDestination: page.url(), anchorVisibleBelowHeader: true, errors });
   fs.writeFileSync('artifacts/partner-review/checks.json', JSON.stringify(results, null, 2));
   console.log(JSON.stringify(results, null, 2));
-  if (results.some(r => r.overflow || r.clippedText?.length || r.violations?.length || (r.loadedLogos !== undefined && r.loadedLogos !== 4))) throw new Error('Partner checks failed.');
+  if (results.some(r => r.overflow || r.clippedText?.length || r.violations?.length || r.opaqueLogoFrames || r.stretchedLogos || r.errors?.length || (r.loadedLogos !== undefined && r.loadedLogos !== 8))) throw new Error('Partner checks failed.');
 })().catch(error => { console.error(error); process.exitCode = 1; }).finally(async () => { await browser?.close(); });

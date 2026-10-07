@@ -32,6 +32,15 @@ test('the company-selected vessel replacement has responsive assets and replaces
   }
 });
 
+test('Epe Lagoon card uses the same fixed-height frame as the other homepage project images', () => {
+  const css = fs.readFileSync(path.join(__dirname, '../app/globals.css'), 'utf8');
+  assert.match(css, /\.project-photo \{ height: 340px; \}/);
+  assert.match(css, /\.home-projects \.project-photo \{ height: 260px; \}/);
+  assert.doesNotMatch(css, /\.home-projects \.project-photo-vessel\s*\{/);
+  const component = fs.readFileSync(path.join(__dirname, '../components/home/projects.tsx'), 'utf8');
+  assert.match(component, /\(max-width: 503px\) 463px, \(max-width: 767px\) calc\(100vw - 40px\), 605px/);
+});
+
 test('seven equipment-family photos and two enhanced posters have responsive delivery assets', async () => {
   const sharp = require('sharp');
   const { companyPhotos, fieldClips } = load('content/company-media.ts');

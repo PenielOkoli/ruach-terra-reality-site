@@ -98,7 +98,6 @@ button, input, select, textarea { font: inherit; }
 
 /* Documentary equipment imagery: preserve the full assembly rather than crop away parts. */
 .hero-landscape img { object-position: 62% center; }
-.home-projects .project-photo-vessel { height: auto; aspect-ratio: 4 / 3; }
 .project-photo-vessel img { object-position: center; }
 .equipment-gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; margin-top: 48px; }
 .equipment-photo .photo-frame { height: 420px; background: #e8e3d9; }

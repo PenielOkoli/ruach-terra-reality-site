@@ -25,7 +25,7 @@ export function ProjectsSection() {
                   src={project.image}
                   alt={project.alt}
                   className={`project-photo${'landscape' in project && project.landscape ? ' project-photo-vessel' : ''}`}
-                  sizes={'landscape' in project && project.landscape ? '(max-width: 767px) calc((100vw - 40px) * 1.334), (max-width: 1416px) 40vw, 563px' : undefined}
+                  sizes={'landscape' in project && project.landscape ? '(max-width: 503px) 463px, (max-width: 767px) calc(100vw - 40px), 605px' : undefined}
                 />
                 <div className="project-copy">
                   <p className="project-location">{project.location}</p>

@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { partnerArtwork, technicalPartners } from '@/content/partners';
+import { technicalPartners } from '@/content/partners';
 
 export function TechnicalPartners() {
   return (
@@ -7,25 +7,24 @@ export function TechnicalPartners() {
       <div className="container">
         <p className="section-label">Technical partners</p>
         <h2 id="partners-title" className="section-title">Our technical network.</h2>
-        <p className="section-intro">Partners and equipment brands listed in our company profile.</p>
-        <ul className="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4" aria-label="Profile-listed technical partners and equipment brands">
-          {technicalPartners.map(({ name, crop }) => (
+        <p className="section-intro">Partners and equipment brands identified by the company.</p>
+        <ul className="mt-12 grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4" aria-label="Technical partners and equipment brands">
+          {technicalPartners.map(({ name, src, width, height }) => (
             <li key={name} className="min-w-0">
-              <div aria-hidden="true" className="flex h-[150px] items-center justify-center bg-white px-5">
-                <div className="relative overflow-hidden" style={{ width: 'min(100%, 190px)', aspectRatio: `${crop.width} / ${crop.height}` }}>
+              <div aria-hidden="true" data-partner-logo className="flex h-[120px] items-center justify-center px-2">
+                <div className="flex h-[110px] w-full max-w-[190px] items-center justify-center">
                   <Image
-                    src={partnerArtwork.src}
+                    src={src}
                     alt=""
-                    width={partnerArtwork.width}
-                    height={partnerArtwork.height}
+                    width={width}
+                    height={height}
                     unoptimized
                     style={{
-                      position: 'absolute',
-                      maxWidth: 'none',
-                      width: `${partnerArtwork.width / crop.width * 100}%`,
+                      width: 'auto',
                       height: 'auto',
-                      left: `${-crop.x / crop.width * 100}%`,
-                      top: `${-crop.y / crop.height * 100}%`,
+                      maxWidth: '100%',
+                      maxHeight: '110px',
+                      objectFit: 'contain',
                     }}
                   />
                 </div>

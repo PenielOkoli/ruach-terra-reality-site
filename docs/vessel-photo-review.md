@@ -14,9 +14,9 @@ The company explicitly selected the new vessel photo to replace the old HDPE-joi
 
 The deck person was removed and the water reflection corrected to agree with the empty deck. Clarity, exposure and colour were enhanced without repainting the hull or modernising the equipment. These are AI-edited presentation assets, not unaltered engineering inspection records. No claim is made that authentic detail was recovered from the compressed source.
 
-The homepage card uses a 4:3 crop of the outer sky/water margins, preserving both vessel ends, lifting gear and reflected vessel. The Projects page shows the full native landscape frame. Responsive width variants are 320, 480, 768, 1024, 1536 and native width, without upscaling.
+At the user's subsequent request, the Epe Lagoon homepage card now uses the same fixed-height frame as the other project cards: 340 pixels on desktop, 280 pixels on tablet and 260 pixels on mobile. A centred `object-fit: cover` crop fills that frame without distorting the vessel; the narrower card may crop the ends of the landscape photograph. All three desktop image bottoms and caption starts line up. The Projects page still shows the full native landscape frame. Responsive width variants are 320, 480, 768, 1024, 1536 and native width, without upscaling.
 
-The final web master is 1672×941. The homepage `sizes` accounts for the horizontal crop so the browser selects enough source pixels. Verified both pages at 360, 768, 1280 and 1920 pixels: replacement loads, old joint image absent, full vessel visible, no horizontal overflow, console errors or WCAG AA violations. All 49 automated tests, TypeScript and lint pass. The existing Projects heading from commit 3102843 is preserved; its stale test expectation was aligned with that committed wording.
+The final web master is 1672×941. The homepage `sizes` accounts for its fixed-height crop so the browser selects enough source pixels: at least 605 pixels wide on desktop and 463 pixels on small mobile screens. `scripts/vessel-photo-browser-check.cjs` checks both pages at 360, 768, 1280 and 1920 pixels, including homepage image/caption alignment, sufficient delivered resolution and the full native frame on Projects, plus overflow, console errors and WCAG AA violations. The existing Projects heading from commit 3102843 is preserved.
 
 ## Final prompts
 

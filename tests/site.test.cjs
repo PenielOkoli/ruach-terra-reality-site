@@ -307,7 +307,7 @@ test('homepage composition preserves the approved markup and copy', () => {
   assert.match(html, /Pipeline<\/p><strong>8–16″ HDPE line<\/strong>/);
   // Update deliberately if homepage copy or markup is intentionally changed later.
   // Responsive derivatives deliberately change image markup, but not homepage copy.
-  assert.equal(crypto.createHash('sha256').update(html).digest('hex'), '658551cf04cf326fbc9ba439381df096bb644e55518fc878055826d60f9384bf');
+  assert.equal(crypto.createHash('sha256').update(html).digest('hex'), 'c24e45f1e9c684ebb9b4775fbcb487aac6b8a2b63f0e78395aa1209919344339');
 });
 
 test('marketing pages and footer contain no photo credits or FIG captions', () => {
@@ -361,19 +361,19 @@ test('all restored and native profile photographs exist with usable dimensions',
   }
 });
 
-test('technical partners preserve the four names and original artwork from slide 11', async () => {
+test('technical partners retain the original four brands and add the four company-supplied brands', async () => {
   const fs = require('node:fs');
   const path = require('node:path');
   const sharp = require('sharp');
   const { partnerArtwork, technicalPartners } = load('content/partners.ts');
   assert.equal(partnerArtwork.sourceSlide, 11);
   assert.equal(partnerArtwork.sourceAsset, 'image26.png');
-  assert.deepEqual(Array.from(technicalPartners, partner => partner.name), ['IPR', 'Atlas Copco', 'Slurry Sucker', 'Toyo']);
+  assert.deepEqual(Array.from(technicalPartners, partner => partner.name), ['IPR', 'Atlas Copco', 'Slurry Sucker', 'Toyo', 'Cummins', 'Weichai', 'Bosch', 'ABB']);
   const artwork = path.join(__dirname, '../public', partnerArtwork.src);
   const metadata = await sharp(artwork).metadata();
   assert.equal(metadata.width, partnerArtwork.width);
   assert.equal(metadata.height, partnerArtwork.height);
-  for (const { crop } of technicalPartners) {
+  for (const { crop } of technicalPartners.filter(partner => partner.crop)) {
     assert.ok(crop.x >= 0 && crop.y >= 0);
     assert.ok(crop.x + crop.width <= metadata.width);
     assert.ok(crop.y + crop.height <= metadata.height);
@@ -382,12 +382,44 @@ test('technical partners preserve the four names and original artwork from slide
   if (fs.existsSync(original)) assert.deepEqual(fs.readFileSync(artwork), fs.readFileSync(original));
 });
 
+test('all eight partner logos are local, correctly sized and genuinely transparent', async () => {
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const sharp = require('sharp');
+  const { technicalPartners } = load('content/partners.ts');
+  for (const partner of technicalPartners) {
+    const file = path.join(__dirname, '../public', partner.src);
+    const metadata = await sharp(file).metadata();
+    assert.equal(metadata.width, partner.width, partner.name);
+    assert.equal(metadata.height, partner.height, partner.name);
+    assert.equal(metadata.hasAlpha, true, partner.name);
+    const { data, info } = await sharp(file).resize({ width: 200 }).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+    const alpha = [];
+    for (let i = 3; i < data.length; i += 4) alpha.push(data[i]);
+    assert.ok(alpha.includes(0), `${partner.name}: transparent background`);
+    assert.ok(alpha.includes(255), `${partner.name}: visible artwork`);
+    assert.ok(alpha.filter(value => value === 0).length > alpha.length * 0.20, `${partner.name}: no opaque rectangular background`);
+    // Native brand artwork can meet a canvas corner (e.g. the Cummins C).
+    // Background-removal derivatives additionally retain clear canvas corners.
+    if (partner.crop) {
+      for (const pixel of [0, info.width - 1, (info.height - 1) * info.width, info.width * info.height - 1]) {
+        assert.equal(data[pixel * 4 + 3], 0, `${partner.name}: transparent corner`);
+      }
+    }
+    if (partner.src.endsWith('.svg')) {
+      assert.doesNotMatch(fs.readFileSync(file, 'utf8'), /<script|<foreignObject|(?:href|xlink:href)\s*=/i, partner.name);
+    }
+  }
+});
+
 test('partner section is on About with a footer anchor, without extra relationship claims', () => {
   const Link = ({ children, ...props }) => React.createElement('a', props, children);
   const renderLoad = createLoader({ 'next/image': { default: () => null }, 'next/link': { default: Link } });
   const html = renderToStaticMarkup(React.createElement(renderLoad('components/technical-partners.tsx').TechnicalPartners));
   assert.match(html, /id="technical-partners"/);
-  assert.match(html, /Partners and equipment brands listed in our company profile/);
+  assert.match(html, /Partners and equipment brands identified by the company/);
+  assert.doesNotMatch(html, /bg-white/);
+  assert.equal((html.match(/data-partner-logo/g) || []).length, 8);
   assert.doesNotMatch(html, /\+27|87759|exclusive|certified|endorsed|Hitech|Craneburg/);
   const about = renderToStaticMarkup(React.createElement(renderLoad('app/about/page.tsx').default));
   assert.match(about, /id="technical-partners"/);
