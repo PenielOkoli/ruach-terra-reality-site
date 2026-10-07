@@ -41,6 +41,19 @@ test('Epe Lagoon card uses the same fixed-height frame as the other homepage pro
   assert.match(component, /\(max-width: 503px\) 463px, \(max-width: 767px\) calc\(100vw - 40px\), 605px/);
 });
 
+test('Epe Lagoon case-note image fills its column without changing the other full-view photographs', () => {
+  const Link = ({ children, ...props }) => React.createElement('a', props, children);
+  const renderLoad = createLoader({ 'next/image': { default: () => null }, 'next/link': { default: Link } });
+  const html = renderToStaticMarkup(React.createElement(renderLoad('app/projects/page.tsx').default));
+  const filledPhoto = html.match(/<figure class="photo project-case-photo-fill[\s\S]*?<\/figure>/)?.[0];
+  assert.ok(filledPhoto);
+  assert.match(filledPhoto, /company-lagoon-vessel-v2-/);
+  assert.match(filledPhoto, /object-fit:cover/);
+  assert.match(filledPhoto, /lg:\[&amp;_\.photo-frame\]:h-full/);
+  assert.doesNotMatch(filledPhoto, /photo-full-frame|aspect-ratio/);
+  assert.equal((html.match(/photo-full-frame/g) || []).length, 2);
+});
+
 test('seven equipment-family photos and two enhanced posters have responsive delivery assets', async () => {
   const sharp = require('sharp');
   const { companyPhotos, fieldClips } = load('content/company-media.ts');

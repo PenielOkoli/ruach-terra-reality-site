@@ -49,14 +49,27 @@ let browser;
         await page.locator('.project-card').last().screenshot({ path: `artifacts/vessel-photo-review/home-card-${width}.png`, style: 'header { visibility: hidden !important; }' });
         await page.locator('.home-projects').screenshot({ path: `artifacts/vessel-photo-review/home-projects-${width}.png`, style: 'header { visibility: hidden !important; }' });
       } else {
-        assert.equal(framing.fit, 'contain');
-        assert.ok(Math.abs(framing.width / framing.height - framing.ratio) < .002);
+        assert.equal(framing.fit, 'cover');
+        const layout = await image.evaluate(node => {
+          const frame = node.closest('.photo-frame').getBoundingClientRect();
+          const details = node.closest('article').children[1].getBoundingClientRect();
+          return { frameTop: frame.top, frameBottom: frame.bottom, detailsTop: details.top, detailsBottom: details.bottom };
+        });
+        if (width >= 1024) {
+          assert.ok(Math.abs(layout.frameTop - layout.detailsTop) < 1, 'Case-note image does not align with the details top');
+          assert.ok(Math.abs(layout.frameBottom - layout.detailsBottom) < 1, 'Case-note image leaves empty space below');
+        } else {
+          assert.equal(framing.height, 300);
+        }
+        const deliveredWidth = Number(framing.src.match(/-(\d+)\.webp$/)[1]);
+        assert.ok(deliveredWidth >= Math.max(framing.width, framing.height * framing.ratio), 'Case-note crop uses an undersized asset');
         await image.screenshot({ path: `artifacts/vessel-photo-review/projects-photo-${width}.png`, style: 'header { visibility: hidden !important; }' });
+        await image.locator('xpath=ancestor::article').screenshot({ path: `artifacts/vessel-photo-review/projects-case-${width}.png`, style: 'header { visibility: hidden !important; }' });
       }
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
       const axe = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
       assert.deepEqual(axe.violations.map(item => item.id), []);
-      results.push({ width, route, replacementLoaded: true, ...(route === '/' ? { imageHeight: framing.height, projectImagesAligned: true } : { fullVesselVisible: true }), aaViolations: 0, source: framing.src });
+      results.push({ width, route, replacementLoaded: true, ...(route === '/' ? { imageHeight: framing.height, projectImagesAligned: true } : { caseImageFillsSpace: true, detailsAligned: width >= 1024 }), aaViolations: 0, source: framing.src });
     }
     assert.deepEqual(errors, []);
     await context.close();
