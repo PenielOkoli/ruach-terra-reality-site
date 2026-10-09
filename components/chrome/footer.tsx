@@ -6,7 +6,7 @@ import { navigationLinks as links } from "@/content/navigation";
 export function Footer() {
   return (
     <footer className="bg-[#10233b] pt-16 text-[#f4f1ea]">
-      <div className="container grid gap-12 pb-14 md:grid-cols-[1.4fr_.8fr_.9fr]">
+      <div className="container grid gap-12 pb-14 md:grid-cols-2 xl:grid-cols-[1.1fr_.7fr_1.2fr]">
         <div>
           <div className="flex items-center gap-3">
             <Image
@@ -46,23 +46,30 @@ export function Footer() {
             </Link>
           </div>
         </div>
-        <div>
+        <div className="md:col-span-2 xl:col-span-1">
           <p className="text-xs font-bold uppercase tracking-[.12em] text-[#cdbb9d]">
             Office
           </p>
           <div className="mt-4 grid gap-3 text-sm leading-6 text-slate-200">
             <p>{company.address}</p>
-            {company.phones.map(number => (
-              <a key={number} href={`tel:${number}`}>{number}</a>
-            ))}
-            <a
-              href={`https://wa.me/${company.whatsapp.replace(/\D/g, '')}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              WhatsApp {company.whatsapp}
-            </a>
-            <a href={`tel:${company.directLine}`}>DL {company.directLine}</a>
+            <div className="footer-contact-columns grid grid-cols-[max-content_minmax(0,1fr)] gap-x-4 text-xs sm:text-sm">
+              <div className="grid content-start gap-3">
+                {company.phones.map(number => (
+                  <a className="whitespace-nowrap" key={number} href={`tel:${number}`}>{number}</a>
+                ))}
+              </div>
+              <div className="grid content-start gap-3">
+                <a
+                  className="whitespace-nowrap"
+                  href={`https://wa.me/${company.whatsapp.replace(/\D/g, '')}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  WhatsApp {company.whatsapp}
+                </a>
+                <a className="whitespace-nowrap" href={`tel:${company.directLine}`}>DL {company.directLine}</a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
