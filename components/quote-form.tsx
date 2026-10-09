@@ -129,7 +129,7 @@ export function QuoteForm() {
       {status === "error" && (
         <p role="alert" className="mt-4 text-sm font-semibold text-[#a44c2a]">
           {message}
-          <span className="mt-2 flex flex-wrap gap-x-5"><a className="underline" href={`tel:${company.phones[0]}`}>Call {company.phones[0]}</a><a className="underline" href={`https://wa.me/234${company.whatsapp.slice(1)}`}>WhatsApp {company.whatsapp}</a></span>
+          <span className="mt-2 flex flex-wrap gap-x-5"><a className="underline" href={`tel:${company.phones[0]}`}>Call {company.phones[0]}</a><a className="underline" href={`https://wa.me/${company.whatsapp.replace(/\D/g, '')}`}>WhatsApp {company.whatsapp}</a></span>
         </p>
       )}
       <button

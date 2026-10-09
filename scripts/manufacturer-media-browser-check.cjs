@@ -27,29 +27,42 @@ let browser;
         node.addEventListener('error', () => reject(new Error('Reference image failed to load')), { once: true });
       }));
       const state = await image.evaluate(node => ({ fit: getComputedStyle(node).objectFit, src: node.currentSrc, loading: node.loading }));
-      assert.equal(state.fit, 'contain');
+      assert.equal(state.fit, 'cover');
       assert.equal(state.loading, 'lazy');
       assert.match(state.src, /manufacturer-.*-v2-\d+\.webp$/);
     }
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
     const groups = await section.locator('.manufacturer-groups article').all();
+    const boxes = await Promise.all(groups.map(group => group.boundingBox()));
+    if (width >= 768) {
+      assert.ok(Math.abs(boxes[0].y - boxes[1].y) < 1, 'Equipment groups must sit side by side');
+      assert.ok(boxes[1].x >= boxes[0].x + boxes[0].width, 'Equipment groups overlap');
+      for (const selector of ['h3', 'p', '.photo-frame']) {
+        const aligned = await Promise.all(groups.map(group => group.locator(selector).boundingBox()));
+        assert.ok(Math.abs(aligned[0].y - aligned[1].y) < 1, `${selector} must align across both columns`);
+        if (selector === '.photo-frame') {
+          assert.ok(Math.abs(aligned[0].height - aligned[1].height) < 1, 'Both images must fill equal-height frames');
+        }
+      }
+    } else {
+      assert.ok(boxes[1].y >= boxes[0].y + boxes[0].height, 'Equipment groups must stack on mobile');
+    }
     for (const group of groups) {
       assert.equal(await group.locator('.manufacturer-photo').count(), 1);
       const state = await group.evaluate(node => {
         const grid = node.querySelector('.manufacturer-photo-grid').getBoundingClientRect();
         const photo = node.querySelector('.photo-frame').getBoundingClientRect();
-        const image = node.querySelector('img');
-        return { gridWidth: grid.width, width: photo.width, height: photo.height, ratio: Number(image.getAttribute('width')) / Number(image.getAttribute('height')) };
+        return { gridWidth: grid.width, width: photo.width, height: photo.height };
       });
       assert.ok(Math.abs(state.gridWidth - state.width) < 1, 'Remaining photo does not fill the available width');
-      assert.ok(state.width <= 720.1 && state.height <= 720.1, 'Reference photo is too large');
-      assert.ok(Math.abs(state.width / state.height - state.ratio) < .001, 'Equipment is cropped or stretched');
+      assert.ok(state.width <= 500.1 && state.height <= 500.1, 'Reference photo is too large');
+      assert.ok(Math.abs(state.width / state.height - 1277 / 1232) < .001, 'Reference frame proportions must match');
     }
     const axe = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
     assert.deepEqual(axe.violations.map(item => item.id), []);
     assert.deepEqual(errors, []);
     await section.screenshot({ path: `artifacts/manufacturer-media-check/fleet-${width}.png`, style: 'header { visibility: hidden !important; }' });
-    results.push({ width, images: 2, maximumPhotoWidth: 720, fullEquipmentFraming: true, runtimeErrors: 0, aaViolations: 0 });
+    results.push({ width, images: 2, maximumPhotoWidth: 500, layout: width >= 768 ? 'side-by-side' : 'stacked', equalHeightFrames: true, runtimeErrors: 0, aaViolations: 0 });
     await context.close();
   }
   fs.writeFileSync('artifacts/manufacturer-media-check/results.json', JSON.stringify(results, null, 2));

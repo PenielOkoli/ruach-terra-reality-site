@@ -15,8 +15,8 @@ export function ManufacturerEquipment() {
               <p>{group.description}</p>
               <div className="manufacturer-photo-grid">
                 {group.photos.map(photo => (
-                  <SitePhoto key={photo.src} src={photo.src} alt={photo.alt} fit="contain"
-                    sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 815px) calc(100vw - 96px), 720px"
+                  <SitePhoto key={photo.src} src={photo.src} alt={photo.alt} fit="cover" frame="fixed"
+                    sizes="(max-width: 540px) calc(100vw - 40px), (max-width: 767px) 500px, (max-width: 1136px) calc((100vw - 136px) / 2), 500px"
                     className="manufacturer-photo" />
                 ))}
               </div>

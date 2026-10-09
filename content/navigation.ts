@@ -4,4 +4,5 @@ export const navigationLinks = [
   { href: "/fleet", label: "Fleet" },
   { href: "/projects", label: "Projects" },
   { href: "/quality-hse", label: "Safety & HSE" },
+  { href: "/careers", label: "Careers" },
 ];

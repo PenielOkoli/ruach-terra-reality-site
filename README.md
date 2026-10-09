@@ -48,7 +48,7 @@ The following still need approved original photography or documents:
 - Independently confirmed project-photo provenance. Slide 7 associates images with Igbolomi, Coastal Road and Epe; those are now matched on the site. No clear matching field photograph was supplied for Bathymetry or Orchid Road. The Lekki–Eleko route map's labels need geographical confirmation. The haulage illustration is not treated as an actual job photo.
 - Original high-resolution horizontal Ruach/Nigerian photography. The photo band now uses an enhanced company-profile pipeline scene. The hero retains its free public-domain USACE industry photograph, identified as such in alt text. Visible credits, captions and FIG labels remain removed at the user's request. Source links, authors and usage records remain in `docs/design-research.md`. The existing non-endorsement disclaimer remains on `/terms`; this external image must not be presented as Ruach equipment or a Nigerian project.
 
-The supplied logo is at `public/logo.png`, with its high-resolution company-profile original at `public/ruach-logo-original.jpg`. The supplied company profile is available as `public/ruach-dredging-company-profile.pdf` and is linked throughout the site.
+The supplied logo is at `public/logo.png`, with its high-resolution company-profile original at `public/ruach-logo-original.jpg`. The company profile supplied on 9 October 2026 is available unchanged as `public/ruach-dredging-company-profile.pdf`; the footer link includes a dated cache version.
 
 ## Content to confirm before launch
 

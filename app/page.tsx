@@ -6,6 +6,7 @@ import { IndustryBand } from "@/components/home/industry-band";
 import { ProcessSection } from "@/components/home/process";
 import { SafetySection } from "@/components/home/safety";
 import { ContactSection } from "@/components/home/contact";
+import { CareersSection } from "@/components/home/careers";
 
 // Route composition only; copy and section presentation live outside the router.
 export default function Home() {
@@ -18,6 +19,7 @@ export default function Home() {
       <IndustryBand />
       <ProcessSection />
       <SafetySection />
+      <CareersSection />
       <ContactSection />
     </>
   );

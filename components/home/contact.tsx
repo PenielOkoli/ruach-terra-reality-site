@@ -19,16 +19,17 @@ export function ContactSection() {
                 Request a quote <Arrow />
               </Link>
               <div className="contact-numbers">
-                <a href={`tel:${company.phones[0]}`}>
-                  Call {company.phones[0]}
-                </a>
+                {company.phones.map(number => (
+                  <a key={number} href={`tel:${number}`}>Call {number}</a>
+                ))}
                 <a
-                  href={`https://wa.me/234${company.whatsapp.slice(1)}`}
+                  href={`https://wa.me/${company.whatsapp.replace(/\D/g, '')}`}
                   target="_blank"
                   rel="noreferrer"
                 >
                   WhatsApp {company.whatsapp} <span aria-hidden="true">↗</span>
                 </a>
+                <a href={`tel:${company.directLine}`}>DL {company.directLine}</a>
               </div>
             </div>
           </div>

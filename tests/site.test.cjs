@@ -305,16 +305,15 @@ test('leadership names omit titles while roles and separate qualifications are r
   assert.deepEqual(Array.from(team, entry => Array.from(entry)), [
     ['Blessing O. Uzo', 'MD/CEO'],
     ['Ikechukwu C. Uzo', 'COO'],
-    ['Tosan Omatseye', 'HOD Legal'],
-    ['Adaora Uzo', 'HOD Admin/HR'],
-    ['Rotimi Mafoluku', 'HOD HSE'],
-    ['Joyce Bamidele', 'CFO/HOD Finance'],
+    ['Chidi Opara', 'Head of Legal'],
+    ['Adaora Uzo', 'Head of Admin/HR'],
+    ['Rotimi Mafoluku', 'Head of HSE'],
+    ['Joyce Bamidele', 'CFO / Head of Finance'],
     ['Mark Revett', 'Technical Consultant, Circle pumps'],
   ]);
   assert.deepEqual(Array.from(leadershipQualifications, entry => Array.from(entry)), [
     ['Blessing O. Uzo', 'BSc Political Science; Diploma Public Administration'],
     ['Ikechukwu C. Uzo', 'M.Arch'],
-    ['Tosan Omatseye', 'BL, LLB, MBA'],
     ['Adaora Uzo', 'MBBS'],
     ['Rotimi Mafoluku', 'MSc Public Health, MBA'],
     ['Joyce Bamidele', 'BSc Accounting, ACCA, ICAN'],
@@ -328,8 +327,8 @@ test('homepage composition preserves the approved markup and copy', () => {
   assert.match(html, /Fleet<\/p><strong>4 submersible dredgers<\/strong>/);
   assert.match(html, /Pipeline<\/p><strong>8–16″ HDPE line<\/strong>/);
   // Update deliberately if homepage copy or markup is intentionally changed later.
-  // Responsive derivatives deliberately change image markup, but not homepage copy.
-  assert.equal(crypto.createHash('sha256').update(html).digest('hex'), 'c24e45f1e9c684ebb9b4775fbcb487aac6b8a2b63f0e78395aa1209919344339');
+  // Includes the careers section and the company-confirmed phone, WhatsApp and DL links.
+  assert.equal(crypto.createHash('sha256').update(html).digest('hex'), 'c71b6df90d207654412a8fef30a59f105cc73a8287fff100eb622f9236247347');
 });
 
 test('marketing pages and footer contain no photo credits or FIG captions', () => {

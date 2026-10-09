@@ -126,7 +126,6 @@ export const organisation = [
 export const leadershipQualifications = [
   ['Blessing O. Uzo', 'BSc Political Science; Diploma Public Administration'],
   ['Ikechukwu C. Uzo', 'M.Arch'],
-  ['Tosan Omatseye', 'BL, LLB, MBA'],
   ['Adaora Uzo', 'MBBS'],
   ['Rotimi Mafoluku', 'MSc Public Health, MBA'],
   ['Joyce Bamidele', 'BSc Accounting, ACCA, ICAN'],

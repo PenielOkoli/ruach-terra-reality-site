@@ -21,7 +21,7 @@ export function Footer() {
             Dredging, hydraulic fill and land reclamation for Lagos and Nigeria.
           </p>
           <a
-            href="/ruach-dredging-company-profile.pdf"
+            href="/ruach-dredging-company-profile.pdf?v=2026-10-09"
             className="mt-6 inline-flex border-b border-[#f4f1ea] pb-1 text-sm font-bold"
           >
             Company profile PDF
@@ -52,16 +52,17 @@ export function Footer() {
           </p>
           <div className="mt-4 grid gap-3 text-sm leading-6 text-slate-200">
             <p>{company.address}</p>
-            <a href={`tel:${company.phones[0]}`}>
-              {company.phones.join(" · ")}
-            </a>
+            {company.phones.map(number => (
+              <a key={number} href={`tel:${number}`}>{number}</a>
+            ))}
             <a
-              href={`https://wa.me/234${company.whatsapp.slice(1)}`}
+              href={`https://wa.me/${company.whatsapp.replace(/\D/g, '')}`}
               target="_blank"
               rel="noreferrer"
             >
               WhatsApp {company.whatsapp}
             </a>
+            <a href={`tel:${company.directLine}`}>DL {company.directLine}</a>
           </div>
         </div>
       </div>

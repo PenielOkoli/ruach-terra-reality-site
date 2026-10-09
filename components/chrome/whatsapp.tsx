@@ -3,7 +3,7 @@ import { company } from "@/content/site";
 export function WhatsApp() {
   return (
     <a
-      href={`https://wa.me/234${company.whatsapp.slice(1)}`}
+      href={`https://wa.me/${company.whatsapp.replace(/\D/g, '')}`}
       target="_blank"
       rel="noreferrer"
       aria-label="Chat with Ruach Dredging on WhatsApp"

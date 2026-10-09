@@ -104,12 +104,13 @@ button, input, select, textarea { font: inherit; }
 .equipment-gallery h3, .field-clip-copy h3 { margin: 24px 0 10px; font-family: var(--font-display), Georgia, serif; font-size: 1.5rem; color: var(--navy); }
 .equipment-gallery p, .field-clip-copy > p:not(.section-label), .field-clip-copy details { font-size: .88rem; line-height: 1.6; color: var(--clay); max-width: 55ch; }
 .equipment-deck-photo .photo-frame { aspect-ratio: 4 / 3; }
-.manufacturer-groups { display: grid; gap: 64px; max-width: 720px; margin: 48px auto 0; }
+.manufacturer-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px; row-gap: 0; max-width: 1040px; margin: 48px auto 0; }
+.manufacturer-groups article { display: grid; grid-template-rows: subgrid; grid-row: span 3; min-width: 0; }
 .manufacturer-groups h3 { font-family: var(--font-display), Georgia, serif; font-size: 1.5rem; color: var(--navy); }
 .manufacturer-groups article > p { font-size: .88rem; line-height: 1.6; color: var(--clay); max-width: 55ch; margin-top: 10px; }
 .manufacturer-photo-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; margin-top: 32px; }
 .manufacturer-photo { min-width: 0; }
-.manufacturer-photo .photo-frame { background: #e8e3d9; }
+.manufacturer-photo .photo-frame { aspect-ratio: 1277 / 1232; width: 100%; background: #e8e3d9; }
 .field-films-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 64px; margin-top: 48px; }
 .field-clip { min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; align-content: start; gap: 24px; }
 .field-clip-player { width: min(100%, 352px); aspect-ratio: 9 / 16; background: var(--navy); position: relative; }
@@ -131,6 +132,7 @@ button, input, select, textarea { font: inherit; }
   .home-fleet .fleet-photo { aspect-ratio: 4 / 5; }
   .equipment-gallery, .field-films-grid { grid-template-columns: minmax(0, 1fr); gap: 48px; }
   .equipment-photo .photo-frame { height: auto; aspect-ratio: 3 / 4; }
-  .manufacturer-groups { gap: 56px; margin-top: 40px; }
+  .manufacturer-groups { grid-template-columns: minmax(0, 1fr); max-width: 500px; gap: 40px; margin-top: 40px; }
+  .manufacturer-groups article { display: block; grid-row: auto; }
   .manufacturer-photo-grid { gap: 24px; }
 }
