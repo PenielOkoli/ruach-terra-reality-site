@@ -99,7 +99,12 @@ button, input, select, textarea { font: inherit; }
 /* Documentary equipment imagery: preserve the full assembly rather than crop away parts. */
 .hero-landscape img { object-position: 62% center; }
 .project-photo-vessel img { object-position: center; }
-.equipment-gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; margin-top: 48px; }
+.fleet-register-photos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; margin-top: 48px; }
+.fleet-register-main .photo-frame { height: 640px; }
+.fleet-register-stack { display: grid; grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 32px; min-height: 0; }
+.fleet-register-stack .photo-frame { height: 100%; }
+.equipment-gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 32px; row-gap: 0; margin-top: 48px; }
+.equipment-gallery article { display: grid; grid-template-rows: subgrid; grid-row: span 3; min-width: 0; }
 .equipment-photo .photo-frame { height: 420px; background: #e8e3d9; }
 .equipment-gallery h3, .field-clip-copy h3 { margin: 24px 0 10px; font-family: var(--font-display), Georgia, serif; font-size: 1.5rem; color: var(--navy); }
 .equipment-gallery p, .field-clip-copy > p:not(.section-label), .field-clip-copy details { font-size: .88rem; line-height: 1.6; color: var(--clay); max-width: 55ch; }
@@ -128,9 +133,17 @@ button, input, select, textarea { font: inherit; }
 .field-clip-copy a { color: var(--rust); text-decoration: underline; }
 .service-index { top: 89px; }
 @media (max-width: 1023px) { .service-index { top: 77px; } }
+@media (max-width: 1023px) {
+  .fleet-register-photos { grid-template-columns: minmax(0, 1fr); }
+  .fleet-register-main .photo-frame { height: clamp(360px, 75vw, 640px); }
+  .fleet-register-stack { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto; }
+  .fleet-register-stack .photo-frame { height: auto; aspect-ratio: 4 / 3; }
+}
+@media (max-width: 539px) { .fleet-register-stack { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 767px) {
   .home-fleet .fleet-photo { aspect-ratio: 4 / 5; }
   .equipment-gallery, .field-films-grid { grid-template-columns: minmax(0, 1fr); gap: 48px; }
+  .equipment-gallery article { display: block; grid-row: auto; }
   .equipment-photo .photo-frame { height: auto; aspect-ratio: 3 / 4; }
   .manufacturer-groups { grid-template-columns: minmax(0, 1fr); max-width: 500px; gap: 40px; margin-top: 40px; }
   .manufacturer-groups article { display: block; grid-row: auto; }
