@@ -1,2 +1,8 @@
 import type { MetadataRoute } from 'next';
-export default function sitemap(): MetadataRoute.Sitemap { const paths = ['', '/about', '/services', '/fleet', '/projects', '/quality-hse', '/careers', '/contact', '/privacy', '/terms']; return paths.map((path) => ({ url: `https://ruachdredging.com${path}`, lastModified: new Date(), changeFrequency: 'monthly', priority: path === '' ? 1 : .8 })); }
+import { company } from '@/content/company';
+
+// Do not claim that every page changes each time a crawler requests this file.
+export default function sitemap(): MetadataRoute.Sitemap {
+  return ['', '/about', '/services', '/fleet', '/projects', '/quality-hse', '/careers', '/contact', '/privacy', '/terms']
+    .map(path => ({ url: `${company.website}${path}` }));
+}

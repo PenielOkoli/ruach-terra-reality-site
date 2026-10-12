@@ -1,25 +1,34 @@
-# Quote delivery setup
+# Website enquiry delivery
 
-The form is fail-closed. It reports acceptance only after a configured HTTPS service returns 2xx. This acknowledges service acceptance, not inbox delivery. No service has been provisioned or externally tested in this pass.
+All project-enquiry emails are addressed to **info@ruachdredging.com**. The recipient cannot be changed by form input. Careers links also open an email to that address; they do not submit a server form.
 
-## Configure
+## SMTP setup
 
-Set `QUOTE_WEBHOOK_URL` and, where the receiver requires authentication, `QUOTE_WEBHOOK_SECRET` in server-only environment variables. Never prefix them with `NEXT_PUBLIC_`. Restart the app after local configuration. The receiver must support this contract, not the old JSON-only request:
+In Vercel's server environment settings, enter the values supplied by the existing mailbox provider:
 
-- HTTP POST, `multipart/form-data` with automatically generated boundary.
-- `payload`: JSON string containing `type: ruach_quote_request`, `version: 1`, `data` (validated enquiry fields), `units` (`volume: m³`, `pipelineDistance: m`), and attachment metadata or null.
-- `attachment`: optional file part containing the actual bytes. At most 5,000,000 bytes; PDF, DOC, DOCX, PNG or JPEG. Filenames are normalized for delivery.
-- `Authorization: Bearer …` only when a secret is configured.
-- Return 2xx only after durably accepting the enquiry and uploaded file. Non-2xx, redirect or network failure becomes 502; a 15-second timeout becomes 504; missing/invalid configuration becomes 503. No automatic retry, because ambiguous delivery could cause duplicate enquiries.
+- `SMTP_HOST`: the provider's outgoing SMTP hostname.
+- `SMTP_PORT`: `465` for implicit TLS or `587` for mandatory STARTTLS.
+- `SMTP_USER`: the provider's authenticated username (often the full email address).
+- `SMTP_PASSWORD`: its SMTP/app password, stored only in server environment variables.
+- `SMTP_FROM`: a provider-approved sender on `ruachdredging.com`; defaults to `info@ruachdredging.com`.
+- `QUOTE_DELIVERY_MODE=smtp` (default).
 
-Name, phone/WhatsApp, location and project type are required, plus contact consent. Email is optional. Blank engineering fields mean unknown; explicit `Not sure yet` is also supported. Numeric engineering inputs must be positive and finite. Unexpected fields are discarded. The browser retains form values on failure and offers direct phone/WhatsApp links.
+Do not put credentials in chat, source control or `NEXT_PUBLIC_` variables. Verify provider-specific sending permissions and domain SPF/DKIM/DMARC. Both supported ports require encryption and certificate validation; insecure port 25 is not supported. Restart/redeploy after setting the variables.
 
-## Before public launch
+The visitor's optional email becomes Reply-To, not From. Uploaded files remain in memory and are never saved to public storage. Messages are plain text. SMTP success means the relay accepted the recipient; it is not proof of inbox delivery. There are no automatic retries after ambiguous failures.
 
-1. Choose/provision the recipient service, mailbox/CRM and retention policy. Confirm its multipart contract or implement a provider adapter in `lib/quote/delivery.ts`.
-2. Add provider/edge-level rate limiting and bot protection. The included honeypot and same-origin browser check are basic safeguards, not distributed anti-abuse protection. Configure hosting request/time limits in addition to the application's bounded 5.1 MB body reader.
-3. Treat all attachments as untrusted. MIME/extension checks are not malware scanning or proof of file content. Scan/quarantine at the receiver, restrict access, and never execute/render uploaded files in a privileged context.
-4. Verify a real submission reaches the agreed destination, including byte-identical attachments. Verify failures/timeouts do not show success. Configure monitoring without logging enquiry data or secrets.
-5. Obtain legal review of the existing Privacy/Terms placeholders and publish approved retention/contact information.
+## Validation and delivery failures
 
-The app intentionally does not store enquiries locally. If stronger delivery guarantees are needed, use a durable queue and idempotent recipient before displaying acceptance.
+Name, phone, site location, project type and consent are required. Uploads are limited to 4 MB (PDF, DOC, DOCX, PNG or JPEG) with extension, MIME and basic signature checks. These checks are not malware scanning. Read timeout is 10 seconds and the total multipart request limit is 4.1 MB.
+
+Missing/invalid configuration returns 503, rejected/failed SMTP delivery returns 502, invalid input returns 400, excessive body size returns 413, and throttled submissions return 429 with Retry-After. The form retains entered values on failure and offers the company email, call and WhatsApp links. It never shows fake success.
+
+The in-process rate limiter is only a backstop. Configure distributed WAF limits at the hosting provider before relying on this endpoint under public traffic. Requests are not logged with enquiry content or credentials.
+
+## Optional existing webhook
+
+Set `QUOTE_DELIVERY_MODE=webhook` only if maintaining an existing approved receiver, then configure `QUOTE_WEBHOOK_URL` (HTTPS) and `QUOTE_WEBHOOK_SECRET`. The multipart payload contains JSON `payload` with type `ruach_quote_request`, version `1`, recipient `info@ruachdredging.com`, validated data, units, attachment metadata and optional `attachment` bytes. The receiver must enforce the company recipient and return 2xx only after accepting/persisting the request. Setting the recipient field cannot reconfigure a third-party workflow automatically; check that workflow before deployment. A failed receiver returns 502 or 504; no simultaneous SMTP copy is sent.
+
+## Required launch check
+
+Send one approved test enquiry after deployment and confirm receipt at the mailbox, its Reply-To and attachment. Local automated tests mock SMTP and do not send email. Review spam placement, provider quotas and attachment scanning. A deployment without valid credentials intentionally leaves direct email/phone available but cannot deliver online forms.

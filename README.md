@@ -27,10 +27,12 @@ Use the standard Next.js build settings on Vercel. Configure and test quote deli
 
 Copy `.env.example` to `.env.local` when configuring notifications.
 
-- `QUOTE_WEBHOOK_URL` - required HTTPS endpoint for an email-provider workflow or CRM automation, accepting multipart uploads.
-- `QUOTE_WEBHOOK_SECRET` - optional bearer token sent to that endpoint.
+- `SMTP_HOST`, `SMTP_PORT` (`465` or `587`), `SMTP_USER`, `SMTP_PASSWORD` - server-only settings from the company's email provider.
+- `SMTP_FROM` - approved sender on `ruachdredging.com`, defaulting to `info@ruachdredging.com`. All form enquiries are addressed to `info@ruachdredging.com` in code.
+- `GOOGLE_SITE_VERIFICATION` - optional Search Console HTML verification token.
+- `QUOTE_DELIVERY_MODE=webhook`, `QUOTE_WEBHOOK_URL`, `QUOTE_WEBHOOK_SECRET` - explicit legacy integration only; its receiver must route to the same company mailbox.
 
-Without a valid endpoint, the API returns HTTP 503 and the form offers phone/WhatsApp contact. It never simulates delivery. See [quote delivery setup](docs/quote-delivery.md) for the payload contract, limitations and launch checks.
+Without valid delivery settings, the API returns HTTP 503 and the form offers email, phone and WhatsApp contact. It never simulates delivery. See [quote delivery setup](docs/quote-delivery.md) and the [security and SEO handoff](docs/security-seo-2026-10-12.md) before deployment.
 
 ## Content editing
 
@@ -48,12 +50,11 @@ The following still need approved original photography or documents:
 - Independently confirmed project-photo provenance. Slide 7 associates images with Igbolomi, Coastal Road and Epe; those are now matched on the site. No clear matching field photograph was supplied for Bathymetry or Orchid Road. The Lekki–Eleko route map's labels need geographical confirmation. The haulage illustration is not treated as an actual job photo.
 - Original high-resolution horizontal Ruach/Nigerian photography. The photo band now uses an enhanced company-profile pipeline scene. The hero retains its free public-domain USACE industry photograph, identified as such in alt text. Visible credits, captions and FIG labels remain removed at the user's request. Source links, authors and usage records remain in `docs/design-research.md`. The existing non-endorsement disclaimer remains on `/terms`; this external image must not be presented as Ruach equipment or a Nigerian project.
 
-The supplied logo is at `public/logo.png`, with its high-resolution company-profile original at `public/ruach-logo-original.jpg`. The company profile supplied on 9 October 2026 is available unchanged as `public/ruach-dredging-company-profile.pdf`; the footer link includes a dated cache version.
+The supplied logo is at `public/logo.png`, with its high-resolution company-profile original at `public/ruach-logo-original.jpg`. The company profile at `public/ruach-dredging-company-profile.pdf` retains the 9 October profile with its cover/contact details updated on 12 October 2026. The footer link includes a dated cache version.
 
 ## Content to confirm before launch
 
-- Production domain (replace `https://ruachdredging.com` in metadata, sitemap and schema if different).
-- Operational email or CRM/webhook for quote notification.
+- Confirm production SMTP settings and a real delivery to `info@ruachdredging.com`. The canonical host is `https://www.ruachdredging.com`.
 - Approved leadership portraits, legal registration confirmation, office pin and project-photo provenance.
 - Legal review of the Privacy and Terms placeholder pages.
 

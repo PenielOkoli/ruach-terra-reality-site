@@ -8,7 +8,8 @@ export const company = {
   submersibleDredgerCount: 4, // Company-confirmed total; matches the four dredgers in the register.
   pipelineDiameter: '8–16″', // Company-confirmed range; individual pump sizes remain separate.
   address: '32 Vover Close, Adiva Plainfield Estate, KM 69 Lekki-Epe Expressway, Lagos, Nigeria.',
-  phones: ['+2348055212777', '+2348098129888'],
+  website: 'https://www.ruachdredging.com',
+  email: 'info@ruachdredging.com',
+  phones: ['+2348069817999'],
   whatsapp: '+2348069817999',
-  directLine: '+2349044441234',
 };

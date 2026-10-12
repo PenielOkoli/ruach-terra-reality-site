@@ -29,7 +29,7 @@ export function ContactSection() {
                 >
                   WhatsApp {company.whatsapp} <span aria-hidden="true">↗</span>
                 </a>
-                <a href={`tel:${company.directLine}`}>DL {company.directLine}</a>
+                <a className="break-all" href={`mailto:${company.email}`}>{company.email}</a>
               </div>
             </div>
           </div>

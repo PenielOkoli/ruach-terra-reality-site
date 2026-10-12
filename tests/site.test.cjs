@@ -165,15 +165,15 @@ test('quote validation trims copy and limits field length', () => {
   assert.equal(result.submission.data.message.length, 2000);
 });
 
-test('quote attachment handling preserves actual file bytes and the 5 MB limit', async () => {
+test('quote attachment handling preserves actual file bytes and the 4 MB limit', async () => {
   const form = quoteForm();
   form.set('attachment', new File(['%PDF-brief'], 'brief.pdf', { type: 'application/pdf' }));
   const result = validateQuote(form);
   assert.equal(result.submission.attachment.name, 'brief.pdf');
   assert.equal(await result.submission.attachment.text(), '%PDF-brief');
   assert.equal(result.submission.data.attachment, undefined);
-  form.set('attachment', new File([new Uint8Array(5_000_001)], 'large.pdf'));
-  assert.equal(validateQuote(form).error, 'Attachments must be 5 MB or smaller.');
+  form.set('attachment', new File([new Uint8Array(4_000_001)], 'large.pdf'));
+  assert.equal(validateQuote(form).error, 'Attachments must be 4 MB or smaller.');
   form.set('attachment', new File(['unsafe'], 'script.exe', { type: 'application/octet-stream' }));
   assert.equal(validateQuote(form).ok, false);
   form.set('attachment', new File(['unsafe'], 'script.pdf', { type: 'text/html' }));
@@ -327,8 +327,8 @@ test('homepage composition preserves the approved markup and copy', () => {
   assert.match(html, /Fleet<\/p><strong>4 submersible dredgers<\/strong>/);
   assert.match(html, /Pipeline<\/p><strong>8–16″ HDPE line<\/strong>/);
   // Update deliberately if homepage copy or markup is intentionally changed later.
-  // Includes the careers section and the company-confirmed phone, WhatsApp and DL links.
-  assert.equal(crypto.createHash('sha256').update(html).digest('hex'), 'c71b6df90d207654412a8fef30a59f105cc73a8287fff100eb622f9236247347');
+  // Includes the careers section, sole company phone/WhatsApp number and contact email.
+  assert.equal(crypto.createHash('sha256').update(html).digest('hex'), '7239b8f5f7791c5f1d1cbfcdd90b45503d4891185ee1f635c71dee8cc2cb8f62');
 });
 
 test('marketing pages and footer contain no photo credits or FIG captions', () => {

@@ -103,7 +103,7 @@ export function QuoteForm() {
             accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
             className="mt-3 block w-full text-sm normal-case tracking-normal text-ink file:mr-3 file:border-0 file:bg-[#ddd7cc] file:px-3 file:py-2 file:text-xs file:font-bold file:text-ink"
           />
-          <span className="mt-2 block text-xs font-normal normal-case tracking-normal">PDF, Word, PNG or JPEG. Maximum 5 MB.</span>
+          <span className="mt-2 block text-xs font-normal normal-case tracking-normal">PDF, Word, PNG or JPEG. Maximum 4 MB.</span>
         </label>
       </div>
       <label className="block border-b border-line py-5 text-xs font-bold uppercase tracking-[.08em] text-clay">
@@ -129,7 +129,7 @@ export function QuoteForm() {
       {status === "error" && (
         <p role="alert" className="mt-4 text-sm font-semibold text-[#a44c2a]">
           {message}
-          <span className="mt-2 flex flex-wrap gap-x-5"><a className="underline" href={`tel:${company.phones[0]}`}>Call {company.phones[0]}</a><a className="underline" href={`https://wa.me/${company.whatsapp.replace(/\D/g, '')}`}>WhatsApp {company.whatsapp}</a></span>
+          <span className="mt-2 flex flex-wrap gap-x-5"><a className="underline" href={`mailto:${company.email}`}>Email {company.email}</a><a className="underline" href={`tel:${company.phones[0]}`}>Call {company.phones[0]}</a><a className="underline" href={`https://wa.me/${company.whatsapp.replace(/\D/g, '')}`}>WhatsApp {company.whatsapp}</a></span>
         </p>
       )}
       <button
@@ -140,6 +140,7 @@ export function QuoteForm() {
       </button>
       <p className="mt-4 text-xs leading-5 text-clay">
         Required fields are marked *. Do not include sensitive information.
+        {' '}You can also email <a className="underline" href={`mailto:${company.email}`}>{company.email}</a>.
       </p>
     </form>
   );

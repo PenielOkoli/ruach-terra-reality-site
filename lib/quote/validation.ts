@@ -50,7 +50,7 @@ export function validateQuote(form: FormData): QuoteValidation {
     attachment instanceof File &&
     attachment.size > MAX_QUOTE_ATTACHMENT_BYTES
   ) {
-    return { ok: false, error: "Attachments must be 5 MB or smaller." };
+    return { ok: false, error: "Attachments must be 4 MB or smaller." };
   }
   if (attachment instanceof File && attachment.size) {
     const types: Record<string, string> = { pdf: 'application/pdf', doc: 'application/msword', docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg' };

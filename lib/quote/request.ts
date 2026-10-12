@@ -8,15 +8,18 @@ export async function readQuoteForm(request: Request): Promise<FormData> {
   if (!reader) throw new Error('format');
   const chunks: Uint8Array[] = [];
   let total = 0;
+  let timedOut = false;
+  const timeout = setTimeout(() => { timedOut = true; void reader.cancel().catch(() => {}); }, 10_000);
   try {
     for (;;) {
       const { done, value } = await reader.read();
+      if (timedOut) throw new Error('timeout');
       if (done) break;
       total += value.byteLength;
       if (total > MAX_QUOTE_REQUEST_BYTES) { await reader.cancel(); throw new Error('size'); }
       chunks.push(value);
     }
-  } finally { reader.releaseLock(); }
+  } finally { clearTimeout(timeout); reader.releaseLock(); }
   const bytes = new Uint8Array(total);
   let offset = 0;
   for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.length; }

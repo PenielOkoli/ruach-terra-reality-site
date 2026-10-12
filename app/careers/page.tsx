@@ -30,7 +30,7 @@ export default function Careers() {
               <div className="mt-8 border-t-2 border-navy pt-6">
                 <h3 className="font-display text-2xl text-navy">How to apply</h3>
                 <p className="mt-4 text-sm leading-7 text-clay">
-                  Select a role to start an application enquiry on WhatsApp.
+                  Select a role to email an application enquiry to {company.email}.
                   Include your name, relevant experience and CV, and our team
                   can advise on the next steps.
                 </p>
@@ -55,13 +55,11 @@ export default function Careers() {
                       <h3 className="font-display text-xl text-navy">{role.title}</h3>
                     </div>
                     <a
-                      href={`https://wa.me/${company.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(`Hello Ruach Dredging, I would like to apply for the ${role.title} role.`)}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={`Apply for ${role.title} on WhatsApp (opens in a new tab)`}
+                      href={`mailto:${company.email}?subject=${encodeURIComponent(`Application enquiry: ${role.title}`)}&body=${encodeURIComponent(`Hello Ruach Dredging, I would like to apply for the ${role.title} role.`)}`}
+                      aria-label={`Apply for ${role.title} by email`}
                       className="text-link !mt-0 shrink-0 self-start sm:self-auto"
                     >
-                      Apply on WhatsApp <Arrow />
+                      Apply by email <Arrow />
                     </a>
                   </div>
                 </li>

@@ -2,6 +2,7 @@ node_modules
 .next
 artifacts/
 out
+output/
 *.tsbuildinfo
 .env*
 !.env.example

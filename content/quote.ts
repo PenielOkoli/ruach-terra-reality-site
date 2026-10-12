@@ -26,5 +26,5 @@ export const quoteProjectTypes = [
   "Industrial pumping and emergency dewatering",
   "Not sure yet",
 ] as const;
-export const MAX_QUOTE_ATTACHMENT_BYTES = 5_000_000;
+export const MAX_QUOTE_ATTACHMENT_BYTES = 4_000_000;
 export const MAX_QUOTE_REQUEST_BYTES = MAX_QUOTE_ATTACHMENT_BYTES + 100_000;
