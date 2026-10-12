@@ -3,6 +3,7 @@ import { Inter, Roboto_Slab } from 'next/font/google';
 import './globals.css';
 import { Footer, Header, WhatsApp } from '@/components/chrome';
 import { company, capabilities } from '@/content/site';
+import { socialPreview } from '@/lib/social-preview';
 
 const body = Inter({ subsets: ['latin'], variable: '--font-body', display: 'swap' });
 const display = Roboto_Slab({ subsets: ['latin'], variable: '--font-display', display: 'swap' });
@@ -12,8 +13,8 @@ export const metadata: Metadata = {
   title: { default: 'Dredging Company in Lagos, Nigeria | Ruach Dredging', template: '%s | Ruach Dredging' },
   description: 'Ruach Dredging provides hydraulic dredging, sand supply, land reclamation, bathymetric surveys and marine support from Lagos, Nigeria. Contact our team.',
   keywords: ['dredging company Lagos', 'sand filling Lekki', 'hydraulic fill Nigeria', 'land reclamation Lagos', 'sand dredging Epe', 'Ibeju-Lekki'],
-  openGraph: { type: 'website', locale: 'en_NG', siteName: company.name, url: '/', title: 'Dredging Company in Lagos, Nigeria | Ruach Dredging', description: 'Hydraulic dredging, sand supply, land reclamation and marine support from Lagos, Nigeria.', images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'Ruach Dredging — Water Moves Possibilities' }] },
-  twitter: { card: 'summary_large_image', title: 'Ruach Dredging | Lagos, Nigeria', description: 'Dredging, hydraulic fill, sand supply and land reclamation.', images: ['/opengraph-image'] },
+  openGraph: { type: 'website', locale: 'en_NG', siteName: company.name, url: '/', title: socialPreview.title, description: socialPreview.description, images: [{ url: socialPreview.image, width: socialPreview.width, height: socialPreview.height, alt: socialPreview.alt, type: 'image/jpeg' }] },
+  twitter: { card: 'summary_large_image', title: socialPreview.title, description: socialPreview.description, images: [socialPreview.image] },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-image-preview': 'large' } },
   verification: process.env.GOOGLE_SITE_VERIFICATION ? { google: process.env.GOOGLE_SITE_VERIFICATION } : undefined,
   alternates: { canonical: '/' },
