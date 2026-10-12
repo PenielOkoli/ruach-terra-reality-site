@@ -22,6 +22,9 @@ export function Footer() {
           </p>
           <a
             href="/ruach-dredging-company-profile.pdf?v=2026-10-12"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Company profile PDF (opens in a new tab)"
             className="mt-6 inline-flex border-b border-[#f4f1ea] pb-1 text-sm font-bold"
           >
             Company profile PDF
@@ -53,23 +56,14 @@ export function Footer() {
           <div className="mt-4 grid gap-3 text-sm leading-6 text-slate-200">
             <p>{company.address}</p>
             <a className="break-all" href={`mailto:${company.email}`}>{company.email}</a>
-            <div className="footer-contact-columns grid grid-cols-[max-content_minmax(0,1fr)] gap-x-4 text-xs sm:text-sm">
-              <div className="grid content-start gap-3">
-                {company.phones.map(number => (
-                  <a className="whitespace-nowrap" key={number} href={`tel:${number}`}>{number}</a>
-                ))}
-              </div>
-              <div className="grid content-start gap-3">
-                <a
-                  className="whitespace-nowrap"
-                  href={`https://wa.me/${company.whatsapp.replace(/\D/g, '')}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  WhatsApp {company.whatsapp}
-                </a>
-              </div>
-            </div>
+            <a
+              className="whitespace-nowrap"
+              href={`https://wa.me/${company.whatsapp.replace(/\D/g, '')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              WhatsApp {company.whatsapp}
+            </a>
           </div>
         </div>
       </div>
