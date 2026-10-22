@@ -1,4 +1,6 @@
 export const careerRoles = [
+  { id: "site-manager", title: "Site Manager" },
+  { id: "admin-manager", title: "Admin Manager" },
   { id: "site-supervisor", title: "Site Supervisor" },
   { id: "admin-supervisor", title: "Admin Supervisor" },
   { id: "operation-supervisor", title: "Operation Supervisor" },
