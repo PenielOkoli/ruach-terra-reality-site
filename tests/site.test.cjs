@@ -299,13 +299,13 @@ test('quote HTTP boundary returns 400, 200 and 500 without live delivery', async
   assert.equal((await POST(request(quoteForm()))).status, 500);
 });
 
-test('leadership names omit titles while roles and separate qualifications are retained', () => {
+test('leadership names match approved wording while roles and separate qualifications are retained', () => {
   const { team } = load('content/site.ts');
   const { leadershipQualifications } = load('content/profile-details.ts');
   assert.deepEqual(Array.from(team, entry => Array.from(entry)), [
     ['Blessing O. Uzo', 'MD/CEO'],
     ['Ikechukwu C. Uzo', 'COO'],
-    ['Chidi Opara', 'Head of Legal'],
+    ['Chukwudi Ejiofor Esq.', 'Head of Legal'],
     ['Adaora Uzo', 'Head of Admin/HR'],
     ['Rotimi Mafoluku', 'Head of HSE'],
     ['Joyce Bamidele', 'CFO / Head of Finance'],
