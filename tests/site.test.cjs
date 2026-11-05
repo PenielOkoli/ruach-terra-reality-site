@@ -303,8 +303,8 @@ test('leadership names match approved wording while roles and separate qualifica
   const { team } = load('content/site.ts');
   const { leadershipQualifications } = load('content/profile-details.ts');
   assert.deepEqual(Array.from(team, entry => Array.from(entry)), [
-    ['Blessing O. Uzo', 'MD/CEO'],
-    ['Ikechukwu C. Uzo', 'COO'],
+    ['Blessing O. Uzo', 'CEO'],
+    ['Ikechukwu C. Uzo', 'MD/COO'],
     ['Chukwudi Ejiofor Esq.', 'Head of Legal'],
     ['Adaora Uzo', 'Head of Admin/HR'],
     ['Rotimi Mafoluku', 'Head of HSE'],
